@@ -22,7 +22,7 @@ function App() {
       console.log('Auth initialized');
       setIsAuthenticating(true);
       microsoftTeams.authentication.authenticate({
-        url: `${window.location.href}/login`,
+        url: `${window.location.href}login`,
         failureCallback: (e) => { console.log('Auth failed:', e) },
         successCallback: (e) => { console.log('Auth successfull:', e) }
       })
