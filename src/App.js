@@ -5,9 +5,11 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  const userAgent = window.navigator.userAgent.toLowerCase();
   const { isAuthenticated } = useSession()
   const [isAuthenticating, setIsAuthenticating] = useState(false);
-  const [isMobile, setisMobile] = useState(window.innerWidth < 1000 ? true : false);
+  const [isTeamsApp, setIsTeamsApp] = useState(userAgent.includes('microsoftteams') || userAgent.includes('teamsmobile'))
+  const [isMobile, setisMobile] = useState(userAgent.includes('android') || userAgent.includes('ios') || false);
 
   function handleWindowSizeChange() {
       if(window.innerWidth < 1000) setisMobile(true);
@@ -41,18 +43,35 @@ function App() {
 
   return (
     <div className="App">
+        <table style={{textAlign: 'left'}}>
+          <tbody>
+            <tr>
+              <th>Environment</th>
+              <td>{process.env.NODE_ENV}</td>
+            </tr>
+            <tr>
+              <th>Is authenticated</th>
+              <td>{isAuthenticated.toString()}</td>
+            </tr>
+            <tr>
+              <th>Is TeamsApp</th>
+              <td>{isTeamsApp.toString()}</td>
+            </tr>
+            <tr>
+              <th>Is mobile</th>
+              <td>{isMobile.toString()}</td>
+            </tr>
+            <tr>
+              <th>Url</th>
+              <td>{window.location.href}</td>
+            </tr>
+            <tr>
+              <th>User-agent</th>
+              <td>{window.navigator.userAgent}</td>
+            </tr>
+          </tbody>
+        </table>
       <header className="App-header">
-        <div>Environment: {process.env.NODE_ENV}</div>
-        <div>User-agent: {window.navigator.userAgent}</div>
-        <div>Is authenticated: {isAuthenticated.toString()}</div>
-        <div>Is mobile: {isMobile.toString()}</div>
-        <div>Url: {window.location.href}</div>
-        {
-          <div>
-            {}
-          </div>
-        }
-
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
