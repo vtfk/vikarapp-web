@@ -9,28 +9,23 @@ function App() {
 
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(auth.isAuthenticated());
-  const [isMobile, setisMobile] = useState(userAgent.includes('android') || userAgent.includes('mobile') || false);
+  const [isMobile] = useState(userAgent.includes('android') || userAgent.includes('mobile') || false);
 
-  function handleWindowSizeChange() {
-      if(window.innerWidth < 1000) setisMobile(true);
-      else setisMobile(false);
+  async function login() {
+    if(!isAuthenticating) {
+      setIsAuthenticating(true);
+      await auth.login();
+      setIsAuthenticating(false);
+      setIsAuthenticated(auth.isAuthenticated())
+    }
   }
+
   useEffect(() => {
-    async function authenticate() {
-      if(!isAuthenticating) {
-        console.log('Auth initialized');
-        setIsAuthenticating(true);
-        await auth.login();
-        setIsAuthenticated(auth.isAuthenticated())
-      }
+    async function auth() {
+      await login();
     }
-    authenticate();
-    
-    window.addEventListener('resize', handleWindowSizeChange);
-    return () => {
-      window.removeEventListener('resize', handleWindowSizeChange);
-    }
-  }, [isAuthenticating]);
+    auth();
+  }, [])
 
   return (
     <div className="App">

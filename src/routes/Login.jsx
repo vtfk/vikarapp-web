@@ -11,7 +11,7 @@ export default function Login() {
   useMountEffect(() => {
     if(!isLoggingIn) {
       setIsLoggingIn(true);
-      auth.login();
+      auth.login({force: true});
     }
   })
 
