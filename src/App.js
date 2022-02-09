@@ -22,7 +22,7 @@ function App() {
       console.log('Auth initialized');
       setIsAuthenticating(true);
       microsoftTeams.authentication.authenticate({
-        url: 'http://localhost:3000/login',
+        url: `${window.location.href}/login`,
         failureCallback: (e) => { console.log('Auth failed:', e) },
         successCallback: (e) => { console.log('Auth successfull:', e) }
       })
@@ -46,6 +46,7 @@ function App() {
         <div>User-agent: {window.navigator.userAgent}</div>
         <div>Is authenticated: {isAuthenticated.toString()}</div>
         <div>Is mobile: {isMobile.toString()}</div>
+        <div>Url: {window.location.href}</div>
         {
           <div>
             {}
