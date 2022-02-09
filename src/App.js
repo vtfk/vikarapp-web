@@ -34,10 +34,11 @@ function App() {
 
   return (
     <div className="App">
-        <table style={{textAlign: 'left'}}>
+        <h2 style={{margin: '0 0.2rem', textAlign: 'left'}}>Status</h2>
+        <table style={{textAlign: 'left', color: 'black'}}>
           <tbody>
             <tr>
-              <th>Environment</th>
+              <th style={{width: '150px'}}>Environment</th>
               <td>{process.env.NODE_ENV}</td>
             </tr>
             <tr>
@@ -60,9 +61,23 @@ function App() {
               <th>User-agent</th>
               <td>{window.navigator.userAgent}</td>
             </tr>
+            {
+              isAuthenticated &&
+              <tr>
+                <th>Logged in as</th>
+                <td>{JSON.stringify(auth.getValidToken()?.token?.account?.name)}</td>
+              </tr>
+            }
           </tbody>
         </table>
-        <button onClick={() => {alert('Authenticated?: ' + isAuthenticated )}}>Is AUth?</button>
+        <div>
+        <h2 style={{margin: '0 0.2rem', textAlign: 'left'}}>Actions</h2>
+        <div style={{textAlign: 'left', display: 'flex', gap: '0.5rem', margin: '0.5rem 0.5rem'}}>
+          <button onClick={() => {alert('Authenticated?: ' + isAuthenticated )}}>Check authentication status</button>
+          <button onClick={() => { auth.login({ force: true })}}>Login</button>
+        </div>
+        </div>
+        
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>

@@ -68,7 +68,7 @@ function saveToken(token, options = {}) {
 }
 
 export async function login(options = {}) {
-  // if(isAuthenticated() && !options.force) return;
+  if(isAuthenticated() && !options.force) return;
 
   // If the request is from Teams and it is not from the loginUrl
   console.log('IsFromTeams:', isFromTeams());
@@ -80,7 +80,6 @@ export async function login(options = {}) {
         successCallback: (e) => { resolve(getValidToken()) },
         failureCallback: (e) => { resolve(getValidToken()) } // There is a bug in teams-js that always trigger this, even on success
       }
-      console.log('Creating popup!')
       microsoftTeams.authentication.authenticate(teamsConfig);
     });
 
