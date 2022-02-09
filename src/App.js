@@ -1,40 +1,38 @@
-import * as microsoftTeams from '@microsoft/teams-js';
-import { useSession } from '@vtfk/react-msal'
 import { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import * as auth from './auth'
 
 function App() {
   const userAgent = window.navigator.userAgent.toLowerCase();
-  const { isAuthenticated } = useSession()
+  const isTeamsApp = userAgent.includes('microsoftteams') || userAgent.includes('teamsmobile')
+
   const [isAuthenticating, setIsAuthenticating] = useState(false);
-  const [isTeamsApp, setIsTeamsApp] = useState(userAgent.includes('microsoftteams') || userAgent.includes('teamsmobile'))
-  const [isMobile, setisMobile] = useState(userAgent.includes('android') || userAgent.includes('ios') || false);
+  const [isMobile, setisMobile] = useState(userAgent.includes('android') || userAgent.includes('mobile') || false);
 
   function handleWindowSizeChange() {
       if(window.innerWidth < 1000) setisMobile(true);
       else setisMobile(false);
   }
   useEffect(() => {
-    // Initialize auth
-    microsoftTeams.initialize();
-    microsoftTeams.authentication.initialize();
-    
+   
     if(!isAuthenticating) {
       console.log('Auth initialized');
       setIsAuthenticating(true);
-      microsoftTeams.authentication.authenticate({
-        url: `${window.location.href}login`,
-        failureCallback: (e) => { console.log('Auth failed:', e) },
-        successCallback: (e) => { console.log('Auth successfull:', e) }
-      })
+      auth.login();
+
+      // microsoftTeams.authentication.authenticate({
+      //   url: `${window.location.href}login`,
+      //   failureCallback: (e) => { console.log('Auth failed:', e) },
+      //   successCallback: (e) => { console.log('Auth successfull:', e) }
+      // })
     }
     
       window.addEventListener('resize', handleWindowSizeChange);
       return () => {
         window.removeEventListener('resize', handleWindowSizeChange);
       }
-  }, [isAuthenticating]);
+  }, [isAuthenticating, auth.isAuthenticated]);
 
   // function handleLogin() {
   //   if(isMobile) login({ scopes: ['openid', 'profile', 'User.Read'], forceRefresh: true})
@@ -51,7 +49,7 @@ function App() {
             </tr>
             <tr>
               <th>Is authenticated</th>
-              <td>{isAuthenticated.toString()}</td>
+              <td>{auth.isAuthenticated().toString()}</td>
             </tr>
             <tr>
               <th>Is TeamsApp</th>
@@ -71,6 +69,7 @@ function App() {
             </tr>
           </tbody>
         </table>
+        <button onClick={() => {alert('Authenticated?: ' + auth.isAuthenticated() )}}>Is AUth?</button>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>

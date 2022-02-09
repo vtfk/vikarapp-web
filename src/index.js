@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App.js';
 import reportWebVitals from './reportWebVitals';
-import { MsalProvider } from '@vtfk/react-msal'
-import { config } from './config'
+import * as microsoftTeams from '@microsoft/teams-js';
 import {
   BrowserRouter,
   Routes,
@@ -15,17 +14,23 @@ import {
   Import routes
 */
 import Login from './routes/Login';
+import HandleLogin from './routes/HandleLogin'
+
+/*
+  Initialize Teams
+*/
+microsoftTeams.initialize();
+microsoftTeams.authentication.initialize();
 
 ReactDOM.render(
   <React.StrictMode>
-    <MsalProvider config={config.msal} scopes={config.msal_scopes}>
-      <BrowserRouter>
-        <Routes>
-          <Route exact path="/" element={<App />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </BrowserRouter>
-    </MsalProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route exact path="/" element={<App />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/handlelogin" element={<HandleLogin />} />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );
