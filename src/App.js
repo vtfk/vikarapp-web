@@ -8,18 +8,20 @@ function App() {
   const isTeamsApp = userAgent.includes('microsoftteams') || userAgent.includes('teamsmobile')
 
   const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(auth.isAuthenticated());
   const [isMobile, setisMobile] = useState(userAgent.includes('android') || userAgent.includes('mobile') || false);
 
   function handleWindowSizeChange() {
       if(window.innerWidth < 1000) setisMobile(true);
       else setisMobile(false);
   }
-  useEffect(() => {
+  useEffect(async () => {
    
     if(!isAuthenticating) {
       console.log('Auth initialized');
       setIsAuthenticating(true);
-      auth.login();
+      await auth.login();
+      setIsAuthenticated(auth.isAuthenticated())
 
       // microsoftTeams.authentication.authenticate({
       //   url: `${window.location.href}login`,
@@ -49,7 +51,7 @@ function App() {
             </tr>
             <tr>
               <th>Is authenticated</th>
-              <td>{auth.isAuthenticated().toString()}</td>
+              <td>{isAuthenticated.toString()}</td>
             </tr>
             <tr>
               <th>Is TeamsApp</th>
@@ -69,7 +71,7 @@ function App() {
             </tr>
           </tbody>
         </table>
-        <button onClick={() => {alert('Authenticated?: ' + auth.isAuthenticated() )}}>Is AUth?</button>
+        <button onClick={() => {alert('Authenticated?: ' + isAuthenticated )}}>Is AUth?</button>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>

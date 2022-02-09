@@ -68,19 +68,22 @@ function saveToken(token, options = {}) {
 }
 
 export async function login(options = {}) {
-  if(getValidToken() && !options.force) return;
+  // if(isAuthenticated() && !options.force) return;
 
   // If the request is from Teams and it is not from the loginUrl
   console.log('IsFromTeams:', isFromTeams());
   console.log('Url:', window.location.href)
   if(isFromTeams() && !window?.location?.href.endsWith(config.auth.loginUrl)) {
-    const teamsConfig = {
-      url: options.loginUrl || `${window.location.href}login`,
-      successCallback: (e) => { console.log('Successfully authenticated:', e); },
-      failureCallback: (e) => { console.log('Failed authentication:', e)}
-    }
-    console.log('Creating popup!')
-    microsoftTeams.authentication.authenticate(teamsConfig);
+    await new Promise((resolve) => {
+      const teamsConfig = {
+        url: options.loginUrl || `${window.location.href}login`,
+        successCallback: (e) => { resolve(getValidToken()) },
+        failureCallback: (e) => { resolve(getValidToken()) } // There is a bug in teams-js that always trigger this, even on success
+      }
+      console.log('Creating popup!')
+      microsoftTeams.authentication.authenticate(teamsConfig);
+    });
+
     return;
   }
 
@@ -110,12 +113,12 @@ export async function handleRedirect() {
     
     // If the request is from Microsoft Teams, notify
     if(isFromTeams()) {
-      if(token) microsoftTeams.authentication.notifySuccess(true);
+      if(token) microsoftTeams.authentication.notifySuccess(token);
       // else microsoftTeams.authentication.notifyFailure('An unexpected authentication error occured')
     }
 
   } catch (err) {
     console.log('Redirection error:', err);
-    if(isFromTeams()) microsoftTeams.authentication.notifyFailure(err)
+    if(isFromTeams()) microsoftTeams.authentication.notifyFailure('Error')
   }
 }
