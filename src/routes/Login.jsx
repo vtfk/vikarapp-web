@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import * as auth from '../auth';
 
 export default function Login() {
-  const useMountEffect = (fun) => useEffect(fun, [])
+  const useMountEffect = (fun) => useEffect(fun)
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   useMountEffect(() => {

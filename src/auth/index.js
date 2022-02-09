@@ -3,7 +3,7 @@
 */
 import * as microsoftTeams from '@microsoft/teams-js';
 import * as msal from "@azure/msal-browser";
-import { isFromTeams, isFromMobile } from './lib/helpers';
+import { isFromTeams } from './lib/helpers';
 const { config } = require('../config')
 
 

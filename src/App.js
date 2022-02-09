@@ -32,7 +32,7 @@ function App() {
       return () => {
         window.removeEventListener('resize', handleWindowSizeChange);
       }
-  }, [isAuthenticating, auth.isAuthenticated]);
+  }, [isAuthenticating]);
 
   // function handleLogin() {
   //   if(isMobile) login({ scopes: ['openid', 'profile', 'User.Read'], forceRefresh: true})
