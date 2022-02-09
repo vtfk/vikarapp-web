@@ -12,7 +12,7 @@ function App() {
         <div>Is authenticated?: {isAuthenticated.toString()}</div>
         <div>Authentication status: {authStatus}</div>
         {
-          !isAuthenticated && <button onClick={() => login({ scopes: ['openid', 'profile', 'User.Read'], forceRefresh: true} )}>Login</button>
+          !isAuthenticated && <button onClick={() => login({ scopes: ['openid', 'profile', 'User.Read'], forceRefresh: true}, 'loginPopup' )}>Login</button>
         }
         {
           isAuthenticated && JSON.stringify(user)
