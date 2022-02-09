@@ -91,11 +91,14 @@ export async function login(options = {}) {
     if(!msalClient) msalClient = new msal.PublicClientApplication(config.msal);
     console.log('Redirect login Azure AD');
     msalClient.acquireTokenRedirect(config.msal);
+    msalClient = new msal.PublicClientApplication(config.msal);
   }
 }
 
 export function logout() {
   console.log('Logging out');
+  localStorage.removeItem(tokenName);
+  sessionStorage.removeItem(tokenName);
 }
 
 export async function handleRedirect() {

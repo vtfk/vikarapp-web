@@ -69,7 +69,8 @@ function App() {
         <h2 style={{margin: '0 0.2rem', textAlign: 'left'}}>Actions</h2>
         <div style={{textAlign: 'left', display: 'flex', gap: '0.5rem', margin: '0.5rem 0.5rem'}}>
           <button onClick={() => {alert('Authenticated?: ' + isAuthenticated )}}>Check authentication status</button>
-          <button onClick={() => { auth.login({ force: true })}}>Login</button>
+          <button onClick={() => { login({ force: true })}}>Login</button>
+          <button onClick={() => { auth.logout(); setIsAuthenticated(false)}}>Logout</button>
         </div>
         </div>
         
