@@ -5,7 +5,7 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
-  const { isAuthenticated, login, authStatus } = useSession()
+  const { isAuthenticated } = useSession()
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [isMobile, setisMobile] = useState(window.innerWidth < 1000 ? true : false);
 
@@ -32,7 +32,7 @@ function App() {
       return () => {
         window.removeEventListener('resize', handleWindowSizeChange);
       }
-  }, []);
+  }, [isAuthenticating]);
 
   // function handleLogin() {
   //   if(isMobile) login({ scopes: ['openid', 'profile', 'User.Read'], forceRefresh: true})
