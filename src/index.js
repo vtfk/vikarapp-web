@@ -3,10 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { MsalProvider } from '@vtfk/react-msal'
+import { config } from './config'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <MsalProvider config={config.msal} scopes={config.msal_scopes}>
+      <App />
+    </MsalProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
