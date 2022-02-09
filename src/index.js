@@ -1,15 +1,31 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import App from './App.js';
 import reportWebVitals from './reportWebVitals';
 import { MsalProvider } from '@vtfk/react-msal'
 import { config } from './config'
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Link
+} from "react-router-dom";
+
+/*
+  Import routes
+*/
+import Login from './routes/Login';
 
 ReactDOM.render(
   <React.StrictMode>
     <MsalProvider config={config.msal} scopes={config.msal_scopes}>
-      <App />
+      <BrowserRouter>
+        <Routes>
+          <Route exact path="/" element={<App />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </BrowserRouter>
     </MsalProvider>
   </React.StrictMode>,
   document.getElementById('root')

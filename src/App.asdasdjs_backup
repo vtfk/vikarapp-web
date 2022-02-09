@@ -1,12 +1,11 @@
+import { useSession } from '@vtfk/react-msal';
 import * as microsoftTeams from '@microsoft/teams-js';
-import { useSession } from '@vtfk/react-msal'
 import { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
-  const { isAuthenticated, login, authStatus } = useSession()
-  const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const { isAuthenticated, login, authStatus, user } = useSession()
   const [isMobile, setisMobile] = useState(window.innerWidth < 1000 ? true : false);
 
   function handleWindowSizeChange() {
@@ -14,43 +13,32 @@ function App() {
       else setisMobile(false);
   }
   useEffect(() => {
-    // Initialize auth
-    microsoftTeams.initialize();
-    microsoftTeams.authentication.initialize();
-    
-    if(!isAuthenticating) {
-      console.log('Auth initialized');
-      setIsAuthenticating(true);
-      microsoftTeams.authentication.authenticate({
-        url: 'http://localhost:3000/login',
-        failureCallback: (e) => { console.log('Auth failed:', e) },
-        successCallback: (e) => { console.log('Auth successfull:', e) }
-      })
-    }
-    
       window.addEventListener('resize', handleWindowSizeChange);
       return () => {
         window.removeEventListener('resize', handleWindowSizeChange);
       }
   }, []);
 
-  // function handleLogin() {
-  //   if(isMobile) login({ scopes: ['openid', 'profile', 'User.Read'], forceRefresh: true})
-  //   else login({ scopes: ['openid', 'profile', 'User.Read'], forceRefresh: true}, 'loginPopup')
-  // }
+  function handleLogin() {
+    if(isMobile) login({ scopes: ['openid', 'profile', 'User.Read'], forceRefresh: true})
+    else login({ scopes: ['openid', 'profile', 'User.Read'], forceRefresh: true}, 'loginPopup')
+  }
 
   return (
     <div className="App">
       <header className="App-header">
         <div>Environment: {process.env.NODE_ENV}</div>
         <div>User-agent: {window.navigator.userAgent}</div>
-        <div>Is authenticated: {isAuthenticated.toString()}</div>
         <div>Is mobile: {isMobile.toString()}</div>
+        <div>Is authenticated?: {isAuthenticated.toString()}</div>
+        <div>Authentication status: {authStatus}</div>
         {
-          <div>
-            {}
-          </div>
+          !isAuthenticated && <button onClick={() => handleLogin()}>Login</button>
         }
+        {
+          isAuthenticated && JSON.stringify(user)
+        }
+        
 
         <img src={logo} className="App-logo" alt="logo" />
         <p>
