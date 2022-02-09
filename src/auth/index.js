@@ -10,6 +10,7 @@ const { config } = require('../config')
 /*
   Declarations
 */
+let authenticationPromise = undefined;
 const tokenName = 'auth_token';
 let msalClient = undefined;
 
@@ -69,21 +70,21 @@ function saveToken(token, options = {}) {
 
 export async function login(options = {}) {
   if(isAuthenticated() && !options.force) return;
-
+  if(authenticationPromise) return authenticationPromise;
+  
   // If the request is from Teams and it is not from the loginUrl
   console.log('IsFromTeams:', isFromTeams());
   console.log('Url:', window.location.href)
   if(isFromTeams() && !window?.location?.href.endsWith(config.auth.loginUrl)) {
-    await new Promise((resolve) => {
+    authenticationPromise = new Promise((resolve) => {
       const teamsConfig = {
         url: options.loginUrl || `${window.location.href}login`,
-        successCallback: (e) => { resolve(getValidToken()) },
-        failureCallback: (e) => { resolve(getValidToken()) } // There is a bug in teams-js that always trigger this, even on success
+        successCallback: (e) => { resolve(getValidToken()); authenticationPromise = undefined; },
+        failureCallback: (e) => { resolve(getValidToken()); authenticationPromise = undefined; } // There is a bug in teams-js that always trigger this, even on success
       }
       microsoftTeams.authentication.authenticate(teamsConfig);
     });
-
-    return;
+    return authenticationPromise;
   }
 
   // Default or Azure AD
@@ -111,7 +112,10 @@ export async function handleRedirect() {
 
 
     // Save the token;
-    if(token) saveToken(token, config.auth);
+    if(token) {
+      saveToken(token, config.auth);
+      authenticationPromise = undefined;
+    }
     
     // If the request is from Microsoft Teams, notify
     if(isFromTeams()) {

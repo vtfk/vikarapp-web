@@ -3,28 +3,24 @@ import logo from './logo.svg';
 import './App.css';
 import * as auth from './auth'
 
+async function login() {
+  await auth.login();
+}
+
 function App() {
   const userAgent = window.navigator.userAgent.toLowerCase();
   const isTeamsApp = userAgent.includes('microsoftteams') || userAgent.includes('teamsmobile')
 
-  const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(auth.isAuthenticated());
   const [isMobile] = useState(userAgent.includes('android') || userAgent.includes('mobile') || false);
 
-  async function login() {
-    if(!isAuthenticating) {
-      setIsAuthenticating(true);
-      await auth.login();
-      setIsAuthenticating(false);
-      setIsAuthenticated(auth.isAuthenticated())
-    }
-  }
 
   useEffect(() => {
-    async function auth() {
+    async function authenticate() {
       await login();
+      setIsAuthenticated(auth.isAuthenticated());
     }
-    auth();
+    authenticate();
   }, [])
 
   return (
@@ -68,8 +64,8 @@ function App() {
         <div>
         <h2 style={{margin: '0 0.2rem', textAlign: 'left'}}>Actions</h2>
         <div style={{textAlign: 'left', display: 'flex', gap: '0.5rem', margin: '0.5rem 0.5rem'}}>
-          <button onClick={() => {alert('Authenticated?: ' + isAuthenticated )}}>Check authentication status</button>
-          <button onClick={() => { login({ force: true })}}>Login</button>
+          <button onClick={() => {alert('Authenticated?: ' + auth.isAuthenticated() )}}>Check authentication status</button>
+          <button onClick={async () => { await login({ force: true }); setIsAuthenticated(auth.isAuthenticated());}}>Login</button>
           <button onClick={() => { auth.logout(); setIsAuthenticated(false)}}>Logout</button>
         </div>
         </div>
