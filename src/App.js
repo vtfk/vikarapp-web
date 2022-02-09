@@ -15,31 +15,22 @@ function App() {
       if(window.innerWidth < 1000) setisMobile(true);
       else setisMobile(false);
   }
-  useEffect(async () => {
-   
-    if(!isAuthenticating) {
-      console.log('Auth initialized');
-      setIsAuthenticating(true);
-      await auth.login();
-      setIsAuthenticated(auth.isAuthenticated())
-
-      // microsoftTeams.authentication.authenticate({
-      //   url: `${window.location.href}login`,
-      //   failureCallback: (e) => { console.log('Auth failed:', e) },
-      //   successCallback: (e) => { console.log('Auth successfull:', e) }
-      // })
-    }
-    
-      window.addEventListener('resize', handleWindowSizeChange);
-      return () => {
-        window.removeEventListener('resize', handleWindowSizeChange);
+  useEffect(() => {
+    async function authenticate() {
+      if(!isAuthenticating) {
+        console.log('Auth initialized');
+        setIsAuthenticating(true);
+        await auth.login();
+        setIsAuthenticated(auth.isAuthenticated())
       }
+    }
+    authenticate();
+    
+    window.addEventListener('resize', handleWindowSizeChange);
+    return () => {
+      window.removeEventListener('resize', handleWindowSizeChange);
+    }
   }, [isAuthenticating]);
-
-  // function handleLogin() {
-  //   if(isMobile) login({ scopes: ['openid', 'profile', 'User.Read'], forceRefresh: true})
-  //   else login({ scopes: ['openid', 'profile', 'User.Read'], forceRefresh: true}, 'loginPopup')
-  // }
 
   return (
     <div className="App">
