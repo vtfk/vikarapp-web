@@ -3,7 +3,10 @@ const redirectUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3
 export const config = {
   auth: {
     loginUrl: '/login',
-    storage: 'local'
+    storage: 'local',
+    loginRequest: {
+      scopes: ['openid', 'profile', 'User.Read']
+    }
   },
   msal: {
     auth: {

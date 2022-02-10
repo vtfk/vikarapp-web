@@ -11,12 +11,9 @@ async function login() {
 function App() {
   const userAgent = window.navigator.userAgent.toLowerCase();
   const isTeamsApp = userAgent.includes('microsoftteams') || userAgent.includes('teamsmobile')
-  const [teamsContext, setTeamsContext] = useState(undefined);
 
   const [isAuthenticated, setIsAuthenticated] = useState(auth.isAuthenticated());
   const [isMobile] = useState(userAgent.includes('android') || userAgent.includes('mobile') || false);
-
-  msTeams.getContext((ctx) => { setTeamsContext(ctx); console.log('Teams context:'); console.log(ctx) })
 
   useEffect(() => {
     async function authenticate() {
@@ -67,12 +64,12 @@ function App() {
               <th>Is TeamsApp</th>
               <td>{isTeamsApp.toString()}</td>
             </tr>
-            <tr>
+            {/* <tr>
               <th>Teams user</th>
               <td>
-                {teamsContext}
+                {teamsContext || 'none'}
               </td>
-            </tr>
+            </tr> */}
           </tbody>
         </table>
         <div>

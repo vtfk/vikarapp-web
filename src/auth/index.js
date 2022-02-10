@@ -75,7 +75,34 @@ export async function login(options = {}) {
   // If the request is from Teams and it is not from the loginUrl
   console.log('IsFromTeams:', isFromTeams());
   console.log('Url:', window.location.href)
+
+  /*
+    Make login request from Teams
+  */
   if(isFromTeams() && !window?.location?.href.endsWith(config.auth.loginUrl)) {
+    // Attempt to retreive loginHint from TeamsContext
+    const teamsContext = await new Promise(async (resolve) => {
+      try {
+        // Simple function to sleep for x ms
+        // We have to do this because getContext does not run the callback if no ctx was found
+        function sleep(ms) { return new Promise((resolve) => setTimeout(() => resolve(), ms)) }
+
+        // Attempt to retreive the teams context
+        let msTeamsContext = undefined;
+        microsoftTeams.getContext((ctx) => msTeamsContext = ctx);
+        await sleep(500);
+
+        resolve(msTeamsContext);
+      } catch { resolve(undefined) }
+    })
+
+    if(teamsContext) {
+      config.auth.loginRequest.loginHint = teamsContext.loginHint || teamsContext.upn || teamsContext.userPrincipalName
+    }
+
+    console.log('Teams Context');
+    console.log(teamsContext);
+
     authenticationPromise = new Promise((resolve) => {
       const teamsConfig = {
         url: options.loginUrl || `${window.location.href}login`,
@@ -90,9 +117,17 @@ export async function login(options = {}) {
   // Default or Azure AD
   if(!options.service || options.service === 'azuread') {
     if(!msalClient) msalClient = new msal.PublicClientApplication(config.msal);
-    console.log('Redirect login Azure AD');
-    msalClient.acquireTokenRedirect(config.msal);
-    msalClient = new msal.PublicClientApplication(config.msal);
+
+    // First attempt to acquire token silently
+    try {
+      const token = await this.authAgent.acquireTokenSilent(config.auth.loginRequest);
+      saveToken(token);
+    } catch {
+      if(config.auth.loginMethod !== 'popup') {
+        console.log('Redirect login Azure AD');
+        msalClient.acquireTokenRedirect(config.auth.loginRequest);
+      }
+    }
   }
 }
 
@@ -119,12 +154,13 @@ export async function handleRedirect() {
     
     // If the request is from Microsoft Teams, notify
     if(isFromTeams()) {
+      console.log('Handling teams');
       if(token) microsoftTeams.authentication.notifySuccess(token);
       else microsoftTeams.authentication.notifyFailure('An unexpected authentication error occured')
     }
 
   } catch (err) {
     console.log('Redirection error:', err);
-    if(isFromTeams()) microsoftTeams.authentication.notifyFailure('Error')
+    if(isFromTeams()) microsoftTeams.authentication.notifyFailure(err)
   }
 }
