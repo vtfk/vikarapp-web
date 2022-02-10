@@ -3,6 +3,7 @@
 */
 import { useState, useEffect } from 'react'
 import * as auth from '../auth';
+import './Login.css'
 
 export default function Login() {
   const useMountEffect = (fun) => useEffect(fun)
@@ -16,9 +17,9 @@ export default function Login() {
   })
 
   return (
-    <div>
-      <div>Loggær inn</div>
-      <div>Holder på? {isLoggingIn.toString()}</div>
+    <div className='container'>
+      <div className='title'>Logger inn</div>
+      <div className='subtitle'>Du vil snart bli videresendt</div>
     </div>
   )
 }

@@ -3,7 +3,7 @@
 */
 import { useState, useEffect } from 'react';
 import * as auth from '../auth';
-import './HandleLogin.css';
+import './Login.css';
 
 export default function HandleLogin() {
   auth.handleRedirect();
@@ -37,11 +37,11 @@ export default function HandleLogin() {
 
   return (
     <div className='container'>
-      { isHandeling && <div className='title'>Processing login</div> }
+      { isHandeling && <div className='title'>Bearbeider innlogging</div> }
       { !isHandeling && 
       <div>
-        <div className='title'>Login successfull</div>
-        <div className='subtitle'>You can close this window</div>
+        <div className='title'>Innlogging vellykket</div>
+        <div className='subtitle'>Du kan stenge dette vinduet nå</div>
       </div>
       }
     </div>
