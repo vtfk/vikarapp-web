@@ -76,73 +76,71 @@ export async function login(options = {}) {
   if(authenticationPromise) return authenticationPromise;
 
   /*
-    Make login request from Teams
+    Declarations
   */
-  if(isFromTeams() && !window?.location?.href.endsWith(config.auth.loginUrl)) {
-    // Attempt to retreive loginHint from TeamsContext
+  // Token object that should be assigned, saved and returned in the bottom of the function
+  let token = undefined; 
+  // If is from teams, attempt to retreive a loginHint
+  if(isFromTeams()) {
     const teamsContext = await getTeamsContext(microsoftTeams);
-    if(teamsContext) {
-      config.auth.loginRequest.loginHint = teamsContext.loginHint || teamsContext.upn || teamsContext.userPrincipalName
-    }
-
-    console.log('Teams Context');
-    console.log(teamsContext);
-
-
-    try {
-      if(!msalClient) msalClient = new msal.PublicClientApplication(config.msal);
-      
-      const accounts = msalClient.getAllAccounts();
-      if(accounts) config.auth.loginRequest.account = accounts[0];
-
-      const token = await msalClient.acquireTokenSilent(config.auth.loginRequest);
-      saveToken(token, config.auth);
-      return token;
-    } catch (err) {
-      console.log('Error')
-      console.log(err);
-      authenticationPromise = new Promise((resolve) => {
-        const teamsConfig = {
-          url: options.loginUrl || config.auth.loginUrl || `${window.location.href}`,
-          successCallback: (e) => { resolve(getValidToken()); authenticationPromise = undefined; },
-          failureCallback: (e) => { resolve(getValidToken()); authenticationPromise = undefined; } // There is a bug in teams-js that always trigger this, even on success
-        }
-        microsoftTeams.authentication.authenticate(teamsConfig);
-      });
-      return authenticationPromise;
-    }
+    if(teamsContext) config.auth.loginRequest.loginHint = teamsContext.loginHint || teamsContext.upn || teamsContext.userPrincipalName
   }
 
+  /*
+    Attempt to handle silent/SSO authentication before using methods that affect user experience
+  */
+  try {
+    if(!options.service || options.service === 'azuread') {
+      if(!msalClient) msalClient = new msal.PublicClientApplication(config.msal);
+      const accounts = msalClient.getAllAccounts();
+      if(accounts) config.auth.loginRequest.account = accounts[0];
+      token = await msalClient.acquireTokenSilent(config.auth.loginRequest)
+    }
+
+    if(!token) throw new Error('Silent token retreival failed')
+    saveToken(token, config.auth);
+    return token;
+  } catch {}
+
+  /*
+    Make login request from Teams
+    This is a special case that can be used by most auth providers
+    Everything here will be handled here and return early not hitting services below
+  */
+  if(isFromTeams() && !window?.location?.href.endsWith(config.auth.loginUrl)) {
+    authenticationPromise = new Promise((resolve) => {
+      const teamsConfig = {
+        url: options.loginUrl || config.auth.loginUrl || `${window.location.href}`,
+        successCallback: (e) => { resolve(getValidToken()); authenticationPromise = undefined; },
+        failureCallback: (e) => { resolve(getValidToken()); authenticationPromise = undefined; } // There is a bug in teams-js that always trigger this, even on success
+      }
+      microsoftTeams.authentication.authenticate(teamsConfig);
+    });
+    return authenticationPromise;
+  }
+
+  /*
+    Make regular auth provider request
+  */
   // Default or Azure AD
   if(!options.service || options.service === 'azuread') {
     if(!msalClient) msalClient = new msal.PublicClientApplication(config.msal);
-
-    // First attempt to acquire token silently
-    try {
-      const accounts = msalClient.getAllAccounts();
-      if(accounts) config.auth.loginRequest.account = accounts[0];
-      const token = await this.authAgent.acquireTokenSilent(config.auth.loginRequest);
-      saveToken(token, config.auth);
-    } catch {
-      if(config.auth.loginMethod !== 'popup') {
-        console.log('Redirect login Azure AD');
-        msalClient.acquireTokenRedirect(config.auth.loginRequest);
-      } else {
-        console.log('Popup login Azure AD');
-        try {
-          const token = await msalClient.acquireTokenPopup(config.auth.loginRequest);
-          saveToken(token, config.auth);
-        }
-        catch (err) {
-          Promise.reject(err);
-        }
-      }
+    if(config.auth.loginMethod !== 'popup') {
+      // Default: Redirection
+      return msalClient.acquireTokenRedirect(config.auth.loginRequest);
+    } else {
+      // PopUp
+      token = await msalClient.acquireTokenPopup(config.auth.loginRequest);
     }
   }
+
+  // Save and return the token
+  if(!token) throw new Error('Authentication failed, no token recevied')
+  saveToken(token, config.auth);
+  return token;
 }
 
 export function logout() {
-  console.log('Logging out');
   localStorage.removeItem(tokenName);
   sessionStorage.removeItem(tokenName);
 }
