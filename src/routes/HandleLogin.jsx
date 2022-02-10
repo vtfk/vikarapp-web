@@ -3,24 +3,33 @@
 */
 import { useState, useEffect } from 'react';
 import * as auth from '../auth';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './Login.css';
 
 export default function HandleLogin() {
-  auth.handleRedirect();
-
   const [error, setError] = useState();
   const [isHandeling, setIsHandeling] = useState(true)
+  const navigate = useNavigate();
+  const { state } = useLocation();
 
-  useEffect(() => {
-    async function handle() {
-      try {
-        await auth.handleRedirect();
-        if(auth.getValidToken()) setIsHandeling(false);
-        else setError('Kunne ikke logge inn')
-      } catch (err) {
-        setError(err);
+  // Function that handles the authentication
+  async function handle() {
+    try {
+      await auth.handleRedirect();
+      if(auth.getValidToken()) {
+        setIsHandeling(false);
+        if (!window.opener || window.opener === window) {
+          navigate(state?.path || "/");
+        }
       }
+      else setError('Kunne ikke logge inn')
+    } catch (err) {
+      setError(err);
     }
+  }
+
+  // Run on mount
+  useEffect(() => {
     handle();
   }, [])
 

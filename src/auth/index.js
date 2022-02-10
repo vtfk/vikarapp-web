@@ -85,13 +85,14 @@ export async function login(options = {}) {
     const teamsContext = await getTeamsContext(microsoftTeams);
     if(teamsContext) config.auth.loginRequest.loginHint = teamsContext.loginHint || teamsContext.upn || teamsContext.userPrincipalName
   }
+  // Create AzureAD MSAL client if applicable
+  if ((!options.service || options.service === 'azuread') && !msalClient) msalClient = new msal.PublicClientApplication(config.msal);
 
   /*
     Attempt to handle silent/SSO authentication before using methods that affect user experience
   */
   try {
     if(!options.service || options.service === 'azuread') {
-      if(!msalClient) msalClient = new msal.PublicClientApplication(config.msal);
       const accounts = msalClient.getAllAccounts();
       if(accounts && Array.isArray(accounts) && accounts.length > 0) config.auth.loginRequest.account = accounts.find((a) => a.username === config.auth?.loginRequest?.loginHint) || accounts[0];
       token = await msalClient.acquireTokenSilent(config.auth.loginRequest)
@@ -124,7 +125,6 @@ export async function login(options = {}) {
   */
   // Default or Azure AD
   if(!options.service || options.service === 'azuread') {
-    if(!msalClient) msalClient = new msal.PublicClientApplication(config.msal);
     if(config.auth.loginMethod !== 'popup') {
       // Default: Redirection
       return msalClient.acquireTokenRedirect(config.auth.loginRequest);
@@ -147,11 +147,9 @@ export function logout() {
 
 export async function handleRedirect() {
   try {
-    console.log('Handeling redirectResponse')
     // Azure AD
     if(!msalClient) msalClient = new msal.PublicClientApplication(config.msal);
     const token = await msalClient.handleRedirectPromise();
-    console.log('Response:', token);
 
     // Save the token;
     if(token) {
@@ -159,16 +157,14 @@ export async function handleRedirect() {
       authenticationPromise = undefined;
     }
     
-    // If the request is from Microsoft Teams, notify
+    // If the request is from a Teams client, notify it
     if(isFromTeams()) {
-      console.log('Handling teams');
       if(token) microsoftTeams.authentication.notifySuccess(token);
       else microsoftTeams.authentication.notifyFailure('An unexpected authentication error occured')
     }
 
     return token;
   } catch (err) {
-    console.log('Redirection error:', err);
     if(isFromTeams()) microsoftTeams.authentication.notifyFailure(err)
   }
 }
