@@ -91,7 +91,7 @@ export async function login(options = {}) {
 
     authenticationPromise = new Promise((resolve) => {
       const teamsConfig = {
-        url: options.loginUrl || `${window.location.href}login`,
+        url: config.auth.loginUrl || options.loginUrl || `${window.location.href}`,
         successCallback: (e) => { resolve(getValidToken()); authenticationPromise = undefined; },
         failureCallback: (e) => { resolve(getValidToken()); authenticationPromise = undefined; } // There is a bug in teams-js that always trigger this, even on success
       }
