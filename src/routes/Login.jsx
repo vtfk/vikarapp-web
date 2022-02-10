@@ -13,11 +13,12 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const { state } = useLocation();
 
+  async function authenticate() {
+    await login();
+    navigate(state?.path || "/")
+  }
+
   useMountEffect(() => {
-    async function authenticate() {
-      await login();
-      navigate(state?.path || "/")
-    }
     authenticate();
   })
 
@@ -25,7 +26,7 @@ export default function LoginPage() {
     <div className="container">
       <div className="title">Du logges inn</div>
       <div className="subtitle">Hvis det ikke skjer automatisk, vennligst forsøk knappen</div>
-      <button>Login</button>
+      <button onClick={() => authenticate()}>Login</button>
     </div>
   )
 }
