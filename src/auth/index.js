@@ -119,7 +119,7 @@ export async function login(options = {}) {
       const accounts = msalClient.getAllAccounts();
       if(accounts) config.auth.loginRequest.account = accounts[0];
       const token = await this.authAgent.acquireTokenSilent(config.auth.loginRequest);
-      saveToken(token);
+      saveToken(token, config.auth);
     } catch {
       if(config.auth.loginMethod !== 'popup') {
         console.log('Redirect login Azure AD');
@@ -128,7 +128,7 @@ export async function login(options = {}) {
         console.log('Popup login Azure AD');
         try {
           const token = await msalClient.acquireTokenPopup(config.auth.loginRequest);
-          saveToken(token);
+          saveToken(token, config.auth);
         }
         catch (err) {
           Promise.reject(err);
