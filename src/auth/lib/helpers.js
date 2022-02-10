@@ -17,3 +17,21 @@ export function isFromTeams() {
   const userAgent = window.navigator.userAgent.toLocaleLowerCase();
   return userAgent.includes('mobile') || userAgent.includes('android') || false;
 }
+
+export function getTeamsContext(msTeamsInstance) {
+  // Attempt to retreive loginHint from TeamsContext
+  return new Promise(async (resolve) => {
+    try {
+      // Simple function to sleep for x ms
+      // We have to do this because getContext does not run the callback if no ctx was found
+      function sleep(ms) { return new Promise((resolve) => setTimeout(() => resolve(), ms)) }
+
+      // Attempt to retreive the teams context
+      let msTeamsContext = undefined;
+      msTeamsInstance.getContext((ctx) => msTeamsContext = ctx);
+      await sleep(500);
+
+      resolve(msTeamsContext);
+    } catch { resolve(undefined) }
+  })
+}

@@ -3,7 +3,7 @@
 */
 import * as microsoftTeams from '@microsoft/teams-js';
 import * as msal from "@azure/msal-browser";
-import { isFromTeams } from './lib/helpers';
+import { isFromTeams, getTeamsContext } from './lib/helpers';
 const { config } = require('../config')
 
 
@@ -81,21 +81,7 @@ export async function login(options = {}) {
   */
   if(isFromTeams() && !window?.location?.href.endsWith(config.auth.loginUrl)) {
     // Attempt to retreive loginHint from TeamsContext
-    const teamsContext = await new Promise(async (resolve) => {
-      try {
-        // Simple function to sleep for x ms
-        // We have to do this because getContext does not run the callback if no ctx was found
-        function sleep(ms) { return new Promise((resolve) => setTimeout(() => resolve(), ms)) }
-
-        // Attempt to retreive the teams context
-        let msTeamsContext = undefined;
-        microsoftTeams.getContext((ctx) => msTeamsContext = ctx);
-        await sleep(500);
-
-        resolve(msTeamsContext);
-      } catch { resolve(undefined) }
-    })
-
+    const teamsContext = await getTeamsContext(microsoftTeams);
     if(teamsContext) {
       config.auth.loginRequest.loginHint = teamsContext.loginHint || teamsContext.upn || teamsContext.userPrincipalName
     }

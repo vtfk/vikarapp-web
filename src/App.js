@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import * as auth from './auth'
-import * as msTeams from '@microsoft/teams-js'
 
 async function login() {
   await auth.login();

@@ -4,6 +4,7 @@ export const config = {
   auth: {
     loginUrl: '/login',
     storage: 'local',
+    loginMethod: 'redirect',
     loginRequest: {
       scopes: ['openid', 'profile', 'User.Read']
     }
