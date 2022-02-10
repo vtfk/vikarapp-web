@@ -1,0 +1,20 @@
+
+
+.container {
+  background-color: #282c34;
+  width: 100vw;
+  height: 100vh;
+  text-align: center;
+  padding: 4rem;
+  overflow: hidden;
+}
+
+.title {
+  font-size: 30px;
+  color: white;
+}
+
+.subtitle {
+  font-size: 20px;
+  color: white;
+}

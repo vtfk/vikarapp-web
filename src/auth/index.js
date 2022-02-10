@@ -131,7 +131,6 @@ export async function handleRedirect() {
     const token = await msalClient.handleRedirectPromise();
     console.log('Response:', token);
 
-
     // Save the token;
     if(token) {
       saveToken(token, config.auth);
@@ -145,6 +144,7 @@ export async function handleRedirect() {
       else microsoftTeams.authentication.notifyFailure('An unexpected authentication error occured')
     }
 
+    return token;
   } catch (err) {
     console.log('Redirection error:', err);
     if(isFromTeams()) microsoftTeams.authentication.notifyFailure(err)
