@@ -11,6 +11,7 @@ export default function HandleLogin() {
   const [isHandeling, setIsHandeling] = useState(true)
   const navigate = useNavigate();
   const { state } = useLocation();
+  const useMountEffect = (fun) => useEffect(fun)
 
   // Function that handles the authentication
   async function handle() {
@@ -29,9 +30,9 @@ export default function HandleLogin() {
   }
 
   // Run on mount
-  useEffect(() => {
+  useMountEffect(() => {
     handle();
-  }, [])
+  })
 
   if(error) {
     return (
