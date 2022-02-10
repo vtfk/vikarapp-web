@@ -51,7 +51,10 @@ export function getValidToken(options = config.auth || {}) {
  * @returns 
  */
 function saveToken(token, options = {}) {
+  // Apply default values to the options
   if(!options) options = {};
+  options = Object.assign(config.auth, options);
+  
   // Parse and prepare the token
   const formattedToken = {
     service: options.service || 'azuread',
