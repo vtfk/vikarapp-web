@@ -71,7 +71,7 @@ function saveToken(token, options = {}) {
 export async function login(options = {}) {
   if(isAuthenticated() && !options.force) return;
   if(authenticationPromise) return authenticationPromise;
-  
+
   // If the request is from Teams and it is not from the loginUrl
   console.log('IsFromTeams:', isFromTeams());
   console.log('Url:', window.location.href)
@@ -120,7 +120,7 @@ export async function handleRedirect() {
     // If the request is from Microsoft Teams, notify
     if(isFromTeams()) {
       if(token) microsoftTeams.authentication.notifySuccess(token);
-      // else microsoftTeams.authentication.notifyFailure('An unexpected authentication error occured')
+      else microsoftTeams.authentication.notifyFailure('An unexpected authentication error occured')
     }
 
   } catch (err) {

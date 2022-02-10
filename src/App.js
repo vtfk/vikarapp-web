@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import * as auth from './auth'
+import * as msTeams from '@microsoft/teams-js'
 
 async function login() {
   await auth.login();
@@ -14,9 +15,10 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(auth.isAuthenticated());
   const [isMobile] = useState(userAgent.includes('android') || userAgent.includes('mobile') || false);
 
-
   useEffect(() => {
     async function authenticate() {
+      console.log('Teams user:');
+      console.log(msTeams.authentication.getUser());
       await login();
       setIsAuthenticated(auth.isAuthenticated());
     }
@@ -25,20 +27,14 @@ function App() {
 
   return (
     <div className="App">
-        <h2 style={{margin: '0 0.2rem', textAlign: 'left'}}>Status</h2>
         <table style={{textAlign: 'left', color: 'black'}}>
           <tbody>
             <tr>
+              <th className='Table-section'>General</th>
+            </tr>
+            <tr>
               <th style={{width: '150px'}}>Environment</th>
               <td>{process.env.NODE_ENV}</td>
-            </tr>
-            <tr>
-              <th>Is authenticated</th>
-              <td>{isAuthenticated.toString()}</td>
-            </tr>
-            <tr>
-              <th>Is TeamsApp</th>
-              <td>{isTeamsApp.toString()}</td>
             </tr>
             <tr>
               <th>Is mobile</th>
@@ -52,13 +48,30 @@ function App() {
               <th>User-agent</th>
               <td>{window.navigator.userAgent}</td>
             </tr>
-            {
-              isAuthenticated &&
-              <tr>
-                <th>Logged in as</th>
-                <td>{JSON.stringify(auth.getValidToken()?.token?.account?.name)}</td>
-              </tr>
-            }
+            <tr>
+              <th className='Table-section'>Authentication</th>
+            </tr>
+            <tr>
+              <th>Is authenticated</th>
+              <td>{isAuthenticated.toString()}</td>
+            </tr>
+            <tr>
+              <th>Logged in as</th>
+              <td>{JSON.stringify(auth.getValidToken()?.token?.account?.name) || 'None'}</td>
+            </tr>
+            <tr>
+              <th className='Table-section'>Teams</th>
+            </tr>
+            <tr>
+              <th>Is TeamsApp</th>
+              <td>{isTeamsApp.toString()}</td>
+            </tr>
+            <tr>
+              <th>Teams user</th>
+              <td>
+                {JSON.stringify(msTeams.authentication.getUser(), null, 2) || 'None'}
+              </td>
+            </tr>
           </tbody>
         </table>
         <div>
