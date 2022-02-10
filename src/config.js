@@ -18,7 +18,7 @@ export const config = {
       postLogoutRedirectUri: 'https://www.vtfk.no/'
     },
     cache: {
-      cacheLocation: 'sessionStorage',
+      cacheLocation: 'localStorage',
       storeAuthStateInCookie: false
     }
   },
