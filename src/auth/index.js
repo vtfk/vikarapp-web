@@ -93,7 +93,7 @@ export async function login(options = {}) {
     if(!options.service || options.service === 'azuread') {
       if(!msalClient) msalClient = new msal.PublicClientApplication(config.msal);
       const accounts = msalClient.getAllAccounts();
-      if(accounts) config.auth.loginRequest.account = accounts.find((a) => a.username === config.auth?.loginRequest?.loginHint) || accounts[0];
+      if(accounts && Array.isArray(accounts) && accounts.length > 0) config.auth.loginRequest.account = accounts.find((a) => a.username === config.auth?.loginRequest?.loginHint) || accounts[0];
       token = await msalClient.acquireTokenSilent(config.auth.loginRequest)
     }
 
