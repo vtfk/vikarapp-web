@@ -13,7 +13,7 @@ function random() {
   return Math.floor(Math.random() * 10000000000)
 }
 
-export default function Table({items, headers, itemId = '_id', style, dense = false, showSelect = true, selectOnClick = false}) {
+export default function Table({items, headers, itemId = '_id', style, dense = false, showSelect = true, selectOnClick = false, onSelectedIdsChanged, onSelectedItemsChanged}) {
   // State
   const [selectedIds, setSelectedIds] = useState([])
   const [selectedItems, setSelectedItems] = useState([])
@@ -21,6 +21,8 @@ export default function Table({items, headers, itemId = '_id', style, dense = fa
 
   // Functions
   function updateSelected(item) {
+    if(items.length === 0) return;
+    
     if(!selectedIds.includes(item[itemId])) {
       setSelectedIds([...selectedIds, item[itemId]]);
       setSelectedItems([...selectedItems, item]);
@@ -29,11 +31,16 @@ export default function Table({items, headers, itemId = '_id', style, dense = fa
       setSelectedItems(selectedItems.filter((i) => i[itemId] !== item[itemId]))
     }
 
+    if(onSelectedIdsChanged && typeof onSelectedIdsChanged === 'function') onSelectedIdsChanged(selectedIds);
+    if(onSelectedItemsChanged && typeof onSelectedItemsChanged === 'function') onSelectedItemsChanged(selectedIds);
+
     if(items.length > 0 && selectedIds.length > 0 && selectedIds.length === items.length) setIsAllSelected(true);
     else setIsAllSelected(false);
   }
 
   function selectAll(bool) {
+    if(items.length === 0) return;
+
     if(bool) {
       setSelectedIds(items.map((i) => i[itemId]))
       setSelectedItems(items);
@@ -43,6 +50,9 @@ export default function Table({items, headers, itemId = '_id', style, dense = fa
       setSelectedItems([]);
       setIsAllSelected(false);
     }
+
+    if(onSelectedIdsChanged && typeof onSelectedIdsChanged === 'function') onSelectedIdsChanged(selectedIds);
+    if(onSelectedItemsChanged && typeof onSelectedItemsChanged === 'function') onSelectedItemsChanged(selectedIds);
   }
 
   function isSelected(item) {

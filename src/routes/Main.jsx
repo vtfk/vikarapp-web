@@ -3,6 +3,7 @@ import logo from '../images/vtfk-logo.svg'
 
 import { Button } from '@vtfk/components'
 import Table from '../components/Table'
+import { useState } from 'react'
 
 export default function Main() {
   const headers = [
@@ -42,6 +43,9 @@ export default function Main() {
     }
   ]
 
+  const [selectedIds, setSelectedIds] = useState([])
+  const [selectedItems, setSelectedItems] = useState([])
+
   return (
     <main className='main-container'>
       <div className='app-container'>
@@ -49,13 +53,14 @@ export default function Main() {
           <h1 className='main-title' style={{margin: 0, fontSize: '3rem'}}>VikarApp</h1>
         </div>
         <div className='main-content'>
-          <Table itemId="_id" headers={headers} items={items} />
+          { selectedIds }
+          <Table itemId="_id" headers={headers} items={items} onSelectedIdsChanged={(e) => setSelectedIds(e)} onSelectedItemsChanged={(e) => setSelectedItems(e)} />
         </div>
         <div className='main-footer'>
           <img className='main-footer-logo' alt="footer-logo" src={logo} width="100px" />
           <div className='main-footer-button-group'>
             <Button size="small">Jeg skal være vikar</Button>
-            <Button size="small">Forleng vikariat</Button>
+            <Button size="small" disabled={selectedItems.length === 0}>Forleng vikariat</Button>
           </div>
         </div>
       </div>
