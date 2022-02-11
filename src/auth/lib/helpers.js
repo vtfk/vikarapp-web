@@ -13,6 +13,7 @@ export function isFromTeams() {
   // Get the userAgent to check if it contains teams
   const userAgent = window.navigator.userAgent.toLocaleLowerCase();
   console.log('User agent: ' + userAgent);
+  console.log('Is inside iframe?:' + isInsideIFrame);
   return isInsideIFrame || userAgent.includes('teams') || false;
 }
 
