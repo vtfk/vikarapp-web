@@ -135,7 +135,7 @@ export async function login(options = {}) {
       Everything here will be handled here and return early not hitting services below
       Teams auth works by creating a popup window that opens a login-route that redirects to the authprovider, then redirects back to a page that handles the response
     */
-    if(isFromTeams() && !window?.location?.href.endsWith(config.auth.loginUrl)) {
+    if(isFromTeams()) {
       const url = options.loginUrl || config.auth.loginUrl || `${window.location.href}`
       if(!url) throw new Error('Authentication not possible because config.auth.loginUrl is not set');
       authenticationPromise = new Promise((resolve) => {
