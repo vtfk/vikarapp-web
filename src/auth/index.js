@@ -191,8 +191,11 @@ export async function handleRedirect(options = {}) {
     
     // If the request is from a Teams client, notify it
     if(isFromTeams() || window.opener) {
-      if(token) microsoftTeams.authentication.notifySuccess(token);
-      else microsoftTeams.authentication.notifyFailure('An unexpected authentication error occured')
+      try{
+        if(token) microsoftTeams.authentication.notifySuccess(token);
+        else microsoftTeams.authentication.notifyFailure('An unexpected authentication error occured')
+      } catch {}
+
       window.close();
     }
 
