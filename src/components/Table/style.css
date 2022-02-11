@@ -1,16 +1,7 @@
 .vtfk-table {
   width: 100%;
   text-align: center;
-  border: none;
   overflow-x: hidden;
-}
-
-.vtfk-table tr {
-  
-}
-
-.vtfk-table tr:hover :not(th) {
-  background-color: #BBC8E1;
 }
 
 .vtfk-table th {
@@ -22,6 +13,10 @@
   padding: 0.5rem 0;
 }
 
+.vtfk-table .td-dense {
+  padding: 0.15rem 0;
+}
+
 .vtfk-table tbody tr:nth-of-type(even) {
   background-color: #D5E1E5;
 }
@@ -30,3 +25,10 @@
   background-color: #ECECEC;
 }
 
+.vtfk-table tbody tr:hover {
+  background-color: #00000018;
+}
+
+.vtfk-table tbody .tr-selected {
+  background-color: #df181894!important;
+}
