@@ -3,6 +3,14 @@
   text-align: center;
 }
 
-.vtfk-table-row {
-  text-align: center;
+.vtfk-table tr {
+  
+}
+
+.vtfk-table th {
+  padding: 0.5rem 0;
+}
+
+.vtfk-table td {
+  
 }
