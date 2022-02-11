@@ -18,6 +18,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
+  min-height: 4rem;
 }
 
 .main-title {
