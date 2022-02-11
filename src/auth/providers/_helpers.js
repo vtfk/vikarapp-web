@@ -35,6 +35,6 @@ export function getProviderClientConfig(providerName) {
 export function getProviderLoginConfig(providerName) {
   if(!providerName) return undefined;
   const providerConfig = getProviderConfig(providerName);
-  if(!providerConfig || !providerConfig.request) return undefined;
-  return providerConfig.request;
+  if(!providerConfig || !providerConfig.login) return undefined;
+  return providerConfig.login;
 }

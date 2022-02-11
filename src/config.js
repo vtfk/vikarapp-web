@@ -2,7 +2,7 @@ const redirectUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3
 
 export const config = {
   auth: {
-    loginUrl: '/login',
+    loginUrl: '/loginredirect',
     storage: 'local',
     loginMethod: 'redirect',
     loginOptions: {
@@ -24,15 +24,9 @@ export const config = {
           storeAuthStateInCookie: false
         }
       },
-      request: {
+      login: {
         scopes: ['openid', 'profile', 'User.Read'],
-        loginHint: 'karleinar.bergstrom@vtfk.no'
       }
     }
   },
-}
-
-// See valid values here: https://azuread.github.io/microsoft-authentication-library-for-js/ref/msal-browser/modules/_src_request_redirectrequest_.html
-export const loginRequest = {
-  scopes: ['openid', 'profile', 'User.Read']
 }

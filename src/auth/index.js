@@ -103,7 +103,7 @@ export async function login(options = {}) {
     // If is from teams, attempt to retreive a loginHint
     if(isFromTeams()) {
       const teamsContext = await getTeamsContext(microsoftTeams);
-      if(teamsContext) config.auth.loginRequest.loginHint = teamsContext.loginHint || teamsContext.upn || teamsContext.userPrincipalName
+      if(teamsContext) config.auth.loginOptions.loginHint = teamsContext.loginHint || teamsContext.upn || teamsContext.userPrincipalName
     }
 
     /*
@@ -135,7 +135,7 @@ export async function login(options = {}) {
       Everything here will be handled here and return early not hitting services below
       Teams auth works by creating a popup window that opens a login-route that redirects to the authprovider, then redirects back to a page that handles the response
     */
-    if(isFromTeams()) {
+    if(isFromTeams() && !window?.location?.href.endsWith(config.auth.loginUrl)) {
       const url = options.loginUrl || config.auth.loginUrl || `${window.location.href}`
       if(!url) throw new Error('Authentication not possible because config.auth.loginUrl is not set');
       authenticationPromise = new Promise((resolve) => {
