@@ -121,14 +121,14 @@ export async function login(options = {}) {
     /*
       Attempt to handle silent/SSO authentication before using methods that affect user experience
     */
-    try {
-      if(provider.silentLogin && typeof provider.silentLogin === 'function') {
-        token = await provider.silentLogin(providerClientOptions, providerLoginOptions);
-        if(!token) throw new Error('Silent token retreival failed')
-        saveToken(token, config.auth);
-        return token;
-      } 
-    } catch {}
+    // try {
+    //   if(provider.silentLogin && typeof provider.silentLogin === 'function') {
+    //     token = await provider.silentLogin(providerClientOptions, providerLoginOptions);
+    //     if(!token) throw new Error('Silent token retreival failed')
+    //     saveToken(token, config.auth);
+    //     return token;
+    //   } 
+    // } catch {}
 
     /*
       Make login request from Teams
