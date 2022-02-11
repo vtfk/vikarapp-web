@@ -111,8 +111,7 @@ export async function login(options = {}) {
     */
     const provider = getProvider(options);
     const { providerClientOptions, providerLoginOptions } = getProviderConfiguration(provider.name);
-    console.log('ClientOptions', providerClientOptions);
-    console.log('LoginOptions:', providerLoginOptions)
+
     /*
       Initialize the provider if applicable
     */
@@ -162,7 +161,7 @@ export async function login(options = {}) {
     saveToken(token, config.auth);
     return token;
   } catch (err) {
-    console.log('Authentication failed: ' + err.message);
+    console.error('Authentication failed: ' + err.message);
     throw err;
   }
 }
