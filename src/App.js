@@ -11,7 +11,6 @@ import {
 import AuthRoute from './components/AuthRoute'
 import Main from './routes/Main';
 import Login from './routes/Login'
-import LoginRedirect from './routes/LoginRedirect';
 import HandleLogin from './routes/HandleLogin'
 import Logout from './routes/Logout'
 
@@ -21,7 +20,6 @@ function App() {
       <Routes>
         <Route path='/login' element={ <Login /> } />
         <Route exact path="/" element={<AuthRoute><Main /></AuthRoute>} />
-        <Route path="/loginredirect" element={<LoginRedirect />} />
         <Route path="/handlelogin" element={<HandleLogin />} />
         <Route path="/logout" element={ <Logout /> } />
       </Routes>

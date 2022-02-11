@@ -2,17 +2,16 @@
   Import dependencies
 */
 import * as microsoftTeams from '@microsoft/teams-js';
-import * as msal from "@azure/msal-browser";
 import { isFromTeams, getTeamsContext } from './lib/helpers';
-const { config } = require('../config')
-
+const { config } = require('../config');
+const providers = require('./providers/_providers');
+const providerHelpers = require('./providers/_helpers');
 
 /*
   Declarations
 */
 let authenticationPromise = undefined;
 const tokenName = 'auth_token';
-let msalClient = undefined;
 
 
 /**
@@ -71,73 +70,101 @@ function saveToken(token, options = {}) {
   return token;
 }
 
+function getProvider(options) {
+  const providerName = options?.provider || config.auth.provider || 'azuread';
+  const provider = providers[providerName];
+  if(!provider) throw new Error('Cannot authenticate because no authentication provider was found');
+  if(!provider.name) throw new Error('Authentication provider cannot be used because it has no name implemented');
+  return provider;
+}
+
+function getProviderConfiguration(providerName, clientOptions, loginOptions) {
+  let providerClientOptions = providerHelpers.getProviderClientConfig(providerName) || {};
+  providerClientOptions = Object.assign(providerClientOptions, config.auth.clientOptions || {}, clientOptions || {})
+  let providerLoginOptions = providerHelpers.getProviderLoginConfig(providerName) || {};
+  providerLoginOptions = Object.assign(providerLoginOptions, config.auth.loginOptions || {}, loginOptions || {});
+
+  return { providerClientOptions, providerLoginOptions}
+}
+
 export async function login(options = {}) {
-  if(isAuthenticated() && !options.force) return;
-  if(authenticationPromise) return authenticationPromise;
-
-  /*
-    Declarations
-  */
-  // Token object that should be assigned, saved and returned in the bottom of the function
-  let token = undefined; 
-  // If is from teams, attempt to retreive a loginHint
-  if(isFromTeams()) {
-    const teamsContext = await getTeamsContext(microsoftTeams);
-    if(teamsContext) config.auth.loginRequest.loginHint = teamsContext.loginHint || teamsContext.upn || teamsContext.userPrincipalName
-  }
-  // Create AzureAD MSAL client if applicable
-  if ((!options.service || options.service === 'azuread') && !msalClient) msalClient = new msal.PublicClientApplication(config.msal);
-
-  /*
-    Attempt to handle silent/SSO authentication before using methods that affect user experience
-  */
   try {
-    if(!options.service || options.service === 'azuread') {
-      const accounts = msalClient.getAllAccounts();
-      if(accounts && Array.isArray(accounts) && accounts.length > 0) config.auth.loginRequest.account = accounts.find((a) => a.username === config.auth?.loginRequest?.loginHint) || accounts[0];
-      token = await msalClient.acquireTokenSilent(config.auth.loginRequest)
+    /*
+      Validation
+    */
+    if(isAuthenticated() && !options.force) return;
+    if(authenticationPromise) return authenticationPromise;
+
+    /*
+      Declarations
+    */
+    // Token object that should be assigned, saved and returned in the bottom of the function
+    let token = undefined; 
+    // If is from teams, attempt to retreive a loginHint
+    if(isFromTeams()) {
+      const teamsContext = await getTeamsContext(microsoftTeams);
+      if(teamsContext) config.auth.loginRequest.loginHint = teamsContext.loginHint || teamsContext.upn || teamsContext.userPrincipalName
     }
 
-    if(!token) throw new Error('Silent token retreival failed')
+    /*
+      Get what authentication provider to use and retreive its options
+    */
+    const provider = getProvider(options);
+    const { providerClientOptions, providerLoginOptions } = getProviderConfiguration(provider.name);
+    console.log('ClientOptions', providerClientOptions);
+    console.log('LoginOptions:', providerLoginOptions)
+    /*
+      Initialize the provider if applicable
+    */
+    if(provider.initialize && typeof provider.initialize === 'function') await provider.initialize(providerClientOptions);
+
+    /*
+      Attempt to handle silent/SSO authentication before using methods that affect user experience
+    */
+    try {
+      if(provider.silentLogin && typeof provider.silentLogin === 'function') {
+        token = await provider.silentLogin(providerClientOptions, providerLoginOptions);
+        if(!token) throw new Error('Silent token retreival failed')
+        saveToken(token, config.auth);
+        return token;
+      } 
+    } catch {}
+
+    /*
+      Make login request from Teams
+      This is a special case that can be used by most auth providers
+      Everything here will be handled here and return early not hitting services below
+      Teams auth works by creating a popup window that opens a login-route that redirects to the authprovider, then redirects back to a page that handles the response
+    */
+    if(isFromTeams() && !window?.location?.href.endsWith(config.auth.loginUrl)) {
+      const url = options.loginUrl || config.auth.loginUrl || `${window.location.href}`
+      if(!url) throw new Error('Authentication not possible because config.auth.loginUrl is not set');
+      authenticationPromise = new Promise((resolve) => {
+        const teamsConfig = {
+          url: url,
+          successCallback: (e) => { resolve(getValidToken()); authenticationPromise = undefined; },
+          failureCallback: (e) => { resolve(getValidToken()); authenticationPromise = undefined; } // There is a bug in teams-js that always trigger this, even on success
+        }
+        microsoftTeams.authentication.authenticate(teamsConfig);
+      });
+      return authenticationPromise;
+    }
+
+    /*
+      Make regular auth provider request
+    */
+    if(provider.login && typeof provider.login === 'function') await provider.login(providerClientOptions, providerLoginOptions);
+
+    /*
+      Save and return the token
+    */
+    if(!token) throw new Error('Authentication failed, no token recevied')
     saveToken(token, config.auth);
     return token;
-  } catch {}
-
-  /*
-    Make login request from Teams
-    This is a special case that can be used by most auth providers
-    Everything here will be handled here and return early not hitting services below
-  */
-  if(isFromTeams() && !window?.location?.href.endsWith(config.auth.loginUrl)) {
-    authenticationPromise = new Promise((resolve) => {
-      const teamsConfig = {
-        url: options.loginUrl || config.auth.loginUrl || `${window.location.href}`,
-        successCallback: (e) => { resolve(getValidToken()); authenticationPromise = undefined; },
-        failureCallback: (e) => { resolve(getValidToken()); authenticationPromise = undefined; } // There is a bug in teams-js that always trigger this, even on success
-      }
-      microsoftTeams.authentication.authenticate(teamsConfig);
-    });
-    return authenticationPromise;
+  } catch (err) {
+    console.log('Authentication failed: ' + err.message);
+    throw err;
   }
-
-  /*
-    Make regular auth provider request
-  */
-  // Default or Azure AD
-  if(!options.service || options.service === 'azuread') {
-    if(config.auth.loginMethod !== 'popup') {
-      // Default: Redirection
-      return msalClient.acquireTokenRedirect(config.auth.loginRequest);
-    } else {
-      // PopUp
-      token = await msalClient.acquireTokenPopup(config.auth.loginRequest);
-    }
-  }
-
-  // Save and return the token
-  if(!token) throw new Error('Authentication failed, no token recevied')
-  saveToken(token, config.auth);
-  return token;
 }
 
 export function logout() {
@@ -145,11 +172,15 @@ export function logout() {
   sessionStorage.removeItem(tokenName);
 }
 
-export async function handleRedirect() {
+export async function handleRedirect(options = {}) {
   try {
-    // Azure AD
-    if(!msalClient) msalClient = new msal.PublicClientApplication(config.msal);
-    const token = await msalClient.handleRedirectPromise();
+    // Get what authentication provider to use and retreive its options
+    const provider = getProvider(options);
+    const { providerClientOptions, providerLoginOptions } = getProviderConfiguration(provider.name);
+
+    // Handle redirect and retreive token
+    let token;
+    if(provider.handleRedirect && typeof provider.handleRedirect === 'function') token = await provider.handleRedirect(providerClientOptions, providerLoginOptions);
 
     // Save the token;
     if(token) {
@@ -163,6 +194,7 @@ export async function handleRedirect() {
       else microsoftTeams.authentication.notifyFailure('An unexpected authentication error occured')
     }
 
+    // Return the token
     return token;
   } catch (err) {
     if(isFromTeams()) microsoftTeams.authentication.notifyFailure(err)

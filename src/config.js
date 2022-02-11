@@ -5,24 +5,31 @@ export const config = {
     loginUrl: '/loginredirect',
     storage: 'local',
     loginMethod: 'redirect',
-    loginRequest: {
+    loginOptions: {
       scopes: ['openid', 'profile', 'User.Read']
     }
   },
-  msal: {
-    auth: {
-      clientId: 'e4ecefc1-524f-4be8-9ac7-dbd23902b533',
-      authority: 'https://login.microsoftonline.com/08f3813c-9f29-482f-9aec-16ef7cbf477a',
-      redirectUri: redirectUrl,
-      navigateToLoginRequestUrl: false,
-      postLogoutRedirectUri: 'https://www.vtfk.no/'
-    },
-    cache: {
-      cacheLocation: 'localStorage',
-      storeAuthStateInCookie: false
+  providers: {
+    azuread: {
+      client: {
+        auth: {
+          clientId: 'e4ecefc1-524f-4be8-9ac7-dbd23902b533',
+          authority: 'https://login.microsoftonline.com/08f3813c-9f29-482f-9aec-16ef7cbf477a',
+          redirectUri: redirectUrl,
+          navigateToLoginRequestUrl: false,
+          postLogoutRedirectUri: 'https://www.vtfk.no/'
+        },
+        cache: {
+          cacheLocation: 'localStorage',
+          storeAuthStateInCookie: false
+        }
+      },
+      request: {
+        scopes: ['openid', 'profile', 'User.Read'],
+        loginHint: 'karleinar.bergstrom@vtfk.no'
+      }
     }
   },
-  msal_scopes: ['openid', 'profile', 'User.Read']
 }
 
 // See valid values here: https://azuread.github.io/microsoft-authentication-library-for-js/ref/msal-browser/modules/_src_request_redirectrequest_.html

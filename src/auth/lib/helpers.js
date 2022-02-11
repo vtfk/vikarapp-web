@@ -18,6 +18,11 @@ export function isFromTeams() {
   return userAgent.includes('mobile') || userAgent.includes('android') || false;
 }
 
+/**
+ * Retreiving the context from Teams is a bit annoying, this makes it simpler
+ * @param {*} msTeamsInstance 
+ * @returns { Promise<Object> }
+ */
 export function getTeamsContext(msTeamsInstance) {
   // Attempt to retreive loginHint from TeamsContext
   return new Promise(async (resolve) => {
