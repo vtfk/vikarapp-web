@@ -4,9 +4,16 @@
  */
 export function isFromTeams() {
   if(!window?.navigator?.userAgent) return false;
+
+  // Check if window is inside iFrame
+  let isInsideIFrame = false;
+  try { isInsideIFrame = window.self !== window.top; }
+  catch { isInsideIFrame = true; }
+
+  // Get the userAgent to check if it contains teams
   const userAgent = window.navigator.userAgent.toLocaleLowerCase();
   console.log('User agent: ' + userAgent);
-  return userAgent.includes('teams') || userAgent.includes('teamsmobile') || true;
+  return isInsideIFrame || userAgent.includes('teams') || true;
 }
 
 /**
