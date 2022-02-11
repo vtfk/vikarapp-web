@@ -13,23 +13,22 @@ function random() {
   return Math.floor(Math.random() * 10000000000)
 }
 
-export default function Table({items, headers, itemId = '_id', style, dense = false, showSelect = true, selectOnClick = true}) {
+export default function Table({items, headers, itemId = '_id', style, dense = false, showSelect = true, selectOnClick = false}) {
   // State
   const [selectedIds, setSelectedIds] = useState([])
   const [selectedItems, setSelectedItems] = useState([])
   const [isAllSelected, setIsAllSelected] = useState(false)
 
   // Functions
-  function updateSelected(item, isSelected) {
-    if(isSelected) {
-      if(!selectedIds.includes(item[itemId])) {
-        setSelectedIds([...selectedIds, item[itemId]]);
-        setSelectedItems([...selectedItems, item]);
-      }
+  function updateSelected(item) {
+    if(!selectedIds.includes(item[itemId])) {
+      setSelectedIds([...selectedIds, item[itemId]]);
+      setSelectedItems([...selectedItems, item]);
     } else {
       setSelectedIds(selectedIds.filter((i) => i !== item[itemId]))
       setSelectedItems(selectedItems.filter((i) => i[itemId] !== item[itemId]))
     }
+
     if(items.length > 0 && selectedIds.length > 0 && selectedIds.length === items.length) setIsAllSelected(true);
     else setIsAllSelected(false);
   }
@@ -64,7 +63,7 @@ export default function Table({items, headers, itemId = '_id', style, dense = fa
           (items && Array.isArray(items) && items.length > 0) ?
           items.map((item) => {
             return (
-              <tr key={item[itemId]} onClick={() => selectOnClick && updateSelected(item, true)} className={isSelected(item) && 'tr-selected'}>
+              <tr key={item[itemId]} onClick={() => selectOnClick && updateSelected(item)} className={isSelected(item) && 'tr-selected'}>
                 { showSelect && <td><Checkbox checked={isSelected(item)} onChange={(e) => updateSelected(item, e.target.checked)} /></td>}
                 {
                   headers.map((header) => {
