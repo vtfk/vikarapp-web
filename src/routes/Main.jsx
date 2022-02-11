@@ -1,20 +1,23 @@
 import '../App.css'
-import { useState } from 'react';
-import * as auth from '../auth'
-import { useNavigate } from 'react-router-dom';
+// import { useState } from 'react';
+// import * as auth from '../auth'
+// import { useNavigate } from 'react-router-dom';
 
 export default function Main() {
   // State
-  const userAgent = window.navigator.userAgent.toLowerCase();
-  const isTeamsApp = userAgent.includes('microsoftteams') || userAgent.includes('teamsmobile')
-  const [isMobile] = useState(userAgent.includes('android') || userAgent.includes('mobile') || false);
+  // const userAgent = window.navigator.userAgent.toLowerCase();
+  // const isTeamsApp = userAgent.includes('microsoftteams') || userAgent.includes('teamsmobile')
+  // const [isMobile] = useState(userAgent.includes('android') || userAgent.includes('mobile') || false);
 
-  // Hooks
-  const navigate = useNavigate();
+  // // Hooks
+  // const navigate = useNavigate();
 
   return (
-    <div>
-      <table style={{textAlign: 'left', color: 'black', backgroundColor: '#3c4966', width: '100%'}}>
+    <main className='main-container'>
+      
+
+
+      {/* <table style={{textAlign: 'left', color: 'black', backgroundColor: '#3c4966', width: '100%'}}>
           <tbody>
             <tr>
               <th className='Table-section'>General</th>
@@ -65,9 +68,7 @@ export default function Main() {
               </td>
             </tr>
           </tbody>
-        </table>
-        <div>
-      </div>
-    </div>
+      </table> */}
+    </main>
   )
 }
