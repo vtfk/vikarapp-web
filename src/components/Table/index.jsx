@@ -7,23 +7,26 @@ import './style.css'
 //   items: PropTypes.array.isRequired,
 //   headers: PropTypes.array.isRequired,
 // }
+function random() {
+  return Math.floor(Math.random() * 10000000000)
+}
 
 export default function Table({items, headers, id = 'id', style}) {
   return(
-    <table className="vtfk-table" style={style}>
+    <table className="vtfk-table" style={style} cellSpacing="0" cellPadding="0">
       <thead>
-        <tr>{ headers.map((header, i) => <th key={i} className={header.class} style={header.style}>{header.label}</th>) }</tr>
+        <tr>{ headers.map((header) => <th key={random()} className={header.class} style={header.style}>{header.label}</th>) }</tr>
       </thead>
       <tbody>
         {
           (items && Array.isArray(items) && items.length > 0) ?
           items.map((item, i) => {
             return (
-              <tr key={i + 1000}>
+              <tr key={item[id]}>
                 {
-                  headers.map((header, i) => {
+                  headers.map((header) => {
                     return (
-                      <td>{item[header.value] || ''}</td>
+                      <td key={random()} style={header.itemStyle}>{item[header.value] || ''}</td>
                     )
                   })
                 }

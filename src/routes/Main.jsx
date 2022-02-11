@@ -8,7 +8,7 @@ export default function Main() {
   const headers = [
     {
       label: 'Status',
-      value: 'status'
+      value: 'status',
     },
     {
       label: 'Team',
@@ -27,6 +27,13 @@ export default function Main() {
   const items = [
     {
       id: 'd95fac91-38d3-4a9a-b473-cc3af4143e61',
+      status: 'active',
+      team: 'Section_2021-Test av vikarapp',
+      teacher: 'per.test@vtfk.no',
+      expiration: '13.02.2022'
+    },
+    {
+      id: '30e43a62-4d43-4e1f-8e5a-8c8055819ffe',
       status: 'active',
       team: 'Section_2021-Test av vikarapp',
       teacher: 'per.test@vtfk.no',

@@ -1,16 +1,30 @@
 .vtfk-table {
   width: 100%;
   text-align: center;
+  border: none;
 }
 
 .vtfk-table tr {
   
 }
 
+.vtfk-table tr:hover :not(th) {
+  background-color: #BBC8E1;
+}
+
 .vtfk-table th {
   padding: 0.5rem 0;
+  background-color: #88A6B0;
 }
 
 .vtfk-table td {
-  
 }
+
+.vtfk-table tbody tr:nth-of-type(even) {
+  background-color: #D5E1E5;
+}
+
+.vtfk-table tbody tr:nth-of-type(odd) {
+  background-color: #ECECEC;
+}
+
