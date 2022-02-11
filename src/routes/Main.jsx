@@ -14,7 +14,7 @@ export default function Main() {
           Her skal det være innhold
         </div>
         <div className='main-footer'>
-          <img className='main-footer-logo' src={logo} width="100px" />
+          <img className='main-footer-logo' alt="footer-logo" src={logo} width="100px" />
           <div className='main-footer-button-group'>
             <Button size="small">Jeg skal være vikar</Button>
             <Button size="small">Forleng vikariat</Button>
