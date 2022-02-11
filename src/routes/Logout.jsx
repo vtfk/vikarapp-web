@@ -19,6 +19,7 @@ export default function Logout() {
       {
         !isLoggingOut && <button onClick={() => { navigate('/login')}} style={{marginTop: '2rem'}}>Logg inn</button>
       }
+      <div>User agent {window.navigator.userAgent.toLocaleLowerCase()}</div>
     </div>
   )
 }

@@ -20,6 +20,7 @@ export default function Login() {
     <div className='container'>
       <div className='title'>Logger inn</div>
       <div className='subtitle'>Du vil snart bli videresendt</div>
+      <div>User agent {window.navigator.userAgent.toLocaleLowerCase()}</div>
     </div>
   )
 }

@@ -5,7 +5,8 @@
 export function isFromTeams() {
   if(!window?.navigator?.userAgent) return false;
   const userAgent = window.navigator.userAgent.toLocaleLowerCase();
-  return userAgent.includes('teams') || userAgent.includes('teamsmobile') || false;
+  console.log('User agent: ' + userAgent);
+  return userAgent.includes('teams') || userAgent.includes('teamsmobile') || true;
 }
 
 /**
