@@ -9,6 +9,7 @@ export default function Main() {
     {
       label: 'Status',
       value: 'status',
+      itemStyle: { textTransform: 'capitalize' }
     },
     {
       label: 'Team',

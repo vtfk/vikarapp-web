@@ -2,6 +2,7 @@
   width: 100%;
   text-align: center;
   border: none;
+  overflow-x: hidden;
 }
 
 .vtfk-table tr {
@@ -18,6 +19,7 @@
 }
 
 .vtfk-table td {
+  padding: 0.5rem 0;
 }
 
 .vtfk-table tbody tr:nth-of-type(even) {
