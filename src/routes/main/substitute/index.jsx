@@ -1,17 +1,23 @@
-import { SearchField } from '@vtfk/components'
+import { Button, SearchField } from '@vtfk/components'
 import { useState } from 'react'
 import Table from '../../../components/Table'
 import Loading from '../../../components/Loading/Loading';
+import {
+  Link
+} from "react-router-dom";
 
 export default function Substitute () {
 
   const [isLoadingTeams, setIsLoadingTeams] = useState(false);
-  const [availableTeams, setAvailableTeams] = useState(undefined)
+  const [availableTeams, setAvailableTeams] = useState(undefined);
+  const [selectedTeams, setSelectedTeams] = useState([])
   
   const headers = [
     {
       label: 'Team',
-      value: 'name'
+      value: 'name',
+      style: {textAlign: 'left'},
+      itemStyle: {textAlign: 'left'}
     }
   ]
 
@@ -39,13 +45,22 @@ export default function Substitute () {
   }
 
   return (
-    <div style={{marginTop: '2rem'}}>
+    <div style={{marginTop: '2rem', height: '100%'}}>
       <SearchField placeholder="Søk etter læreren du skal være vikar for" rounded onSearch={() => { loadTeams() }}/>
       {
         isLoadingTeams && <Loading title='Laster inn teams' message="Dette kan ta noen sekunder"/>
       }
       {
         !isLoadingTeams && Array.isArray(availableTeams) && <Table headers={headers} items={availableTeams} selectOnClick style={{marginTop: '2rem'}} />
+      }
+      {
+      <div className='main-footer-button-group'>
+        <Button size="small" disabled={selectedTeams.length === 0}>Ok</Button>
+        <Link to="/">
+        <Button size="small">Avbryt</Button>
+        </Link>
+        
+      </div>
       }
       
     </div>
