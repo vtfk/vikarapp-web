@@ -67,7 +67,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
       <table className="vtfk-table" style={style} cellSpacing="0" cellPadding="0">
         <thead>
           <tr>
-            { showSelect && <th><Checkbox checked={isAllSelected()} name={"checkAll"} value={"checkAll"} label={" "} onChange={(e) => selectAll(e.target.checked)} style={{padding: 0}}/></th>}
+            { showSelect && <th className='vtfk-table-checkbox'><Checkbox checked={isAllSelected()} name={"checkAll"} value={"checkAll"} label={" "} onChange={(e) => selectAll(e.target.checked)} style={{padding: 0, display: 'block'}}/></th>}
             { headers.map((header) => <th key={nanoid()} className={header.class || undefined} style={header.style || undefined}>{header.label}</th>) }
           </tr>
         </thead>
@@ -77,7 +77,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
             items.map((item) => {
               return (
                 <tr key={item[itemId]} onClick={() => selectOnClick && updateSelected(item)} className={isSelected(item) ? 'tr-selected' : undefined}>
-                  { showSelect && <td><Checkbox checked={isSelected(item)} onChange={(e) => updateSelected(item, e.target.checked)} /></td>}
+                  { showSelect && <td className='vtfk-table-checkbox'><Checkbox checked={isSelected(item)} onChange={(e) => updateSelected(item, e.target.checked)} style={{display: 'block'}} /></td>}
                   {
                     headers.map((header) => {
                       return (

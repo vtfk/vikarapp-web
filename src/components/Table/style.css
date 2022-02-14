@@ -4,6 +4,11 @@
   overflow-x: hidden;
 }
 
+.vtfk-table-checkbox {
+  width: 1%;
+  padding-left: 0.5rem!important;
+}
+
 .vtfk-table th {
   padding: 0.5rem 0;
   background-color: #88A6B0;
