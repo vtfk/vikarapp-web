@@ -45,7 +45,11 @@
 .main-footer-button-group {
   display: flex;
   gap: 0.5rem;
+  margin-top: auto;
   margin-left: auto;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  justify-self: end;
 }
 
 
