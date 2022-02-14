@@ -18,11 +18,14 @@
   width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
   min-height: 4rem;
 }
 
 .main-title {
   color: #FFBF00;
+  margin: 0;
+  padding: 0;
 }
 
 .main-content {
