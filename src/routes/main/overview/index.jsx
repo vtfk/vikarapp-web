@@ -13,7 +13,8 @@ export default function MainOverview() {
     {
       label: 'Status',
       value: 'status',
-      itemStyle: { textTransform: 'capitalize' }
+      itemStyle: { textTransform: 'capitalize' },
+      element: Button
     },
     {
       label: 'Team',
@@ -47,8 +48,9 @@ export default function MainOverview() {
   ]
 
   return (
-    <div className="overview">
+    <div className="overview main-content-bg">
       <Table itemId="_id" headers={headers} items={items} selected={selectedIds} onSelectedIdsChanged={(e) => setSelectedIds(e)} onSelectedItemsChanged={(e) => setSelectedItems(e)} />
+      {selectedIds}
       <div className='main-footer-button-group'>
         <Link to="substitute">
           <Button size="small">Jeg skal være vikar</Button>
