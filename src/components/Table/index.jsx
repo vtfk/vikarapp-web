@@ -1,17 +1,8 @@
 import './style.css'
 import { Checkbox } from '@vtfk/components'
 import { useState } from 'react';
+import { nanoid } from 'nanoid'
 
-/*
-  Props
-*/
-// Table.propTypes = {
-//   items: PropTypes.array.isRequired,
-//   headers: PropTypes.array.isRequired,
-// }
-function random() {
-  return Math.floor(Math.random() * 10000000000)
-}
 
 export default function Table({items, headers, itemId = '_id', selected, style, dense = false, showSelect = true, selectOnClick = false, onSelectedIdsChanged, onSelectedItemsChanged}) {
   // State
@@ -77,7 +68,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
         <thead>
           <tr>
             { showSelect && <th><Checkbox checked={isAllSelected()} name={"checkAll"} value={"checkAll"} label={" "} onChange={(e) => selectAll(e.target.checked)} style={{padding: 0}}/></th>}
-            { headers.map((header) => <th key={random()} className={header.class || undefined} style={header.style || undefined}>{header.label}</th>) }
+            { headers.map((header) => <th key={nanoid()} className={header.class || undefined} style={header.style || undefined}>{header.label}</th>) }
           </tr>
         </thead>
         <tbody>
@@ -90,7 +81,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
                   {
                     headers.map((header) => {
                       return (
-                        <td key={random()} className={dense ? 'td-dense' : undefined} style={header.itemStyle}>{item[header.value] || ''}</td>
+                        <td key={nanoid()} className={dense ? 'td-dense' : undefined} style={header.itemStyle}>{item[header.value] || ''}</td>
                       )
                     })
                   }
@@ -103,8 +94,6 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
       </table>
       : <div>Table cannot be shown when no headers are specified</div>
     }
-    <div style={{color: 'red'}}>{selectedIds}</div>
-    
     </div>
   )
 }
