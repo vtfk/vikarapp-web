@@ -20,10 +20,10 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/login' element={ <Login /> } />
-        <Route path="/*" element={<AuthRoute><Main /></AuthRoute>} />
         <Route path="/handlelogin" element={<HandleLogin />} />
         <Route path="/loginredirect" element={<LoginRedirect />} />
         <Route path="/logout" element={ <Logout /> } />
+        <Route path="/*" element={<AuthRoute><Main /></AuthRoute>} />
       </Routes>
     </BrowserRouter>
   );

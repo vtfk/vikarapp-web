@@ -45,21 +45,20 @@ export default function Substitute () {
   }
 
   return (
-    <div style={{marginTop: '2rem', height: '100%'}}>
+    <div style={{paddingTop: '2rem', height: '100%', display: 'flex', flexDirection: 'column'}}>
       <SearchField placeholder="Søk etter læreren du skal være vikar for" rounded onSearch={() => { loadTeams() }}/>
       {
         isLoadingTeams && <Loading title='Laster inn teams' message="Dette kan ta noen sekunder"/>
       }
       {
-        !isLoadingTeams && Array.isArray(availableTeams) && <Table headers={headers} items={availableTeams} selectOnClick style={{marginTop: '2rem'}} />
+        !isLoadingTeams && Array.isArray(availableTeams) && <Table headers={headers} items={availableTeams} onSelectedItemsChanged={(e) => { setSelectedTeams(e)}} selectOnClick style={{marginTop: '2rem'}} />
       }
       {
       <div className='main-footer-button-group'>
         <Button size="small" disabled={selectedTeams.length === 0}>Ok</Button>
         <Link to="/">
-        <Button size="small">Avbryt</Button>
+          <Button size="small">Avbryt</Button>
         </Link>
-        
       </div>
       }
       

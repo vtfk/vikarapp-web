@@ -4,7 +4,8 @@ import { IconButton} from '@vtfk/components'
 import {
   Routes,
   Route,
-  Link
+  Link,
+  useLocation,
 } from "react-router-dom";
 
 /*
@@ -15,15 +16,19 @@ import Overview from './main/overview/'
 
 
 export default function Main() {
+  const location = useLocation();
   return (
     <main className='main-container'>
       <div className='app-container'>
         <div className='main-header'>
-          <div>
-            <Link to="/">
-              <IconButton icon="arrowLeft"/>
-            </Link>
-          </div> 
+          {
+            location && location.pathname !== '/' &&
+            <div>
+              <Link to="/">
+                <IconButton icon="arrowLeft"/>
+              </Link>
+            </div> 
+          }
           <h1 className='main-title' style={{margin: 0, fontSize: '3rem'}}>VikarApp</h1>
         </div>
         <div className='main-content'>
