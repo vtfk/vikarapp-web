@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 
 export default function Substitute () {
-
+  const [selectedTeacher, setSelectedTeacher] = useState(undefined);
   const [isLoadingTeams, setIsLoadingTeams] = useState(false);
   const [availableTeams, setAvailableTeams] = useState(undefined);
   const [selectedTeams, setSelectedTeams] = useState([])
@@ -18,6 +18,16 @@ export default function Substitute () {
       value: 'name',
       style: {textAlign: 'left'},
       itemStyle: {textAlign: 'left'}
+    }
+  ]
+
+  const teachers = [
+    {
+      _id: '0f4f58a9-fb12-4c9a-a7a1-0c23b129b88a',
+      name: 'Test testesen',
+    }, {
+      _id: '96b5a35b-4ecc-42e9-849e-fe3b06feb44f',
+      name: 'Noen Andre'
     }
   ]
 
@@ -40,8 +50,28 @@ export default function Substitute () {
 
     setIsLoadingTeams(true);
     await sleep(1000);
+    setSelectedTeacher(teachers[0]);
     setAvailableTeams(allTeams)
     setIsLoadingTeams(false);
+  }
+
+  async function activateSubstitution() {
+    // Input validation
+    if(!selectedTeams || !Array.isArray(selectedTeams) || selectedTeams.length === 0) {
+      alert('Du må velge velge en eller flere klasse å vikariere for');
+      return;
+    }
+    // Verify
+    let message = `Ønsker du å vikarere for lærer ${selectedTeacher.name}?\n\n`
+    message += `Antall klasser: ${selectedTeams.length}\n\n`
+    message += 'Klasser:\n'
+    message += `${selectedTeams.map((t) => t.name + '\n')}`
+
+    if(window.confirm(message)) {
+      console.log('Nå skal det aktiveres vikariat');
+      
+    }
+
   }
 
   return (
@@ -55,7 +85,7 @@ export default function Substitute () {
       }
       {
       <div className='main-footer-button-group'>
-        <Button size="small" disabled={selectedTeams.length === 0}>Ok</Button>
+        <Button size="small" disabled={selectedTeams.length === 0} onClick={() => activateSubstitution()}>Ok</Button>
         <Link to="/">
           <Button size="small">Avbryt</Button>
         </Link>
