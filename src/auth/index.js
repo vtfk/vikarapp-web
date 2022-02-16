@@ -3,7 +3,7 @@
 */
 import * as microsoftTeams from '@microsoft/teams-js';
 import { isFromTeams, getTeamsContext } from './lib/helpers';
-const { config } = require('../config');
+const config = require('../config');
 const providers = require('./providers/_providers');
 const providerHelpers = require('./providers/_helpers');
 
@@ -27,10 +27,33 @@ export function getValidToken(options = config.auth || {}) {
   const token = JSON.parse(rawToken);
 
   // Don't return if the token has expired
-  if(Date.parse(token.expiresOn) <= new Date()) return;
+  if(Date.parse(token.expiration) <= new Date()) return;
 
+  // Don't return if the current token don't have the requred scopes
+  const { providerLoginOptions } = getProviderConfiguration(token.provider);
+  if(providerLoginOptions?.scopes) {
+    // Return if the token don't have any scopes
+    if(!token.scopes) return;
+    // Return if the provider has more scopes than the token
+    if(providerLoginOptions.scopes.length > token.scopes.length) return;
+    // Return if the token don't contain the scopes of the provider
+    for(const providerScope of providerLoginOptions.scopes) {
+      if(!token.scopes.includes(providerScope)) return;
+    }
+  }
+  
   // Return the token
   return token;
+}
+
+/**
+ * Returns a string in the 'Bearer <AccessToken>' format if there is a valid token
+ */
+export function getValidBearerToken() {
+  const validToken = getValidToken();
+  if(!validToken || !validToken.token) return;
+
+  return `Bearer ${validToken.token.accessToken || validToken.token.token || validToken.token.idToken }`
 }
 
 /**
@@ -56,9 +79,9 @@ function saveToken(token, options = {}) {
   
   // Parse and prepare the token
   const formattedToken = {
-    service: options.service || 'azuread',
+    provider: options.service || 'azuread',
     expiration: token.expiresOn || token.extExpiresOn || token.expiration || token.exp,
-    scopes: options.scopes || [],
+    scopes: token.scopes || options.scopes || [],
     token: token
   }
 

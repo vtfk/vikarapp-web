@@ -1,6 +1,6 @@
 import './Main.css'
 import logo from '../images/vtfk-logo.svg'
-import { IconButton} from '@vtfk/components'
+import { IconButton } from '@vtfk/components'
 import {
   Routes,
   Route,
@@ -13,7 +13,6 @@ import {
 */
 import Substitute from './main/substitute';
 import Overview from './main/overview/'
-
 
 export default function Main() {
   const location = useLocation();

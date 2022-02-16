@@ -8,7 +8,8 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
   // State
   const [selectedIds, setSelectedIds] = useState(selected && Array.isArray(selected) ? selected : [])
   const [selectedItems, setSelectedItems] = useState([])
-
+  console.log('TableId: ' + itemId);
+  console.log('Table Items: ', items);
   // Functions
   function updateSelected(item) {
     if(items.length === 0) return;

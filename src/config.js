@@ -1,12 +1,11 @@
 const redirectUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3000/handlelogin' : 'https://witty-water-0af444f03.1.azurestaticapps.net/handlelogin'
 
-export const config = {
+const config = {
   auth: {
     loginUrl: '/loginredirect',
     storage: 'local',
     loginMethod: 'redirect',
     loginOptions: {
-      scopes: ['openid', 'profile', 'User.Read']
     }
   },
   providers: {
@@ -25,8 +24,10 @@ export const config = {
         }
       },
       login: {
-        scopes: ['openid', 'profile', 'User.Read'],
+        scopes: ['openid', 'profile', 'User.Read', 'User.ReadBasic.All'],
       }
     }
   },
 }
+
+module.exports = config;

@@ -5,8 +5,12 @@ import Loading from '../../../components/Loading/Loading';
 import {
   Link
 } from "react-router-dom";
+import axios from 'axios'
+import { getValidBearerToken } from '../../../auth'
 
 export default function Substitute () {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [availableTeachers, setAvailableTeachers] = useState([]);
   const [selectedTeacher, setSelectedTeacher] = useState(undefined);
   const [isLoadingTeams, setIsLoadingTeams] = useState(false);
   const [availableTeams, setAvailableTeams] = useState(undefined);
@@ -15,43 +19,58 @@ export default function Substitute () {
   const headers = [
     {
       label: 'Team',
-      value: 'name',
+      value: 'displayName',
       style: {textAlign: 'left'},
       itemStyle: {textAlign: 'left'}
-    }
-  ]
-
-  const teachers = [
-    {
-      _id: '0f4f58a9-fb12-4c9a-a7a1-0c23b129b88a',
-      name: 'Test testesen',
-    }, {
-      _id: '96b5a35b-4ecc-42e9-849e-fe3b06feb44f',
-      name: 'Noen Andre'
-    }
-  ]
-
-  const allTeams = [
-    {
-      _id: '4c581958-a42e-4cb5-9ddf-ccc2fa22d9fd',
-      name: 'Team #1'
     },
     {
-      _id: '5445ceb5-26ec-407b-9546-9089bfdd92a9',
-      name: 'Team #2'
+      label: 'Beskrivelse',
+      value: 'description'
     }
   ]
 
+  async function searchForTeachers() {
+    if(!searchTerm) return
+    if(searchTerm.length < 3) return;
+
+    const request = {
+      url: `https://graph.microsoft.com/v1.0/users?$filter=startsWith(displayName, '${searchTerm}') OR startsWith(surname, '${searchTerm}')&$orderBy=displayName&$count=true`,
+      headers: {
+        ConsistencyLevel: 'eventual',
+        Authorization: getValidBearerToken()
+      }
+    }
+
+    const response = await axios.request(request);
+    if(response?.status === 200 && response.data?.value) {
+      const teachers = response.data.value;
+      setAvailableTeachers(teachers);
+      console.log(availableTeachers);
+      setSelectedTeacher(teachers[0])
+      await loadTeams();
+    }
+  }
+
   async function loadTeams() {
-    function sleep(ms) {
-      return new Promise((resolve) => setTimeout(() => resolve(), ms))
-      
+    if(!selectedTeacher || !selectedTeacher.id) return;
+
+    // Request for retreiving the teachers teams
+    const request = {
+      url: `https://graph.microsoft.com/v1.0/users/${selectedTeacher.id}/ownedObjects`,
+      headers: {
+        ConsistencyLevel: 'eventual',
+        Authorization: getValidBearerToken()
+      }
     }
 
     setIsLoadingTeams(true);
-    await sleep(1000);
-    setSelectedTeacher(teachers[0]);
-    setAvailableTeams(allTeams)
+    const response = await axios.request(request);
+
+    if(response?.status === 200 && response.data?.value) {
+      console.log('Received data: ', response.data.value);
+      setAvailableTeams(response.data.value)
+    }
+
     setIsLoadingTeams(false);
   }
 
@@ -69,19 +88,17 @@ export default function Substitute () {
 
     if(window.confirm(message)) {
       console.log('Nå skal det aktiveres vikariat');
-      
     }
-
   }
 
   return (
     <div style={{paddingTop: '2rem', height: '100%', display: 'flex', flexDirection: 'column'}}>
-      <SearchField placeholder="Søk etter læreren du skal være vikar for" rounded onSearch={() => { loadTeams() }}/>
+      <SearchField placeholder="Søk etter læreren du skal være vikar for" rounded onSearch={() => { searchForTeachers() }} onChange={(e) => setSearchTerm(e.target.value)} />
       {
         isLoadingTeams && <Loading title='Laster inn teams' message="Dette kan ta noen sekunder"/>
       }
       {
-        !isLoadingTeams && Array.isArray(availableTeams) && <Table headers={headers} items={availableTeams} onSelectedItemsChanged={(e) => { setSelectedTeams(e)}} selectOnClick style={{marginTop: '2rem'}} />
+        !isLoadingTeams && Array.isArray(availableTeams) && <Table headers={headers} items={availableTeams} itemId="id" onSelectedItemsChanged={(e) => { setSelectedTeams(e)}} selectOnClick style={{marginTop: '2rem'}} />
       }
       {
       <div className='main-footer-button-group'>

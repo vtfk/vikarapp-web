@@ -1,6 +1,6 @@
 import './style.css'
 import Table from '../../../components/Table'
-import { Button } from '@vtfk/components'
+import { Button, Dialog, DialogTitle, DialogBody, DialogActions} from '@vtfk/components'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -8,6 +8,7 @@ export default function MainOverview() {
   // State
   const [selectedIds, setSelectedIds] = useState([])
   const [selectedItems, setSelectedItems] = useState([])
+  const [isShowRenewalDialog, setIsShowRenewalDialog] = useState(false);
   
   const headers = [
     {
@@ -54,8 +55,24 @@ export default function MainOverview() {
         <Link to="substitute">
           <Button size="small">Jeg skal være vikar</Button>
         </Link>
-        <Button size="small" disabled={selectedIds.length === 0}>Forleng vikariat</Button>
+        <Button size="small" disabled={selectedIds.length === 0} onClick={() => selectedItems.length > 0 && setIsShowRenewalDialog(true)}>Forleng vikariat</Button>
       </div>
+      <Dialog isOpen={isShowRenewalDialog} onDismiss={() => setIsShowRenewalDialog(false)}>
+        <DialogTitle>Fornye vikariat?</DialogTitle>
+        <DialogBody>
+          Er du sikker på at du ønsker å fornye vikariat for:
+          <ul>
+            {
+              selectedItems.map((i) => <li>{i.team}</li>)
+            }
+          </ul>
+        </DialogBody>
+        <DialogActions>
+          <Button size="small" style={{marginTop: '0.5rem'}} onClick={() => window.alert('TODO: Implementere fornying')}>Ja</Button>
+          <Button size="small" style={{marginTop: '0.5rem'}} onClick={() => setIsShowRenewalDialog(false)}>Nei</Button>
+        </DialogActions>
+      </Dialog>
     </div>
+
   )
 }

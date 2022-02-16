@@ -1,7 +1,7 @@
 /*
   Import dependencies
 */
-const { config } = require('../../config');
+const config = require('../../config');
 
 /**
  * Retreives the config for a given provider
