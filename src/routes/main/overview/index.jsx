@@ -50,7 +50,7 @@ export default function MainOverview() {
 
   return (
     <div className="overview main-content-bg">
-      <Table itemId="_id" headers={headers} items={items} selected={selectedIds} onSelectedIdsChanged={(e) => setSelectedIds(e)} onSelectedItemsChanged={(e) => {setSelectedItems(e); console.log(selectedItems)}} />
+      <Table itemId="_id" headers={headers} items={items} selected={selectedIds} selectOnClick onSelectedIdsChanged={(e) => setSelectedIds(e)} onSelectedItemsChanged={(e) => {setSelectedItems(e); console.log(selectedItems)}} />
       <div className='main-footer-button-group'>
         <Link to="substitute">
           <Button size="small">Jeg skal være vikar</Button>
