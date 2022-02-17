@@ -24,10 +24,12 @@ const config = {
         }
       },
       login: {
-        scopes: ['openid', 'profile', 'User.Read', 'User.ReadBasic.All'],
+        // scopes: ['openid', 'profile', 'User.Read', 'User.ReadBasic.All'],
+        scopes: ['e4ecefc1-524f-4be8-9ac7-dbd23902b533/.default']
       }
     }
   },
+  vikarAPIBaseurl: process.env.VTFK_VIKARAPI_BASEURL || 'http://localhost:7070/api/'
 }
 
 module.exports = config;

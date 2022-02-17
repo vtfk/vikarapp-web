@@ -48,6 +48,14 @@ export default function MainOverview() {
     }
   ]
 
+  function renewSubsitution() {
+    if(!selectedItems || selectedItems.length === 0) return;
+    window.alert('TODO: Implementere fornying');
+    setIsShowRenewalDialog(false)
+    setSelectedIds([]);
+    setSelectedItems([]);
+  }
+
   return (
     <div className="overview main-content-bg">
       <Table itemId="_id" headers={headers} items={items} selected={selectedIds} selectOnClick onSelectedIdsChanged={(e) => setSelectedIds(e)} onSelectedItemsChanged={(e) => {setSelectedItems(e); console.log(selectedItems)}} />
@@ -63,12 +71,12 @@ export default function MainOverview() {
           Er du sikker på at du ønsker å fornye vikariat for:
           <ul>
             {
-              selectedItems.map((i) => <li>{i.team}</li>)
+              selectedItems.map((i) => <li key={i.id}>{i.team}</li>)
             }
           </ul>
         </DialogBody>
         <DialogActions>
-          <Button size="small" style={{marginTop: '0.5rem'}} onClick={() => window.alert('TODO: Implementere fornying')}>Ja</Button>
+          <Button size="small" style={{marginTop: '0.5rem'}} onClick={() => renewSubsitution()}>Ja</Button>
           <Button size="small" style={{marginTop: '0.5rem'}} onClick={() => setIsShowRenewalDialog(false)}>Nei</Button>
         </DialogActions>
       </Dialog>

@@ -1,6 +1,6 @@
 import './style.css'
 import { Checkbox } from '@vtfk/components'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { nanoid } from 'nanoid'
 
 
@@ -8,21 +8,25 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
   // State
   const [selectedIds, setSelectedIds] = useState(selected && Array.isArray(selected) ? selected : [])
   const [selectedItems, setSelectedItems] = useState([])
-  console.log('TableId: ' + itemId);
-  console.log('Table Items: ', items);
   // Functions
-  function updateSelected(item) {
+  function updateSelected(tableItems) {
     if(items.length === 0) return;
 
-    let newIds = undefined;
-    let newItems = undefined;
-    if(!selectedIds.includes(item[itemId])) {
-      newIds = [...selectedIds, item[itemId]];
-      newItems = [...selectedItems, item];
-    } else {
-      newIds = selectedIds.filter((i) => i !== item[itemId]);
-      newItems = selectedItems.filter((i) => i[itemId] !== item[itemId])
+    let newIds = [];
+
+    if(Array.isArray(tableItems)) {
+      newIds = tableItems;
+    } else if(typeof tableItems === 'object') {
+      // If the item don't exist, add it. Else remove it
+      if(!selectedIds.includes(tableItems[itemId])){
+        newIds = [...selectedIds, tableItems[itemId]];
+      }
+      else {
+        newIds = selectedIds.filter((i) => i !== tableItems[itemId])
+      }
     }
+
+    const newItems = items.filter((i) => newIds.includes(i[itemId]));
 
     setSelectedIds(newIds)
     setSelectedItems(newItems)
@@ -61,6 +65,10 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
     return items.length === selectedIds.length;
   }
 
+  useEffect(() => {
+    updateSelected(selected);
+  }, [selected])
+
   // Render function
   return(
     <div>
@@ -78,7 +86,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
             items.map((item) => {
               return (
                 <tr key={item[itemId]} onClick={() => selectOnClick && updateSelected(item)} className={isSelected(item) ? 'tr-selected' : undefined}>
-                  { showSelect && <td className='vtfk-table-checkbox'><Checkbox checked={isSelected(item)} onChange={(e) => updateSelected(item, e.target.checked)} style={{display: 'block'}} /></td>}
+                  { showSelect && <td className='vtfk-table-checkbox'><Checkbox checked={isSelected(item)} onChange={(e) => updateSelected(item)} style={{display: 'block'}} /></td>}
                   {
                     headers.map((header) => {
                       return (

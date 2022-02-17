@@ -1,4 +1,4 @@
-import { Button, SearchField } from '@vtfk/components'
+import { Button, SearchField, SearchResult } from '@vtfk/components'
 import { useState } from 'react'
 import Table from '../../../components/Table'
 import Loading from '../../../components/Loading/Loading';
@@ -7,15 +7,18 @@ import {
 } from "react-router-dom";
 import axios from 'axios'
 import { getValidBearerToken } from '../../../auth'
+import useTeacher from '../../../hooks/useTeachers'
 
 export default function Substitute () {
   const [searchTerm, setSearchTerm] = useState('');
-  const [availableTeachers, setAvailableTeachers] = useState([]);
+  const [searchItems, setSearchItems] = useState([]);
   const [selectedTeacher, setSelectedTeacher] = useState(undefined);
   const [isLoadingTeams, setIsLoadingTeams] = useState(false);
   const [availableTeams, setAvailableTeams] = useState(undefined);
   const [selectedTeams, setSelectedTeams] = useState([])
   
+  const { search, isLoading } = useTeacher()
+
   const headers = [
     {
       label: 'Team',
@@ -30,28 +33,13 @@ export default function Substitute () {
   ]
 
   async function searchForTeachers() {
-    if(!searchTerm) return
-    if(searchTerm.length < 3) return;
-
-    const request = {
-      url: `https://graph.microsoft.com/v1.0/users?$filter=startsWith(displayName, '${searchTerm}') OR startsWith(surname, '${searchTerm}')&$orderBy=displayName&$count=true`,
-      headers: {
-        ConsistencyLevel: 'eventual',
-        Authorization: getValidBearerToken()
-      }
-    }
-
-    const response = await axios.request(request);
-    if(response?.status === 200 && response.data?.value) {
-      const teachers = response.data.value;
-      setAvailableTeachers(teachers);
-      console.log(availableTeachers);
-      setSelectedTeacher(teachers[0])
-      await loadTeams();
-    }
+    const result = await search(searchTerm)
+    if(result) setSearchItems(result.map((i) => { return { title: i.displayName, secondary: i.jobTitle, description: i.officeLocation, item: i }}))
+    else setSearchItems([])
   }
 
   async function loadTeams() {
+    console.log('Selected Teacher:', selectedTeacher)
     if(!selectedTeacher || !selectedTeacher.id) return;
 
     // Request for retreiving the teachers teams
@@ -65,6 +53,7 @@ export default function Substitute () {
 
     setIsLoadingTeams(true);
     const response = await axios.request(request);
+    console.log('Response:', response)
 
     if(response?.status === 200 && response.data?.value) {
       console.log('Received data: ', response.data.value);
@@ -93,7 +82,8 @@ export default function Substitute () {
 
   return (
     <div style={{paddingTop: '2rem', height: '100%', display: 'flex', flexDirection: 'column'}}>
-      <SearchField placeholder="Søk etter læreren du skal være vikar for" rounded onSearch={() => { searchForTeachers() }} onChange={(e) => setSearchTerm(e.target.value)} />
+      <SearchField placeholder="Søk etter læreren du skal være vikar for" rounded onDebounce={() => { searchForTeachers()}} debounceMs={250} onSearch={() => { searchForTeachers() }} onChange={(e) => {setSearchTerm(e.target.value); setSearchItems([])}} />
+      <SearchResult items={searchItems} onClick={(e) => {setSelectedTeacher(e.item); loadTeams()}} loading={isLoading} />
       {
         isLoadingTeams && <Loading title='Laster inn teams' message="Dette kan ta noen sekunder"/>
       }
