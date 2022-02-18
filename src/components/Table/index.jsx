@@ -1,6 +1,6 @@
 import './style.css'
 import { Checkbox } from '@vtfk/components'
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { nanoid } from 'nanoid'
 
 
@@ -30,6 +30,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
 
     setSelectedIds(newIds)
     setSelectedItems(newItems)
+    console.log('Selected Items:', selectedItems)
 
     if(onSelectedIdsChanged && typeof onSelectedIdsChanged === 'function') onSelectedIdsChanged(newIds);
     if(onSelectedItemsChanged && typeof onSelectedItemsChanged === 'function') onSelectedItemsChanged(newItems);
@@ -65,9 +66,9 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
     return items.length === selectedIds.length;
   }
 
-  useEffect(() => {
-    updateSelected(selected);
-  }, [selected])
+  // useEffect(() => {
+  //   updateSelected(selected);
+  // }, [selected])
 
   // Render function
   return(
@@ -97,7 +98,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
                 </tr>
               )
             })
-            : <tr><td colSpan={headers.length} style={{ textAlign: 'center'}}>Ingen data funnter</td></tr>
+            : <tr><td colSpan={headers.length + 1} style={{ textAlign: 'center'}}>Ingen data funnter</td></tr>
           }
         </tbody>
       </table>

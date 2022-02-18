@@ -79,9 +79,11 @@ function saveToken(token, options = {}) {
   
   // Parse and prepare the token
   const formattedToken = {
-    provider: options.service || 'azuread',
+    provider: options.provider || 'azuread',
+    username: token.account?.username || token.idTokenClaims?.preferred_username || undefined,
     expiration: token.expiresOn || token.extExpiresOn || token.expiration || token.exp,
     scopes: token.scopes || options.scopes || [],
+    roles: token.roles || token.idTokenClaims?.roles || token.account?.idTokenClaims?.roles || [],
     token: token
   }
 

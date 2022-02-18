@@ -5,19 +5,19 @@ import Loading from '../../../components/Loading/Loading';
 import {
   Link
 } from "react-router-dom";
-import axios from 'axios'
-import { getValidBearerToken } from '../../../auth'
 import useTeacher from '../../../hooks/useTeachers'
+import useTeacherTeams from '../../../hooks/useTeacherTeams';
+// import useTeacherTeams from '../../../hooks/useTeacherTeams';
 
 export default function Substitute () {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchItems, setSearchItems] = useState([]);
   const [selectedTeacher, setSelectedTeacher] = useState(undefined);
-  const [isLoadingTeams, setIsLoadingTeams] = useState(false);
-  const [availableTeams, setAvailableTeams] = useState(undefined);
   const [selectedTeams, setSelectedTeams] = useState([])
   
-  const { search, isLoading } = useTeacher()
+  const { search, isLoading } = useTeacher();
+  // const { searchTeacherTeams, isLoading as loading } = useTeacherTeams();
+  const { search:searchTeacherTeams, isLoading:isLoadingTeams, teacherTeams } = useTeacherTeams();
 
   const headers = [
     {
@@ -28,7 +28,9 @@ export default function Substitute () {
     },
     {
       label: 'Beskrivelse',
-      value: 'description'
+      value: 'description',
+      style: {textAlign: 'left'},
+      itemStyle: {textAlign: 'left'}
     }
   ]
 
@@ -38,29 +40,9 @@ export default function Substitute () {
     else setSearchItems([])
   }
 
-  async function loadTeams() {
-    console.log('Selected Teacher:', selectedTeacher)
-    if(!selectedTeacher || !selectedTeacher.id) return;
-
-    // Request for retreiving the teachers teams
-    const request = {
-      url: `https://graph.microsoft.com/v1.0/users/${selectedTeacher.id}/ownedObjects`,
-      headers: {
-        ConsistencyLevel: 'eventual',
-        Authorization: getValidBearerToken()
-      }
-    }
-
-    setIsLoadingTeams(true);
-    const response = await axios.request(request);
-    console.log('Response:', response)
-
-    if(response?.status === 200 && response.data?.value) {
-      console.log('Received data: ', response.data.value);
-      setAvailableTeams(response.data.value)
-    }
-
-    setIsLoadingTeams(false);
+  async function loadTeams(teacher) {
+    if(!teacher || !teacher.id) return;
+    await searchTeacherTeams(teacher.id);
   }
 
   async function activateSubstitution() {
@@ -82,13 +64,17 @@ export default function Substitute () {
 
   return (
     <div style={{paddingTop: '2rem', height: '100%', display: 'flex', flexDirection: 'column'}}>
-      <SearchField placeholder="Søk etter læreren du skal være vikar for" rounded onDebounce={() => { searchForTeachers()}} debounceMs={250} onSearch={() => { searchForTeachers() }} onChange={(e) => {setSearchTerm(e.target.value); setSearchItems([])}} />
-      <SearchResult items={searchItems} onClick={(e) => {setSelectedTeacher(e.item); loadTeams()}} loading={isLoading} />
+      <SearchField style={{position: 'relative'}} placeholder="Søk etter læreren du skal være vikar for" rounded onDebounce={() => { searchForTeachers()}} debounceMs={250} onSearch={() => { searchForTeachers() }} onChange={(e) => {setSearchTerm(e.target.value);}}/>
+      <div style={{position: 'relative', width: '100%', zIndex: 100}}>
+        <div style={{position: 'absolute', top: '0', width: '100%'}}>
+          <SearchResult items={searchItems} onClick={(e) => {setSelectedTeacher(e.item); loadTeams(e.item)}} loading={isLoading}/>
+        </div>
+      </div>
       {
         isLoadingTeams && <Loading title='Laster inn teams' message="Dette kan ta noen sekunder"/>
       }
       {
-        !isLoadingTeams && Array.isArray(availableTeams) && <Table headers={headers} items={availableTeams} itemId="id" onSelectedItemsChanged={(e) => { setSelectedTeams(e)}} selectOnClick style={{marginTop: '2rem'}} />
+        !isLoadingTeams && Array.isArray(teacherTeams) && teacherTeams.length > 0 && <Table headers={headers} items={teacherTeams} itemId="id" onSelectedItemsChanged={(e) => { setSelectedTeams(e)}} selectOnClick style={{marginTop: '2rem'}} />
       }
       {
       <div className='main-footer-button-group'>

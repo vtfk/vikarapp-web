@@ -1,7 +1,7 @@
+import config from '../../config'
 import axios from "axios";
 import { useState } from "react";
 import { getValidBearerToken, login } from '../../auth'
-import config from '../../config'
 
 export default function useTeachers() {
   const [teachers, setTeachers] = useState([]);
