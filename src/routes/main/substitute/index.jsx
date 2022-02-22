@@ -45,6 +45,10 @@ export default function Substitute () {
     await searchTeacherTeams(teacher.id);
   }
 
+  function onSelectedTeams(e) {
+    console.log('Selected teams substitute: ', e)
+  }
+
   async function activateSubstitution() {
     // Input validation
     if(!selectedTeams || !Array.isArray(selectedTeams) || selectedTeams.length === 0) {
@@ -64,7 +68,15 @@ export default function Substitute () {
 
   return (
     <div style={{paddingTop: '2rem', height: '100%', display: 'flex', flexDirection: 'column'}}>
-      <SearchField style={{position: 'relative'}} placeholder="Søk etter læreren du skal være vikar for" rounded onDebounce={() => { searchForTeachers()}} debounceMs={250} onSearch={() => { searchForTeachers() }} onChange={(e) => {setSearchTerm(e.target.value);}}/>
+      <SearchField
+        style={{position: 'relative'}}
+        placeholder="Søk etter læreren du skal være vikar for"
+        rounded
+        onDebounce={() => { searchForTeachers()}}
+        debounceMs={250}
+        onSearch={() => { searchForTeachers() }}
+        onChange={(e) => {setSearchTerm(e.target.value);}}
+      />
       <div style={{position: 'relative', width: '100%', zIndex: 100}}>
         <div style={{position: 'absolute', top: '0', width: '100%'}}>
           <SearchResult items={searchItems} onClick={(e) => {setSelectedTeacher(e.item); loadTeams(e.item)}} loading={isLoading}/>
@@ -74,7 +86,15 @@ export default function Substitute () {
         isLoadingTeams && <Loading title='Laster inn teams' message="Dette kan ta noen sekunder"/>
       }
       {
-        !isLoadingTeams && Array.isArray(teacherTeams) && teacherTeams.length > 0 && <Table headers={headers} items={teacherTeams} itemId="id" onSelectedItemsChanged={(e) => { setSelectedTeams(e)}} selectOnClick style={{marginTop: '2rem'}} />
+        !isLoadingTeams && Array.isArray(teacherTeams) && teacherTeams.length > 0 &&
+        <Table
+          headers={headers}
+          items={teacherTeams}
+          itemId="id"
+          selectOnClick
+          onSelectedItemsChanged={(e) => { onSelectedTeams(e)}}
+          style={{marginTop: '2rem'}}
+        />
       }
       {
       <div className='main-footer-button-group'>

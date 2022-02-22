@@ -30,7 +30,6 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
 
     setSelectedIds(newIds)
     setSelectedItems(newItems)
-    console.log('Selected Items:', selectedItems)
 
     if(onSelectedIdsChanged && typeof onSelectedIdsChanged === 'function') onSelectedIdsChanged(newIds);
     if(onSelectedItemsChanged && typeof onSelectedItemsChanged === 'function') onSelectedItemsChanged(newItems);
@@ -66,6 +65,16 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
     return items.length === selectedIds.length;
   }
 
+  function handleCheckboxClick(e, item) {
+    updateSelected(item);
+  }
+
+  function handleRowClick(e, item) {
+    const targetNodeType = e.target.nodeName;
+    if(targetNodeType !== 'TD' && targetNodeType !== 'TR') return;
+    updateSelected(item);
+  }
+
   // useEffect(() => {
   //   updateSelected(selected);
   // }, [selected])
@@ -86,8 +95,13 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
             (items && Array.isArray(items) && items.length > 0) ?
             items.map((item) => {
               return (
-                <tr key={item[itemId]} onClick={() => selectOnClick && updateSelected(item)} className={isSelected(item) ? 'tr-selected' : undefined}>
-                  { showSelect && <td className='vtfk-table-checkbox'><Checkbox checked={isSelected(item)} onChange={(e) => updateSelected(item)} style={{display: 'block'}} /></td>}
+                <tr key={item[itemId]} onClick={(e) => selectOnClick && handleRowClick(e, item)} className={isSelected(item) ? 'tr-selected' : undefined}>
+                  { 
+                  showSelect &&
+                    <td className='vtfk-table-checkbox'>
+                      <Checkbox checked={isSelected(item)} onChange={(e) => handleCheckboxClick(e, item)} style={{display: 'block'}} />
+                    </td>
+                  }
                   {
                     headers.map((header) => {
                       return (
