@@ -2,9 +2,9 @@ import './style.css'
 import { Checkbox } from '@vtfk/components'
 import { useState } from 'react';
 import { nanoid } from 'nanoid'
+import { mergeStyles } from './lib/helpers'
 
-
-export default function Table({items, headers, itemId = '_id', selected, style, dense = false, showSelect = true, selectOnClick = false, onSelectedIdsChanged, onSelectedItemsChanged, actions}) {
+export default function Table({items, headers, itemId = '_id', selected, style, headerStyle, itemStyle, dense = false, showSelect = true, selectOnClick = false, onSelectedIdsChanged, onSelectedItemsChanged, actions}) {
   // State
   const [selectedIds, setSelectedIds] = useState(selected && Array.isArray(selected) ? selected : [])
   const [selectedItems, setSelectedItems] = useState([])
@@ -76,10 +76,6 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
     updateSelected(item);
   }
 
-  // useEffect(() => {
-  //   updateSelected(selected);
-  // }, [selected])
-
   // Render function
   return(
     <div>
@@ -87,8 +83,16 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
       <table className="vtfk-table" style={style} cellSpacing="0" cellPadding="0">
         <thead>
           <tr>
-            { showSelect && items && <th className='vtfk-table-checkbox'><Checkbox checked={isAllSelected()} name={"checkAll"} value={"checkAll"} label={" "} onChange={(e) => selectAll(e.target.checked)} style={{padding: 0, display: 'block'}}/></th>}
-            { headers.map((header) => <th key={nanoid()} className={header.class || undefined} style={header.style || undefined}>{header.label}</th>) }
+            { showSelect && items && 
+              <th className='vtfk-table-checkbox' style={headerStyle}>
+                <Checkbox checked={isAllSelected()} name={"checkAll"} value={"checkAll"} label={" "} onChange={(e) => selectAll(e.target.checked)} style={{padding: 0, display: 'block'}}/>
+              </th>
+            }
+            { 
+              headers.map((header) => 
+              <th key={nanoid()} className={header.class || undefined} style={ mergeStyles(headerStyle, header.style)}>{header.label}
+              </th>)
+            }
           </tr>
         </thead>
         <tbody>
@@ -106,7 +110,13 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
                   {
                     headers.map((header) => {
                       return (
-                        <td key={nanoid()} className={dense ? 'td-dense' : undefined} style={header.itemStyle}>{item.elements?.[header.value] || item[header.value] || ''}</td>
+                        <td
+                          key={nanoid()}
+                          className={dense ? 'td-dense' : undefined}
+                          style={mergeStyles(itemStyle, header.itemStyle)}
+                        >
+                          { item.elements?.[header.value] || item[header.value] || '' }
+                        </td>
                       )
                     })
                   }

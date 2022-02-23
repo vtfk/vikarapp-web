@@ -4,8 +4,8 @@ const config = {
   auth: {
     loginUrl: '/loginredirect',
     storage: 'local',
-    loginMethod: 'redirect',
     loginOptions: {
+      type: 'redirect'
     }
   },
   providers: {

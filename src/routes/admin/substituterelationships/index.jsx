@@ -39,7 +39,7 @@ export default function SubstituteRelationships() {
 
       function Action () {
         return (
-          <IconButton size="small" onClick={() => onEditItem(i)} />
+          <IconButton size="small" icon="add" onClick={() => onEditItem(i)} />
         )
       }
 
@@ -70,7 +70,6 @@ export default function SubstituteRelationships() {
           </DialogActions>
         </Dialog>
       }
-      
     </div>
   )
 }

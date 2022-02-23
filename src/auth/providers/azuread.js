@@ -25,7 +25,7 @@ export async function login(clientOptions = {}, loginOptions = {}) {
   if(!msalClient) initialize(clientOptions);
 
   // Login with redirection
-  if(loginOptions.loginMethod !== 'popup') return msalClient.acquireTokenRedirect(loginOptions);
+  if(loginOptions.type !== 'popup') return msalClient.acquireTokenRedirect(loginOptions);
 
   // Login with popup
   return await msalClient.acquireTokenPopup(loginOptions);
