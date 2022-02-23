@@ -13,7 +13,7 @@ export default function Substitute () {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchItems, setSearchItems] = useState([]);
   const [selectedTeacher, setSelectedTeacher] = useState(undefined);
-  const [selectedTeams, setSelectedTeams] = useState([])
+  const [selectedTeams] = useState([])
   
   const { search, isLoading } = useTeacher();
   // const { searchTeacherTeams, isLoading as loading } = useTeacherTeams();
@@ -67,7 +67,7 @@ export default function Substitute () {
   }
 
   return (
-    <div style={{paddingTop: '2rem', height: '100%', display: 'flex', flexDirection: 'column'}}>
+    <div style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
       <SearchField
         style={{position: 'relative'}}
         placeholder="Søk etter læreren du skal være vikar for"

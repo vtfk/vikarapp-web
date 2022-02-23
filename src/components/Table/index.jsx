@@ -30,6 +30,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
 
     setSelectedIds(newIds)
     setSelectedItems(newItems)
+    console.log('Selected Items:', selectedItems);
 
     if(onSelectedIdsChanged && typeof onSelectedIdsChanged === 'function') onSelectedIdsChanged(newIds);
     if(onSelectedItemsChanged && typeof onSelectedItemsChanged === 'function') onSelectedItemsChanged(newItems);
@@ -86,7 +87,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
       <table className="vtfk-table" style={style} cellSpacing="0" cellPadding="0">
         <thead>
           <tr>
-            { showSelect && <th className='vtfk-table-checkbox'><Checkbox checked={isAllSelected()} name={"checkAll"} value={"checkAll"} label={" "} onChange={(e) => selectAll(e.target.checked)} style={{padding: 0, display: 'block'}}/></th>}
+            { showSelect && items && <th className='vtfk-table-checkbox'><Checkbox checked={isAllSelected()} name={"checkAll"} value={"checkAll"} label={" "} onChange={(e) => selectAll(e.target.checked)} style={{padding: 0, display: 'block'}}/></th>}
             { headers.map((header) => <th key={nanoid()} className={header.class || undefined} style={header.style || undefined}>{header.label}</th>) }
           </tr>
         </thead>
@@ -112,7 +113,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
                 </tr>
               )
             })
-            : <tr><td colSpan={headers.length + 1} style={{ textAlign: 'center'}}>Ingen data funnter</td></tr>
+            : <tr><td colSpan={headers.length + 1} style={{ textAlign: 'center'}}>Ingen data funnet</td></tr>
           }
         </tbody>
       </table>
