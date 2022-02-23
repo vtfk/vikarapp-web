@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { nanoid } from 'nanoid'
 
 
-export default function Table({items, headers, itemId = '_id', selected, style, dense = false, showSelect = true, selectOnClick = false, onSelectedIdsChanged, onSelectedItemsChanged}) {
+export default function Table({items, headers, itemId = '_id', selected, style, dense = false, showSelect = true, selectOnClick = false, onSelectedIdsChanged, onSelectedItemsChanged, actions}) {
   // State
   const [selectedIds, setSelectedIds] = useState(selected && Array.isArray(selected) ? selected : [])
   const [selectedItems, setSelectedItems] = useState([])
@@ -106,7 +106,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
                   {
                     headers.map((header) => {
                       return (
-                        <td key={nanoid()} className={dense ? 'td-dense' : undefined} style={header.itemStyle}>{item[header.value] || ''}</td>
+                        <td key={nanoid()} className={dense ? 'td-dense' : undefined} style={header.itemStyle}>{item.elements?.[header.value] || item[header.value] || ''}</td>
                       )
                     })
                   }
