@@ -74,8 +74,11 @@ export default function SubstituteRelationships() {
         )
       }
       function SchoolCount () {
+        let str = i.permittedSchools?.length || 0;
+        if(i.permittedSchools?.includes('*')) str = 'Alle'
+
         return (
-          <div>{i.permittedSchools?.length || 0}</div>
+          <div>{str}</div>
         )
       }
 

@@ -2,9 +2,9 @@ import './style.css'
 import { Checkbox } from '@vtfk/components'
 import { useState } from 'react';
 import { nanoid } from 'nanoid'
-import { mergeStyles } from './lib/helpers'
+import { mergeStyles, mergeClasses } from './lib/helpers'
 
-export default function Table({items, headers, itemId = '_id', selected, style, headerStyle, itemStyle, dense = false, showSelect = true, selectOnClick = false, onSelectedIdsChanged, onSelectedItemsChanged}) {
+export default function Table({items, headers, itemId = '_id', selected, style, headerClass, headerStyle, itemClass, itemStyle, dense = false, showSelect = true, selectOnClick = false, onSelectedIdsChanged, onSelectedItemsChanged}) {
   // State
   const [selectedIds, setSelectedIds] = useState(selected && Array.isArray(selected) ? selected : [])
   const [selectedItems, setSelectedItems] = useState([])
@@ -86,14 +86,14 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
             { 
               // Render checkboxs for selecting all items if applicable
               showSelect && items && 
-              <th className='vtfk-table-checkbox' style={headerStyle}>
+              <th className='vtfk-table-checkbox' style={headerStyle} class={ headerClass }>
                 <Checkbox checked={isAllSelected()} name={"checkAll"} value={"checkAll"} label={" "} onChange={(e) => selectAll(e.target.checked)} style={{padding: 0, display: 'block'}}/>
               </th>
             }
             { 
               // Render all headers
               headers.map((header) => 
-                <th key={nanoid()} className={header.class || undefined} style={ mergeStyles(headerStyle, header.style)}>
+                <th key={nanoid()} className={header.class || undefined} class={mergeClasses(headerClass, header.class)} style={mergeStyles(headerStyle, header.style)}>
                   {header.label}
                 </th>
               )
@@ -105,7 +105,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
             (items && Array.isArray(items) && items.length > 0) ?
             items.map((item) => {
               return (
-                <tr key={item[itemId]} onClick={(e) => selectOnClick && handleRowClick(e, item)} className={isSelected(item) ? 'tr-selected' : undefined}>
+                <tr key={item[itemId]} onClick={(e) => selectOnClick && handleRowClick(e, item)} className={mergeClasses(itemClass, isSelected(item) ? 'tr-selected' : '')}>
                   { 
                     // Render checkbox for selecting the item in the current row, if applicable
                     showSelect &&
@@ -119,7 +119,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
                       return (
                         <td
                           key={nanoid()}
-                          className={dense ? 'td-dense' : undefined}
+                          className={mergeClasses(dense ? 'td-dense' : '', itemClass, header.itemClass)}
                           style={mergeStyles(itemStyle, header.itemStyle)}
                         >
                           { item.elements?.[header.value] || item[header.value] || '' }
