@@ -86,14 +86,14 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
             { 
               // Render checkboxs for selecting all items if applicable
               showSelect && items && 
-              <th className='vtfk-table-checkbox' style={headerStyle} className={ headerClass }>
+              <th className={mergeClasses('vtfk-table-checkbox', headerClass)} style={headerStyle} >
                 <Checkbox checked={isAllSelected()} name={"checkAll"} value={"checkAll"} label={" "} onChange={(e) => selectAll(e.target.checked)} style={{padding: 0, display: 'block'}}/>
               </th>
             }
             { 
               // Render all headers
               headers.map((header) => 
-                <th key={nanoid()} className={header.class || undefined} className={mergeClasses(headerClass, header.class)} style={mergeStyles(headerStyle, header.style)}>
+                <th key={nanoid()} className={mergeClasses(headerClass, header.class)} style={mergeStyles(headerStyle, header.style)}>
                   {header.label}
                 </th>
               )
