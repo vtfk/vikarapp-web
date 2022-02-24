@@ -1,7 +1,7 @@
 import config from '../../config'
 import axios from "axios";
 import { useState } from "react";
-import { getValidBearerToken, login } from '../../auth'
+import { login } from '../../auth'
 
 export default function useSubstituteRelationships() {
   const [state, setState] = useState([]);
@@ -10,14 +10,13 @@ export default function useSubstituteRelationships() {
   async function get() {
     setIsLoading(true);
 
-    const token = getValidBearerToken();
-    if(!token) await login({ type: 'popup' })
+    const { bearerToken} = await login({ type: 'popup' })
 
     const request = {
       url: `${config.vikarAPIBaseurl}substituterelationships`,
       method: 'GET',
       headers: {
-        Authorization: token
+        Authorization: bearerToken
       }
     }
 
@@ -36,8 +35,7 @@ export default function useSubstituteRelationships() {
   async function put(item) {
     if(!item?._id) throw new Error('The provided item must have a id')
 
-    const token = getValidBearerToken();
-    if(!token) await login({ type: 'popup' })
+    const { bearerToken} = await login({ type: 'popup' })
 
     delete item.elements;
 
@@ -45,7 +43,7 @@ export default function useSubstituteRelationships() {
       url: `${config.vikarAPIBaseurl}substituterelationships/${item._id}`,
       method: 'PUT',
       headers: {
-        Authorization: token
+        Authorization: bearerToken
       },
       data: item
     }

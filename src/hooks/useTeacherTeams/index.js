@@ -1,7 +1,7 @@
 import config from '../../config'
 import axios from "axios";
 import { useState } from "react";
-import { getValidBearerToken, login } from '../../auth'
+import { login } from '../../auth'
 
 export default function useTeacherTeams() {
   const [state, setState] = useState([]);
@@ -12,14 +12,13 @@ export default function useTeacherTeams() {
 
     setIsLoading(true);
 
-    const token = getValidBearerToken();
-    if(!token) await login({ type: 'popup' })
+    const { bearerToken } = await login({ type: 'popup' })
 
     const request = {
       url: `${config.vikarAPIBaseurl}teacherteams/${id}`,
       method: 'GET',
       headers: {
-        Authorization: token
+        Authorization: bearerToken
       }
     }
 

@@ -7,13 +7,16 @@ import {
 } from "react-router-dom";
 import useTeacher from '../../../hooks/useTeachers'
 import useTeacherTeams from '../../../hooks/useTeacherTeams';
+import useSubstitutions from '../../../hooks/useSubstitutions';
+import { getValidToken } from '../../../auth'
 
 export default function Substitute () {
   const [selectedTeacher, setSelectedTeacher] = useState(undefined);
-  const [selectedTeams] = useState([])
+  const [selectedTeams, setSelectedTeams] = useState([])
   
   const { state:teachers, search:searchForTeachers, isLoading:isLoadingTeachers } = useTeacher();
   const { state:teacherTeams, search:searchTeacherTeams, isLoading:isLoadingTeams } = useTeacherTeams();
+  const { post:postSubstitutions } = useSubstitutions();
 
   // Table headers
   const headers = [
@@ -38,24 +41,24 @@ export default function Substitute () {
     { value: 'officeLocation'}
   ]
 
-  function onSelectedTeams(e) {
-    console.log('Selected teams substitute: ', e)
-  }
-
   async function activateSubstitution() {
     // Input validation
     if(!selectedTeams || !Array.isArray(selectedTeams) || selectedTeams.length === 0) {
       alert('Du må velge velge en eller flere klasse å vikariere for');
       return;
     }
-    // Verify
-    let message = `Ønsker du å vikarere for lærer ${selectedTeacher.name}?\n\n`
-    message += `Antall klasser: ${selectedTeams.length}\n\n`
+    // Verify that the request should be made
+    let message = `Ønsker du å vikarere for lærer ${selectedTeacher.displayName}?\n\n`
     message += 'Klasser:\n'
-    message += `${selectedTeams.map((t) => t.name + '\n')}`
+    selectedTeams.map((t) => message += `${t.displayName}\n`)
+    if(!window.confirm(message)) return;
 
-    if(window.confirm(message)) {
-      console.log('Nå skal det aktiveres vikariat');
+    // Make the request
+    const data = await postSubstitutions(getValidToken()?.username, selectedTeacher.userPrincipalName, selectedTeams.map((t) => t.id))
+
+    // Route back to the front page
+    if(data) {
+      console.log('TODO: Route back to frontpage')
     }
   }
 
@@ -68,20 +71,20 @@ export default function Substitute () {
         items={teachers}
         itemMapping={itemMapping}
         onSearch={(e) => { searchForTeachers(e?.target?.value) }}
-        onSelected={(e) => { setSelectedTeacher(e); searchTeacherTeams(e?.userPrincipalName) }}
+        onSelected={(e) => { console.log('Selected teacher', e); setSelectedTeacher(e); searchTeacherTeams(e?.userPrincipalName) }}
         rounded
       />
       {
         isLoadingTeams && <Loading title='Laster inn teams' message="Dette kan ta noen sekunder"/>
       }
       {
-        !isLoadingTeams &&
+        !isLoadingTeams && selectedTeacher &&
         <Table
           headers={headers}
           items={teacherTeams}
           itemId="id"
           selectOnClick
-          onSelectedItemsChanged={(e) => { onSelectedTeams(e)}}
+          onSelectedItemsChanged={(e) => { setSelectedTeams(e)}}
           style={{marginTop: '2rem'}}
         />
       }
