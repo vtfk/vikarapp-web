@@ -57,13 +57,13 @@ export default function MainOverview() {
   }
 
   return (
-    <div className="overview main-content-bg">
+    <div className="overview">
       <Table itemId="_id" headers={headers} items={items} selected={selectedIds} selectOnClick onSelectedIdsChanged={(e) => setSelectedIds(e)} onSelectedItemsChanged={(e) => {setSelectedItems(e); console.log(selectedItems)}} />
-      <div className='main-footer-button-group'>
+      <div className='main-footer-button-group' style={{marginTop: '1rem'}}>
         <Link to="substitute">
-          <Button size="small">Jeg skal være vikar</Button>
+          <Button>Jeg skal være vikar</Button>
         </Link>
-        <Button size="small" disabled={selectedIds.length === 0} onClick={() => selectedItems.length > 0 && setIsShowRenewalDialog(true)}>Forleng vikariat</Button>
+        <Button disabled={selectedIds.length === 0} onClick={() => selectedItems.length > 0 && setIsShowRenewalDialog(true)}>Forleng vikariat</Button>
       </div>
       <Dialog isOpen={isShowRenewalDialog} onDismiss={() => setIsShowRenewalDialog(false)}>
         <DialogTitle>Fornye vikariat?</DialogTitle>
