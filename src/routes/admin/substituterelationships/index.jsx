@@ -63,9 +63,9 @@ export default function SubstituteRelationships() {
     }
   ]
 
-  const items = useMemo(() => {
-    let rawItems = relationships
-    rawItems.forEach((i, index) => {
+  const tableItems = useMemo(() => {
+    let tableItems = relationships
+    tableItems.forEach((i, index) => {
       function Action () {
         return (
           <div style={{display: 'flex', justifyContent: 'center'}}>
@@ -87,7 +87,7 @@ export default function SubstituteRelationships() {
         schools: <SchoolCount />
       }
     })
-    return rawItems
+    return tableItems
   }, [relationships])
 
   useEffect(() => {
@@ -130,7 +130,7 @@ export default function SubstituteRelationships() {
   return (
     <div>
       <div style={{color: 'white'}}>Her setter du opp hvilke skoler som for lov til å være vikar for hverandre</div>
-      <Table headers={headers} items={items} showSelect={false} headerStyle={{textAlign: 'left'}} itemStyle={{textAlign: 'left'}}/>
+      <Table headers={headers} items={tableItems} showSelect={false} headerStyle={{textAlign: 'left'}} itemStyle={{textAlign: 'left'}}/>
       {
         editedItem && 
         <Dialog isOpen={editedItem !== undefined} onDismiss={() => setEditedItem(undefined)} persistent>
