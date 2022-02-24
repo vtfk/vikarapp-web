@@ -15,6 +15,7 @@ export default function Substitute () {
   const { state:teachers, search:searchForTeachers, isLoading:isLoadingTeachers } = useTeacher();
   const { state:teacherTeams, search:searchTeacherTeams, isLoading:isLoadingTeams } = useTeacherTeams();
 
+  // Table headers
   const headers = [
     {
       label: 'Team',
@@ -30,16 +31,11 @@ export default function Substitute () {
     }
   ]
 
+  // Item mapping for the search results
   const itemMapping = [
-    {
-      value: 'displayName'
-    },
-    {
-      value: 'jobTitle'
-    },
-    {
-      value: 'officeLocation'
-    }
+    { value: 'displayName' },
+    { value: 'jobTitle' },
+    { value: 'officeLocation'}
   ]
 
   function onSelectedTeams(e) {
@@ -66,14 +62,14 @@ export default function Substitute () {
   return (
     <div style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
       <SearchField
+        loading={isLoadingTeachers}
+        debounceMs={250}
+        placeholder="Søk etter læreren du skal være vikar for"
         items={teachers}
         itemMapping={itemMapping}
-        onSearch={(e) => { searchForTeachers(e.target.value) }}
-        onSelected={(e) => { searchTeacherTeams(e?.userPrincipalName) }}
-        loading={isLoadingTeachers}
-        placeholder="Søk etter læreren du skal være vikar for"
+        onSearch={(e) => { searchForTeachers(e?.target?.value) }}
+        onSelected={(e) => { setSelectedTeacher(e); searchTeacherTeams(e?.userPrincipalName) }}
         rounded
-        debounceMs={250}
       />
       {
         isLoadingTeams && <Loading title='Laster inn teams' message="Dette kan ta noen sekunder"/>
