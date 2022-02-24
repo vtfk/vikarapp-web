@@ -133,7 +133,7 @@ export default function SubstituteRelationships() {
       <Table headers={headers} items={items} showSelect={false} headerStyle={{textAlign: 'left'}} itemStyle={{textAlign: 'left'}}/>
       {
         editedItem && 
-        <Dialog isOpen={editedItem !== undefined} onDismiss={() => setEditedItem(undefined)}>
+        <Dialog isOpen={editedItem !== undefined} onDismiss={() => setEditedItem(undefined)} persistent>
           <DialogTitle>Endre forhold</DialogTitle>
           <DialogBody>
             <div>Her endrer du hvilke skoler lærere på <b>{editedItem.school}</b> kan være vikar for.</div>
