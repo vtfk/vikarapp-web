@@ -1,6 +1,6 @@
 import './Main.css'
 import logo from '../images/vtfk-logo.svg'
-import gear from '../images/gear.svg'
+// import gear from '../images/gear.svg'
 import { IconButton, Button } from '@vtfk/components'
 import {
   Routes,
