@@ -28,6 +28,7 @@ export function mergeStyles() {
 export function mergeClasses() {
   // String that will contain all concatinated classes
   let classes = '';
+
   // Process all classes
   for (let i = 0; i < arguments.length; i++) {
     // Skip of not string

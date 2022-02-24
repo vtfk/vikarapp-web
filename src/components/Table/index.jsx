@@ -1,10 +1,10 @@
 import './style.css'
-import { Checkbox } from '@vtfk/components'
+import { Checkbox, Spinner } from '@vtfk/components'
 import { useState } from 'react';
 import { nanoid } from 'nanoid'
 import { mergeStyles, mergeClasses } from './lib/helpers'
 
-export default function Table({items, headers, itemId = '_id', selected, style, headerClass, headerStyle, itemClass, itemStyle, trClass, trStyle, dense = false, showSelect = true, selectOnClick = false, onSelectedIdsChanged, onSelectedItemsChanged}) {
+export default function Table({items, headers, itemId = '_id', selected, style, headerClass, headerStyle, itemClass, itemStyle, trClass, trStyle, isLoading, loadingText, loadingElement, dense = false, showSelect = true, selectOnClick = false, onSelectedIdsChanged, onSelectedItemsChanged}) {
   // State
   const [selectedIds, setSelectedIds] = useState(selected && Array.isArray(selected) ? selected : [])
   const [selectedItems, setSelectedItems] = useState([])
@@ -102,7 +102,26 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
         </thead>
         <tbody>
           {
-            (items && Array.isArray(items) && items.length > 0) ?
+            isLoading &&
+            <tr>
+              {
+                !loadingElement && 
+                <td colSpan={1000} height='100%' className={mergeClasses('vtfk-table-loading-td')}>
+                  {
+                    !loadingElement ?
+                    <div className='vtfk-table-loading-container'>
+                      <h2 style={{margin: 0, marginBottom: '1rem'}}>{ loadingText || 'Laster' }</h2>
+                      <Spinner size="large" />
+                    </div>
+                    :
+                    loadingElement
+                  }
+                </td>
+              }
+            </tr>
+          }
+          {
+            !isLoading && (items && Array.isArray(items) && items.length > 0) &&
             items.map((item) => {
               return (
                 <tr key={item[itemId]} onClick={(e) => selectOnClick && handleRowClick(e, item)} className={mergeClasses(trClass, isSelected(item) ? 'tr-selected' : '', selectOnClick ? 'tr-select-onclick' : '')} style={mergeStyles(trStyle)}>
@@ -122,7 +141,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
                           className={mergeClasses(dense ? 'td-dense' : '', itemClass, header.itemClass)}
                           style={mergeStyles(itemStyle, header.itemStyle)}
                         >
-                          { item.elements?.[header.value] || item[header.value] || '' }
+                          { item[header.value] || '' }
                         </td>
                       )
                     })
@@ -130,7 +149,10 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
                 </tr>
               )
             })
-            : <tr><td colSpan={headers.length + 1} style={{ textAlign: 'center'}}>Ingen data funnet</td></tr>
+          }
+          {
+            !isLoading && items.length === 0 &&
+            <tr><td colSpan={headers.length + 1} style={{ textAlign: 'center'}}>Ingen data funnet</td></tr>
           }
         </tbody>
       </table>

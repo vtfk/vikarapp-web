@@ -6,7 +6,7 @@ import useSubstituteRelationships from "../../../hooks/useSubstituteRelationship
 export default function SubstituteRelationships() {
   const [editedItem, setEditedItem] = useState(undefined);
 
-  const { state:relationships, get, put } = useSubstituteRelationships();
+  const { state:relationships, get, put, isLoading } = useSubstituteRelationships();
   
 
   const headers = [
@@ -64,12 +64,16 @@ export default function SubstituteRelationships() {
   ]
 
   const tableItems = useMemo(() => {
-    let tableItems = relationships
+    // Make a copy of the items and break all references
+    let tableItems = JSON.parse(JSON.stringify(relationships))
+
+    // Update the fields with custom components
     tableItems.forEach((i, index) => {
       function Action () {
+        const item = {...relationships[index]}
         return (
           <div style={{display: 'flex', justifyContent: 'center'}}>
-            <Button size="small" onClick={() => onEditItem({...relationships[index]})} style={{minHeight: '25px', padding: '0 1rem'}}>Rediger</Button>
+            <Button size="small" onClick={() => onEditItem(item)} style={{minHeight: '25px', padding: '0 1rem'}}>Rediger</Button>
           </div>
         )
       }
@@ -81,12 +85,10 @@ export default function SubstituteRelationships() {
           <div>{str}</div>
         )
       }
-
-      i.elements = {
-        actions: <Action />,
-        schools: <SchoolCount />
-      }
+      i.actions = <Action />
+      i.schools = <SchoolCount />
     })
+    // Return the prepared tableItems
     return tableItems
   }, [relationships])
 
@@ -130,7 +132,7 @@ export default function SubstituteRelationships() {
   return (
     <div>
       <div style={{color: 'white'}}>Her setter du opp hvilke skoler som for lov til å være vikar for hverandre</div>
-      <Table headers={headers} items={tableItems} showSelect={false} headerStyle={{textAlign: 'left'}} itemStyle={{textAlign: 'left'}}/>
+      <Table headers={headers} items={tableItems} showSelect={false} headerStyle={{textAlign: 'left'}} itemStyle={{textAlign: 'left'}} isLoading={isLoading}/>
       {
         editedItem && 
         <Dialog isOpen={editedItem !== undefined} onDismiss={() => setEditedItem(undefined)} persistent>
