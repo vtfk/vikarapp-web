@@ -1,7 +1,7 @@
 import './Main.css'
 import logo from '../images/vtfk-logo.svg'
 import gear from '../images/gear.svg'
-import { IconButton } from '@vtfk/components'
+import { IconButton, Button } from '@vtfk/components'
 import {
   Routes,
   Route,
@@ -52,7 +52,7 @@ export default function Main() {
             {
               isAdmin && 
               <Link to="/admin">
-                <img alt="gear-button" src={gear} width="100%" className='settings-button'/>
+                <Button size="small" type="secondary">Admin</Button>
               </Link>
             }
           </div>

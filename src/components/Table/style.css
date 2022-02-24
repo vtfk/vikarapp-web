@@ -43,3 +43,7 @@
 .vtfk-table tbody .tr-selected {
   background-color: #e69696!important;
 }
+
+.vtfk-table tbody .tr-select-onclick {
+  cursor: pointer;
+}

@@ -71,7 +71,7 @@ export default function MainOverview() {
           Er du sikker på at du ønsker å fornye vikariat for:
           <ul>
             {
-              selectedItems.map((i) => <li key={i.id}>{i.team}</li>)
+              selectedItems.map((i) => <li key={i._id}>{i.team}</li>)
             }
           </ul>
         </DialogBody>

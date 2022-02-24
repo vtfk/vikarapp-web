@@ -31,14 +31,14 @@ export function mergeClasses() {
   // Process all classes
   for (let i = 0; i < arguments.length; i++) {
     // Skip of not string
-    if(typeof arguments[i] !== 'string') continue;
+    if(typeof arguments[i] !== 'string')  continue;
 
     // Split on space to get all parts, this is to clean up double spaces and make sure that two identical classes cannot be added twice
     let parts = arguments[i].trim().split(' ');
 
     // Loop through and add all unique classes
     for(const part of parts) {
-      if(!part || classes.includes(part)) return;
+      if(!part || classes.includes(part)) { continue; }
       classes += `${part} `
     }
   }

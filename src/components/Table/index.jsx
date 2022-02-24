@@ -105,7 +105,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
             (items && Array.isArray(items) && items.length > 0) ?
             items.map((item) => {
               return (
-                <tr key={item[itemId]} onClick={(e) => selectOnClick && handleRowClick(e, item)} className={mergeClasses(trClass, isSelected(item) ? 'tr-selected' : '')} style={mergeStyles(trStyle)}>
+                <tr key={item[itemId]} onClick={(e) => selectOnClick && handleRowClick(e, item)} className={mergeClasses(trClass, isSelected(item) ? 'tr-selected' : '', selectOnClick ? 'tr-select-onclick' : '')} style={mergeStyles(trStyle)}>
                   { 
                     // Render checkbox for selecting the item in the current row, if applicable
                     showSelect &&
