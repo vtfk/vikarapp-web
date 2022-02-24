@@ -1,4 +1,4 @@
-import { Button, SearchField, SearchResult } from '@vtfk/components'
+import { Button, SearchField } from '@vtfk/components'
 import { useState } from 'react'
 import Table from '../../../components/Table'
 import Loading from '../../../components/Loading/Loading';
@@ -7,17 +7,13 @@ import {
 } from "react-router-dom";
 import useTeacher from '../../../hooks/useTeachers'
 import useTeacherTeams from '../../../hooks/useTeacherTeams';
-// import useTeacherTeams from '../../../hooks/useTeacherTeams';
 
 export default function Substitute () {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchItems, setSearchItems] = useState([]);
   const [selectedTeacher, setSelectedTeacher] = useState(undefined);
   const [selectedTeams] = useState([])
   
-  const { search, isLoading } = useTeacher();
-  // const { searchTeacherTeams, isLoading as loading } = useTeacherTeams();
-  const { search:searchTeacherTeams, isLoading:isLoadingTeams, teacherTeams } = useTeacherTeams();
+  const { state:teachers, search:searchForTeachers, isLoading:isLoadingTeachers } = useTeacher();
+  const { state:teacherTeams, search:searchTeacherTeams, isLoading:isLoadingTeams } = useTeacherTeams();
 
   const headers = [
     {
@@ -34,16 +30,17 @@ export default function Substitute () {
     }
   ]
 
-  async function searchForTeachers() {
-    const result = await search(searchTerm)
-    if(result) setSearchItems(result.map((i) => { return { title: i.displayName, secondary: i.jobTitle, description: i.officeLocation, item: i }}))
-    else setSearchItems([])
-  }
-
-  async function loadTeams(teacher) {
-    if(!teacher || !teacher.id) return;
-    await searchTeacherTeams(teacher.id);
-  }
+  const itemMapping = [
+    {
+      value: 'displayName'
+    },
+    {
+      value: 'jobTitle'
+    },
+    {
+      value: 'officeLocation'
+    }
+  ]
 
   function onSelectedTeams(e) {
     console.log('Selected teams substitute: ', e)
@@ -69,24 +66,20 @@ export default function Substitute () {
   return (
     <div style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
       <SearchField
-        style={{position: 'relative'}}
+        items={teachers}
+        itemMapping={itemMapping}
+        onSearch={(e) => { searchForTeachers(e.target.value) }}
+        onSelected={(e) => { searchTeacherTeams(e?.userPrincipalName) }}
+        loading={isLoadingTeachers}
         placeholder="Søk etter læreren du skal være vikar for"
         rounded
-        onDebounce={() => { searchForTeachers()}}
         debounceMs={250}
-        onSearch={() => { searchForTeachers() }}
-        onChange={(e) => {setSearchTerm(e.target.value);}}
       />
-      <div style={{position: 'relative', width: '100%', zIndex: 100}}>
-        <div style={{position: 'absolute', top: '0', width: '100%'}}>
-          <SearchResult items={searchItems} onClick={(e) => {setSelectedTeacher(e.item); loadTeams(e.item)}} loading={isLoading}/>
-        </div>
-      </div>
       {
         isLoadingTeams && <Loading title='Laster inn teams' message="Dette kan ta noen sekunder"/>
       }
       {
-        !isLoadingTeams && Array.isArray(teacherTeams) && teacherTeams.length > 0 &&
+        !isLoadingTeams &&
         <Table
           headers={headers}
           items={teacherTeams}

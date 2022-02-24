@@ -4,7 +4,7 @@ import { useState } from "react";
 import { getValidBearerToken, login } from '../../auth'
 
 export default function useTeacherTeams() {
-  const [teacherTeams, setTeacherTeams] = useState([]);
+  const [state, setState] = useState([]);
   const [isLoadingTeams, setIsLoading] = useState(false);
 
   async function search(id) {
@@ -25,15 +25,15 @@ export default function useTeacherTeams() {
 
     try {
       const { data } = await axios.request(request);
-      setTeacherTeams(data);
+      setState(data);
       setIsLoading(false);
       return data;
     } catch {
-      setTeacherTeams([]);
+      setState([]);
       setIsLoading(false);
       return [];
     }
   }
 
-  return { teacherTeams, setTeacherTeams, search, isLoadingTeams }
+  return { state, setState, search, isLoadingTeams }
 }

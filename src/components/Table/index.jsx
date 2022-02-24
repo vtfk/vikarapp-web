@@ -78,9 +78,9 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
 
   // Render function
   return(
-    <div className='vtfk-table-container'>
+    <div className='vtfk-table-container' style={style} >
     { headers ?
-      <table className="vtfk-table" style={style} cellSpacing="0" cellPadding="0">
+      <table className="vtfk-table" cellSpacing="0" cellPadding="0">
         <thead>
           <tr>
             { 
