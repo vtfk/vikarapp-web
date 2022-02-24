@@ -32,9 +32,9 @@
 }
 
 .vtfk-table tbody tr:hover {
-  background-color: #00000018;
+  background-color: rgba(206, 207, 207, 0.952)
 }
 
 .vtfk-table tbody .tr-selected {
-  background-color: #df181894!important;
+  background-color: #e69696!important;
 }

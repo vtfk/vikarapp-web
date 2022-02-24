@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { nanoid } from 'nanoid'
 import { mergeStyles } from './lib/helpers'
 
-export default function Table({items, headers, itemId = '_id', selected, style, headerStyle, itemStyle, dense = false, showSelect = true, selectOnClick = false, onSelectedIdsChanged, onSelectedItemsChanged, actions}) {
+export default function Table({items, headers, itemId = '_id', selected, style, headerStyle, itemStyle, dense = false, showSelect = true, selectOnClick = false, onSelectedIdsChanged, onSelectedItemsChanged}) {
   // State
   const [selectedIds, setSelectedIds] = useState(selected && Array.isArray(selected) ? selected : [])
   const [selectedItems, setSelectedItems] = useState([])
@@ -83,15 +83,20 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
       <table className="vtfk-table" style={style} cellSpacing="0" cellPadding="0">
         <thead>
           <tr>
-            { showSelect && items && 
+            { 
+              // Render checkboxs for selecting all items if applicable
+              showSelect && items && 
               <th className='vtfk-table-checkbox' style={headerStyle}>
                 <Checkbox checked={isAllSelected()} name={"checkAll"} value={"checkAll"} label={" "} onChange={(e) => selectAll(e.target.checked)} style={{padding: 0, display: 'block'}}/>
               </th>
             }
             { 
+              // Render all headers
               headers.map((header) => 
-              <th key={nanoid()} className={header.class || undefined} style={ mergeStyles(headerStyle, header.style)}>{header.label}
-              </th>)
+                <th key={nanoid()} className={header.class || undefined} style={ mergeStyles(headerStyle, header.style)}>
+                  {header.label}
+                </th>
+              )
             }
           </tr>
         </thead>
@@ -102,12 +107,14 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
               return (
                 <tr key={item[itemId]} onClick={(e) => selectOnClick && handleRowClick(e, item)} className={isSelected(item) ? 'tr-selected' : undefined}>
                   { 
-                  showSelect &&
+                    // Render checkbox for selecting the item in the current row, if applicable
+                    showSelect &&
                     <td className='vtfk-table-checkbox'>
                       <Checkbox checked={isSelected(item)} onChange={(e) => handleCheckboxClick(e, item)} style={{display: 'block'}} />
                     </td>
                   }
                   {
+                    // Render item
                     headers.map((header) => {
                       return (
                         <td

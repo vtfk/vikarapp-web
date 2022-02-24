@@ -33,5 +33,26 @@ export default function useSubstituteRelationships() {
     }
   }
 
-  return { state, setState, get, isLoading }
+  async function put(item) {
+    if(!item?._id) throw new Error('The provided item must have a id')
+
+    const token = getValidBearerToken();
+    if(!token) await login({ type: 'popup' })
+
+    delete item.elements;
+
+    const request = {
+      url: `${config.vikarAPIBaseurl}substituterelationships/${item._id}`,
+      method: 'PUT',
+      headers: {
+        Authorization: token
+      },
+      data: item
+    }
+
+    // Update the relationship
+    await axios.request(request);
+  }
+
+  return { state, setState, get, put, isLoading }
 }
