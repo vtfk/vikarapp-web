@@ -43,6 +43,10 @@ export default function Substitute () {
 
   async function activateSubstitution() {
     // Input validation
+    if(!selectedTeacher) {
+      alert('Du må velge en lærer du skal være vikar for');
+      return;
+    }
     if(!selectedTeams || !Array.isArray(selectedTeams) || selectedTeams.length === 0) {
       alert('Du må velge velge en eller flere klasse å vikariere for');
       return;
@@ -53,8 +57,15 @@ export default function Substitute () {
     selectedTeams.map((t) => message += `${t.displayName}\n`)
     if(!window.confirm(message)) return;
 
+    const substitutions = selectedTeams.map((i) => {
+      return {
+        teacherUpn: selectedTeacher.userPrincipalName,
+        teamId: i.id
+      }
+    })
+
     // Make the request
-    const data = await postSubstitutions(getValidToken()?.username, selectedTeacher.userPrincipalName, selectedTeams.map((t) => t.id))
+    const data = await postSubstitutions(getValidToken().username, substitutions)
 
     // Route back to the front page
     if(data) {

@@ -39,6 +39,7 @@ export default function MainOverview() {
     const items = JSON.parse(JSON.stringify(substitutions))
 
     // Support function
+    // Translate status for display
     function translateStatus(status) {
       switch(status) {
         case 'pending':
@@ -50,6 +51,19 @@ export default function MainOverview() {
         default:
           return 'Ukjent'
       }
+    }
+
+    // Format dateTime to dd.mm.yyyy
+    function formatDate(date) {
+      function padTo2Digits(num) {
+        return num.toString().padStart(2, '0');
+      }
+
+      return [
+        padTo2Digits(date.getDate()),
+        padTo2Digits(date.getMonth() + 1),
+        date.getFullYear(),
+      ].join('.');
     }
 
     // Update the items
@@ -66,9 +80,20 @@ export default function MainOverview() {
         )
       }
 
+      function Expiration() {
+        return (
+          <div>
+            {
+              formatDate(new Date(item.expirationTimestamp))
+            }
+          </div>
+        )
+      }
+
       // Set the components
       i._elements = {
-        status: <Status />
+        status: <Status />,
+        expirationTimestamp: <Expiration />
       }
     })
 

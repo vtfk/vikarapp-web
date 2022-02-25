@@ -51,18 +51,18 @@ export default function useSubstitutions() {
   /**
    * 
    * @param {Object} teacherUpn
-   * @param {String} substituteteacherUpn
-   * @param {[String]} teamIds
+   * @param {[Object]} substitutions
+   * @param {String} substitutions.teacherUpn
+   * @param {String} substitutions.teamIds
    */
-  async function post(teacherUpn, substituteUpn, teamIds) {
+  async function post(substituteUpn, substitutions) {
     // Input validation
-    if(!teacherUpn) throw new Error('Vikariat kan ikke registreres, teacherUpn mangler');
     if(!substituteUpn) throw new Error('Vikariat kan ikke registreres, substituteteacherUpn mangler');
-    if(!teamIds) throw new Error('Vikariat kan ikke registreres, teamdId mangler');
-    if(!Array.isArray(teamIds)) throw new Error('teamIds må være av type array');
-    teamIds.forEach((id) => {
-      if(id === '') throw new Error('TeamId cannot be empty');
-      if(id.length < 35) throw new Error(`TeamId ${id} is not valid`)
+    if(!substitutions) throw new Error('Vikariat kan ikke registreres, teamdId mangler');
+    if(!Array.isArray(substitutions)) throw new Error('substitutions må være av type array');
+    substitutions.forEach((sub) => {
+      if(!sub.teacherUpn) throw new Error('teacherUpn kan ikke være tomt');
+      if(!sub.teamId) throw new Error(`teamsId kan ikke være tomt`)
     })
 
     const { bearerToken} = await login({ type: 'popup' })
@@ -75,18 +75,17 @@ export default function useSubstitutions() {
         Authorization: bearerToken
       },
       data: {
-        teacherUpn,
         substituteUpn,
-        teamIds
+        substitutions
       }
     }
 
     console.log('Request:', request)
 
     // Make the request
-    // const { data } = await axios.request(request);
+    const { data } = await axios.request(request);
 
-    // return data;
+    return data;
   }
 
   return { state, get, post, isLoading }
