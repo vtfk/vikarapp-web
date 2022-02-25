@@ -11,7 +11,7 @@ export default function MainOverview() {
   const [selectedIds, setSelectedIds] = useState([])
   const [selectedItems, setSelectedItems] = useState([])
   const [isShowRenewalDialog, setIsShowRenewalDialog] = useState(false);
-  const { state:substitutions, get, post } = useSubstitutions()
+  const { state:substitutions, get } = useSubstitutions()
 
   // Table headers
   const headers = [
@@ -102,6 +102,7 @@ export default function MainOverview() {
 
   useEffect(() => {
     get(getValidToken().username)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   async function renewSubsitution() {

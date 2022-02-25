@@ -7,8 +7,7 @@ import { mergeStyles, mergeClasses } from './lib/helpers'
 export default function Table({items, headers, itemId = '_id', selected, style, headerClass, headerStyle, itemClass, itemStyle, trClass, trStyle, isLoading, loadingText, loadingElement, dense = false, showSelect = true, selectOnClick = false, onSelectedIdsChanged, onSelectedItemsChanged}) {
   // State
   const [selectedIds, setSelectedIds] = useState(selected && Array.isArray(selected) ? selected : [])
-  const [selectedItems, setSelectedItems] = useState([])
-  
+
   useEffect(() => {
     // Update selected ids if updated externally
     setSelectedIds(selected !== undefined ? selected : selectedIds || [])
@@ -40,7 +39,6 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
     })
 
     setSelectedIds(newIds)
-    setSelectedItems(newItems)
 
     if(onSelectedIdsChanged && typeof onSelectedIdsChanged === 'function') onSelectedIdsChanged(newIds);
     if(onSelectedItemsChanged && typeof onSelectedItemsChanged === 'function') onSelectedItemsChanged(newItems);
@@ -60,7 +58,6 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
     }
 
     setSelectedIds(newIds)
-    setSelectedItems(newItems)
 
     if(onSelectedIdsChanged && typeof onSelectedIdsChanged === 'function') onSelectedIdsChanged(newIds);
     if(onSelectedItemsChanged && typeof onSelectedItemsChanged === 'function') onSelectedItemsChanged(newItems);

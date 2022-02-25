@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Table from '../../../components/Table'
 import Loading from '../../../components/Loading/Loading';
 import {
-  Link
+  Link, useNavigate
 } from "react-router-dom";
 import useTeacher from '../../../hooks/useTeachers'
 import useTeacherTeams from '../../../hooks/useTeacherTeams';
@@ -14,6 +14,7 @@ export default function Substitute () {
   const [selectedTeacher, setSelectedTeacher] = useState(undefined);
   const [selectedTeams, setSelectedTeams] = useState([])
   
+  const navigate = useNavigate()
   const { state:teachers, search:searchForTeachers, isLoading:isLoadingTeachers } = useTeacher();
   const { state:teacherTeams, search:searchTeacherTeams, isLoading:isLoadingTeams } = useTeacherTeams();
   const { post:postSubstitutions } = useSubstitutions();
@@ -69,7 +70,7 @@ export default function Substitute () {
 
     // Route back to the front page
     if(data) {
-      console.log('TODO: Route back to frontpage')
+      navigate('/')
     }
   }
 
