@@ -108,7 +108,7 @@ export async function login(options = {}) {
     /*
       Validation
     */
-    if(isAuthenticated() && !options.force) return;
+    if(isAuthenticated() && !options.force) return getValidToken();
     if(authenticationPromise) return authenticationPromise;
 
     /*

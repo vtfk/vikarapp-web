@@ -9,9 +9,9 @@ export default function useSubstitutions() {
   /**
    * Get substitutions
    * @param {String=} teamId 
-   * @param {String=} teacherId 
+   * @param {String=} teacherUpn 
    */
-  async function get(teamId, teacherId) {
+  async function get(teamId, teacherUpn) {
     setIsLoading(true);
 
     const { bearerToken} = await login({ type: 'popup' })
@@ -19,7 +19,7 @@ export default function useSubstitutions() {
     // Setup query parameters
     let queryParams = [];
     if(teamId) queryParams.push(`teamId=${teamId}`)
-    if(teacherId) queryParams.push(`teacherId=${teacherId}`)
+    if(teacherUpn) queryParams.push(`teacherUpn=${teacherUpn}`)
 
     let query = '';
     for(let i = 0; i < queryParams.length; i++) {
@@ -37,7 +37,7 @@ export default function useSubstitutions() {
     }
 
     // Make the request
-    const { data } = await axios.request(request);
+    const { data } = await axios.request(request);
 
     return data
   }
@@ -47,15 +47,15 @@ export default function useSubstitutions() {
 
 /**
  * 
- * @param {Object} teacherId
- * @param {String} substituteTeacherId
+ * @param {Object} teacherUpn
+ * @param {String} substituteteacherUpn
  * @param {[String]} teamIds
  */
-async function post(teacherId, substituteTeacherId, teamIds) {
+async function post(teacherUpn, substituteUpn, teamIds) {
   // Input validation
+  if(!teacherUpn) throw new Error('Vikariat kan ikke registreres, teacherUpn mangler');
+  if(!substituteUpn) throw new Error('Vikariat kan ikke registreres, substituteteacherUpn mangler');
   if(!teamIds) throw new Error('Vikariat kan ikke registreres, teamdId mangler');
-  if(!teacherId) throw new Error('Vikariat kan ikke registreres, teacherId mangler');
-  if(!substituteTeacherId) throw new Error('Vikariat kan ikke registreres, substituteTeacherId mangler');
   if(!Array.isArray(teamIds)) throw new Error('teamIds må være av type array');
   teamIds.forEach((id) => {
     if(id === '') throw new Error('TeamId cannot be empty');
@@ -72,8 +72,8 @@ async function post(teacherId, substituteTeacherId, teamIds) {
       Authorization: bearerToken
     },
     data: {
-      teacherId,
-      substituteTeacherId,
+      teacherUpn,
+      substituteUpn,
       teamIds
     }
   }
@@ -94,9 +94,9 @@ async function post(teacherId, substituteTeacherId, teamIds) {
   "status": "pending || active || expired",
   "teamId": "",
   "teamName": "",
-  "substituteTeacherId": "",
+  "substituteteacherUpn": "",
   "substituteTeacherName": "",
-  "teacherId": "",
+  "teacherUpn": "",
   "teacherName": "",
   "expirationTimestamp": ""
 }
@@ -108,7 +108,7 @@ async function post(teacherId, substituteTeacherId, teamIds) {
   "substitutions": [
     {
       "_id": "",
-      "teacherId": "",
+      "teacherUpn": "",
       "teacherName": "",
       "expirationTimestamp": ""
     }
@@ -117,7 +117,7 @@ async function post(teacherId, substituteTeacherId, teamIds) {
 
 {
   "_id": "",
-  "teacherId": "",
+  "teacherUpn": "",
   "teacherName": "",
   "substitutions": [
     {

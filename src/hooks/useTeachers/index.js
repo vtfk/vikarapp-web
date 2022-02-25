@@ -12,7 +12,7 @@ export default function useTeachers() {
 
     setIsLoading(true);
 
-    const { bearerToken} = await login({ type: 'popup' })
+    const { bearerToken } = await login({ type: 'popup' })
 
     const request = {
       url: `${config.vikarAPIBaseurl}teachers/${term}`,
