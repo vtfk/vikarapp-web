@@ -1,56 +1,96 @@
 import './style.css'
 import Table from '../../../components/Table'
 import { Button, Dialog, DialogTitle, DialogBody, DialogActions} from '@vtfk/components'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+import useSubstitutions from '../../../hooks/useSubstitutions'
+import { getValidToken } from '../../../auth'
 
 export default function MainOverview() {
   // State
   const [selectedIds, setSelectedIds] = useState([])
   const [selectedItems, setSelectedItems] = useState([])
   const [isShowRenewalDialog, setIsShowRenewalDialog] = useState(false);
-  
+  const { state:substitutions, get, post } = useSubstitutions()
+
+  // Table headers
   const headers = [
     {
       label: 'Status',
       value: 'status',
       itemStyle: { textTransform: 'capitalize' },
-      element: Button
-    },
-    {
-      label: 'Team',
-      value: 'team'
     },
     {
       label: 'Lærer',
-      value: 'teacher'
+      value: 'teacherName'
+    },
+    {
+      label: 'Klasse / team',
+      value: 'teamName'
     },
     {
       label: 'Utløper',
-      value: 'expiration'
+      value: 'expirationTimestamp'
     }
   ]
 
-  const items = [
-    {
-      _id: 'd95fac91-38d3-4a9a-b473-cc3af4143e61',
-      status: 'active',
-      team: 'Section_2021-Test av vikarapp',
-      teacher: 'per.test@vtfk.no',
-      expiration: '13.02.2022'
-    },
-    {
-      _id: '30e43a62-4d43-4e1f-8e5a-8c8055819ffe',
-      status: 'active',
-      team: 'Section_2021-Test av vikarapp',
-      teacher: 'per.test@vtfk.no',
-      expiration: '14.02.2022'
-    }
-  ]
+  const tableItems = useMemo(() => {
+    // Make a copy of the data
+    const items = JSON.parse(JSON.stringify(substitutions))
 
-  function renewSubsitution() {
+    // Support function
+    function translateStatus(status) {
+      switch(status) {
+        case 'pending':
+          return 'Venter'
+        case 'active':
+          return 'Aktiv'
+        case 'expired':
+          return 'Utløpt'
+        default:
+          return 'Ukjent'
+      }
+    }
+
+    // Update the items
+    items.forEach((i, index) => {
+      // Get a reference to the source data
+      const item = substitutions[index]
+
+      // Components
+      function Status() {
+        return (
+          <div>
+            { translateStatus(item.status) }
+          </div>
+        )
+      }
+
+      // Set the components
+      i._elements = {
+        status: <Status />
+      }
+    })
+
+    return items
+  }, [substitutions])
+
+  useEffect(() => {
+    get(getValidToken().username)
+  },[])
+
+  async function renewSubsitution() {
+    // Input validation
     if(!selectedItems || selectedItems.length === 0) return;
-    window.alert('TODO: Implementere fornying');
+
+    // window.alert('TODO: Implementere fornying');
+
+    for(const substitution of selectedItems) {
+
+      console.log('Fornyer:', substitution)
+    }
+
+    
     setIsShowRenewalDialog(false)
     setSelectedIds([]);
     setSelectedItems([]);
@@ -58,7 +98,15 @@ export default function MainOverview() {
 
   return (
     <div className="overview">
-      <Table itemId="_id" headers={headers} items={items} selected={selectedIds} selectOnClick onSelectedIdsChanged={(e) => setSelectedIds(e)} onSelectedItemsChanged={(e) => {setSelectedItems(e); console.log(selectedItems)}} />
+      <Table
+        itemId="_id"
+        headers={headers}
+        items={tableItems}
+        selected={selectedIds}
+        selectOnClick
+        onSelectedIdsChanged={(e) => setSelectedIds(e)}
+        onSelectedItemsChanged={(e) => setSelectedItems(e)}
+      />
       <div className='main-footer-button-group' style={{marginTop: '1rem'}}>
         <Link to="substitute">
           <Button>Jeg skal være vikar</Button>
@@ -71,7 +119,7 @@ export default function MainOverview() {
           Er du sikker på at du ønsker å fornye vikariat for:
           <ul>
             {
-              selectedItems.map((i) => <li key={i._id}>{i.team}</li>)
+              selectedItems.map((i) => <li key={i._id}>{i.teamName}</li>)
             }
           </ul>
         </DialogBody>

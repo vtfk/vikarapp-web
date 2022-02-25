@@ -1,6 +1,6 @@
 import './style.css'
 import { Checkbox, Spinner } from '@vtfk/components'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { nanoid } from 'nanoid'
 import { mergeStyles, mergeClasses } from './lib/helpers'
 
@@ -8,6 +8,12 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
   // State
   const [selectedIds, setSelectedIds] = useState(selected && Array.isArray(selected) ? selected : [])
   const [selectedItems, setSelectedItems] = useState([])
+  
+  useEffect(() => {
+    // Update selected ids if updated externally
+    setSelectedIds(selected !== undefined ? selected : selectedIds || [])
+  }, [selected, selectedIds, setSelectedIds])
+  
   // Functions
   function updateSelected(tableItems) {
     if(items.length === 0) return;
@@ -26,11 +32,15 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
       }
     }
 
-    const newItems = items.filter((i) => newIds.includes(i[itemId]));
+    let newItems = items.filter((i) => newIds.includes(i[itemId]));
+    // Strip away the _elements before returning
+    newItems = newItems.map((i) => {
+      let {_elements, ...clean} = i
+      return clean
+    })
 
     setSelectedIds(newIds)
     setSelectedItems(newItems)
-    console.log('Selected Items:', selectedItems);
 
     if(onSelectedIdsChanged && typeof onSelectedIdsChanged === 'function') onSelectedIdsChanged(newIds);
     if(onSelectedItemsChanged && typeof onSelectedItemsChanged === 'function') onSelectedItemsChanged(newItems);
@@ -141,7 +151,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
                           className={mergeClasses(dense ? 'td-dense' : '', itemClass, header.itemClass)}
                           style={mergeStyles(itemStyle, header.itemStyle)}
                         >
-                          { item[header.value] || '' }
+                          { item._elements?.[header.value] || item[header.value] || '' }
                         </td>
                       )
                     })

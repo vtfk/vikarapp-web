@@ -4,22 +4,25 @@ import { useState } from "react";
 import { login } from '../../auth'
 
 export default function useSubstitutions() {
+  const [state, setState] = useState([])
   const [isLoading, setIsLoading] = useState(false)
 
   /**
    * Get substitutions
-   * @param {String=} teamId 
+   * @param {String=} substituteUpn 
    * @param {String=} teacherUpn 
+   * @param {String=} status 
    */
-  async function get(teamId, teacherUpn) {
+  async function get(substituteUpn, teacherUpn, status) {
     setIsLoading(true);
 
     const { bearerToken} = await login({ type: 'popup' })
 
     // Setup query parameters
     let queryParams = [];
-    if(teamId) queryParams.push(`teamId=${teamId}`)
+    if(substituteUpn) queryParams.push(`substituteUpn=${substituteUpn}`)
     if(teacherUpn) queryParams.push(`teacherUpn=${teacherUpn}`)
+    if(status) queryParams.push(`status=${status}`)
 
     let query = '';
     for(let i = 0; i < queryParams.length; i++) {
@@ -29,7 +32,7 @@ export default function useSubstitutions() {
 
     // Create the request
     const request = {
-      url: `${config.vikarAPIBaseurl}substitutes${query}`,
+      url: `${config.vikarAPIBaseurl}substitutions${query}`,
       method: 'GET',
       headers: {
         Authorization: bearerToken
@@ -39,52 +42,56 @@ export default function useSubstitutions() {
     // Make the request
     const { data } = await axios.request(request);
 
+    // Set the state
+    setState(data)
+
     return data
   }
 
-  return { get, post, isLoading }
-}
+  /**
+   * 
+   * @param {Object} teacherUpn
+   * @param {String} substituteteacherUpn
+   * @param {[String]} teamIds
+   */
+  async function post(teacherUpn, substituteUpn, teamIds) {
+    // Input validation
+    if(!teacherUpn) throw new Error('Vikariat kan ikke registreres, teacherUpn mangler');
+    if(!substituteUpn) throw new Error('Vikariat kan ikke registreres, substituteteacherUpn mangler');
+    if(!teamIds) throw new Error('Vikariat kan ikke registreres, teamdId mangler');
+    if(!Array.isArray(teamIds)) throw new Error('teamIds må være av type array');
+    teamIds.forEach((id) => {
+      if(id === '') throw new Error('TeamId cannot be empty');
+      if(id.length < 35) throw new Error(`TeamId ${id} is not valid`)
+    })
 
-/**
- * 
- * @param {Object} teacherUpn
- * @param {String} substituteteacherUpn
- * @param {[String]} teamIds
- */
-async function post(teacherUpn, substituteUpn, teamIds) {
-  // Input validation
-  if(!teacherUpn) throw new Error('Vikariat kan ikke registreres, teacherUpn mangler');
-  if(!substituteUpn) throw new Error('Vikariat kan ikke registreres, substituteteacherUpn mangler');
-  if(!teamIds) throw new Error('Vikariat kan ikke registreres, teamdId mangler');
-  if(!Array.isArray(teamIds)) throw new Error('teamIds må være av type array');
-  teamIds.forEach((id) => {
-    if(id === '') throw new Error('TeamId cannot be empty');
-    if(id.length < 35) throw new Error(`TeamId ${id} is not valid`)
-  })
+    const { bearerToken} = await login({ type: 'popup' })
 
-  const { bearerToken} = await login({ type: 'popup' })
-
-  // Create the request
-  const request = {
-    url: `${config.vikarAPIBaseurl}substitutes`,
-    method: 'POST',
-    headers: {
-      Authorization: bearerToken
-    },
-    data: {
-      teacherUpn,
-      substituteUpn,
-      teamIds
+    // Create the request
+    const request = {
+      url: `${config.vikarAPIBaseurl}substitutions`,
+      method: 'POST',
+      headers: {
+        Authorization: bearerToken
+      },
+      data: {
+        teacherUpn,
+        substituteUpn,
+        teamIds
+      }
     }
+
+    console.log('Request:', request)
+
+    // Make the request
+    // const { data } = await axios.request(request);
+
+    // return data;
   }
 
-  console.log('Request:', request)
-
-  // Make the request
-  // const { data } = await axios.request(request);
-
-  // return data;
+  return { state, get, post, isLoading }
 }
+
 
 /*
   Mulige måter å sette dette opp på

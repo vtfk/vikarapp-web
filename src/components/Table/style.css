@@ -8,23 +8,24 @@
 
 .vtfk-table {
   width: 100%;
-  text-align: center;
+  text-align: left;
   overflow-x: hidden;
   overflow-y: auto;
 }
 
 .vtfk-table-checkbox {
-  width: 1%;
-  padding-left: 0.5rem!important;
+  max-width: 40px;
 }
 
 .vtfk-table th {
   padding: 0.5rem;
+  text-align: left;
   background-color: #88A6B0;
 }
 
 .vtfk-table td {
   padding: 0.5rem;
+  text-align: left;
 }
 
 .vtfk-table .td-dense {
