@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import { login } from '../../auth'
 
-export default function useSubstituteRelationships() {
+export default function useSchools() {
   const [state, setState] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -13,7 +13,7 @@ export default function useSubstituteRelationships() {
     const { bearerToken} = await login({ type: 'popup' })
 
     const request = {
-      url: `${config.vikarAPIBaseurl}substituterelationships`,
+      url: `${config.vikarAPIBaseurl}schools`,
       method: 'GET',
       headers: {
         Authorization: bearerToken

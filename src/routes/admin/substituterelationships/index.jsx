@@ -1,12 +1,12 @@
 import { Button, Checkbox, Dialog, DialogActions, DialogBody, DialogTitle } from "@vtfk/components";
 import { useEffect, useMemo, useState } from "react";
 import Table from "../../../components/Table";
-import useSubstituteRelationships from "../../../hooks/useSubstituteRelationships"
+import useSchools from "../../../hooks/useSchools"
 
 export default function SubstituteRelationships() {
   const [editedItem, setEditedItem] = useState(undefined);
 
-  const { state:relationships, get, put, isLoading } = useSubstituteRelationships();
+  const { state:schools, get, put, isLoading } = useSchools();
   
 
   const headers = [
@@ -28,49 +28,49 @@ export default function SubstituteRelationships() {
     }
   ]
 
-  const schools = [
-    {
-      label: 'Holmestrand Videregående Skole',
-      value: 'Holmestrand Videregående Skole'
-    },
-    {
-      label: 'Greveskogen Videregående Skole',
-      value: 'Greveskogen Videregående Skole'
-    },
-    {
-      label: 'Færder Videregående Skole',
-      value: 'Færder Videregående Skole'
-    },
-    {
-      label: 'Sande Videregående Skole',
-      value: 'Sande Videregående Skole'
-    },
-    {
-      label: 'Thor Heyerdahl Videregående Skole',
-      value: 'Thor Heyerdahl Videregående Skole'
-    },
-    {
-      label: 'Re Videregående Skole',
-      value: 'Re Videregående Skole'
-    },
-    {
-      label: 'Melsom Videregående Skole',
-      value: 'Melsom Videregående Skole'
-    },
-    {
-      label: 'Nøtterøy Videregående Skole',
-      value: 'Nøtterøy Videregående Skole'
-    }
-  ]
+  // const schools = [
+  //   {
+  //     label: 'Holmestrand Videregående Skole',
+  //     value: 'Holmestrand Videregående Skole'
+  //   },
+  //   {
+  //     label: 'Greveskogen Videregående Skole',
+  //     value: 'Greveskogen Videregående Skole'
+  //   },
+  //   {
+  //     label: 'Færder Videregående Skole',
+  //     value: 'Færder Videregående Skole'
+  //   },
+  //   {
+  //     label: 'Sande Videregående Skole',
+  //     value: 'Sande Videregående Skole'
+  //   },
+  //   {
+  //     label: 'Thor Heyerdahl Videregående Skole',
+  //     value: 'Thor Heyerdahl Videregående Skole'
+  //   },
+  //   {
+  //     label: 'Re Videregående Skole',
+  //     value: 'Re Videregående Skole'
+  //   },
+  //   {
+  //     label: 'Melsom Videregående Skole',
+  //     value: 'Melsom Videregående Skole'
+  //   },
+  //   {
+  //     label: 'Nøtterøy Videregående Skole',
+  //     value: 'Nøtterøy Videregående Skole'
+  //   }
+  // ]
 
   const tableItems = useMemo(() => {
     // Make a copy of the items and break all references
-    let tableItems = JSON.parse(JSON.stringify(relationships))
+    let tableItems = JSON.parse(JSON.stringify(schools))
 
     // Update the fields with custom components
     tableItems.forEach((i, index) => {
       function Action () {
-        const item = {...relationships[index]}
+        const item = {...schools[index]}
         return (
           <div style={{display: 'flex', justifyContent: 'center'}}>
             <Button size="small" onClick={() => onEditItem(item)} style={{minHeight: '25px', padding: '0 1rem'}}>Rediger</Button>
@@ -90,7 +90,7 @@ export default function SubstituteRelationships() {
     })
     // Return the prepared tableItems
     return tableItems
-  }, [relationships])
+  }, [schools])
 
   useEffect(() => {
     function getData () { get() }
@@ -102,19 +102,17 @@ export default function SubstituteRelationships() {
     setEditedItem(item);
   }
 
-  function onSchoolCheck(school) {
-    if(!school || !editedItem) return;
+  function onSchoolCheck(schoolId) {
+    if(!schoolId || !editedItem) return;
 
     let item = {...editedItem}
 
-    if(school === '*') {
-      if(!item.permittedSchools.includes('*') && item.permittedSchools.length <= schools.length) item.permittedSchools = ['*'];
-      else item.permittedSchools = []
-    }
-    else {
-      item.permittedSchools = item.permittedSchools.filter((s) => s !== '*')
-      if(item.permittedSchools.includes(school)) item.permittedSchools = item.permittedSchools.filter((s) => s !== school)
-      else item.permittedSchools.push(school)
+    if(schoolId === '*') {
+      if(item.permittedSchools.length === schools.length) item.permittedSchools = [];
+      else item.permittedSchools = schools.map((i) => i._id)
+    } else {
+      if(item.permittedSchools.includes(schoolId)) item.permittedSchools = item.permittedSchools.filter((i) => i !== schoolId)
+      else item.permittedSchools.push(schoolId)
     }
 
     setEditedItem(item)
@@ -143,16 +141,17 @@ export default function SubstituteRelationships() {
             <div>
               <Checkbox
                 label="Alle"
-                checked={editedItem.permittedSchools?.includes('*') || editedItem.permittedSchools.length >= schools.length}
-                onChange={() => {onSchoolCheck('*')}}
+                checked={editedItem.permittedSchools.length >= schools.length}
+                onChange={() => { onSchoolCheck('*') }}
                 style={{fontWeight: 'bold'}}
               />
             </div>
               {
-                schools.filter((s) => s.value !== editedItem.school).map((s) => {
+                schools && schools.length > 0 &&
+                schools.filter((s) => s._id !== editedItem._id).map((s) => {
                   return (
                     <div key={s.value}>
-                      <Checkbox checked={editedItem.permittedSchools?.includes('*') || editedItem.permittedSchools?.includes(s.value)} label={s.label} onChange={() => {onSchoolCheck(s.value)}} />
+                      <Checkbox checked={editedItem.permittedSchools.includes(s._id)} label={s.name} onChange={() => {onSchoolCheck(s._id)}} />
                     </div>
                   )
                 })
