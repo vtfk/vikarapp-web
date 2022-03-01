@@ -28,41 +28,6 @@ export default function SubstituteRelationships() {
     }
   ]
 
-  // const schools = [
-  //   {
-  //     label: 'Holmestrand Videregående Skole',
-  //     value: 'Holmestrand Videregående Skole'
-  //   },
-  //   {
-  //     label: 'Greveskogen Videregående Skole',
-  //     value: 'Greveskogen Videregående Skole'
-  //   },
-  //   {
-  //     label: 'Færder Videregående Skole',
-  //     value: 'Færder Videregående Skole'
-  //   },
-  //   {
-  //     label: 'Sande Videregående Skole',
-  //     value: 'Sande Videregående Skole'
-  //   },
-  //   {
-  //     label: 'Thor Heyerdahl Videregående Skole',
-  //     value: 'Thor Heyerdahl Videregående Skole'
-  //   },
-  //   {
-  //     label: 'Re Videregående Skole',
-  //     value: 'Re Videregående Skole'
-  //   },
-  //   {
-  //     label: 'Melsom Videregående Skole',
-  //     value: 'Melsom Videregående Skole'
-  //   },
-  //   {
-  //     label: 'Nøtterøy Videregående Skole',
-  //     value: 'Nøtterøy Videregående Skole'
-  //   }
-  // ]
-
   const tableItems = useMemo(() => {
     // Make a copy of the items and break all references
     let tableItems = JSON.parse(JSON.stringify(schools))
