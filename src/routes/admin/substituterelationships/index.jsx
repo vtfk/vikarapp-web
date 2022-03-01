@@ -12,7 +12,7 @@ export default function SubstituteRelationships() {
   const headers = [
     {
       label: 'Skole',
-      value: 'school',
+      value: 'name',
     },
     {
       label: 'Skoler',
