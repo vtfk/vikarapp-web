@@ -1,0 +1,64 @@
+.vtfk-errorfield {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #F3B5B2;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.vtfk-errorfield-title {
+  margin: 0;
+}
+
+.vtfk-errorfield-statuscode {
+  margin-top: 0.3rem;
+}
+
+.vtfk-errorfield-message {
+  margin-top: 0.3rem;
+  margin-bottom: 0;
+}
+
+.vtfk-errorfield-stack-container {
+  width: 100%;
+}
+
+.vtfk-errorfield-stack {
+  background-color: #F8D3D1;
+  margin-top: 0.5rem;
+  border-radius: 5px;
+  width: 100%;
+  padding: 0.5rem;
+  max-height: 200px;
+  overflow: auto;
+}
+
+.vtfk-errorfield-raw {
+  background-color: #F8D3D1;
+  margin-top: 0.5rem;
+  border-radius: 5px;
+  width: 100%;
+  padding: 0.5rem;
+  max-height: 200px;
+}
+
+
+.vtfk-errorfield-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+
+/*
+  Error Dialog
+*/
+.vtfk-errordialog-actions {
+  background-color: #cf9592;
+}
+
+.vtfk-errordialog-multiple-error-button-group {
+  display: flex;
+  gap: 0.5rem;
+}

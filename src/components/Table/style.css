@@ -13,8 +13,9 @@
   overflow-y: auto;
 }
 
-.vtfk-table-checkbox {
-  max-width: 40px;
+.vtfk-table-checkbox-cell {
+  width: 45px;
+  max-width: 45px;
 }
 
 .vtfk-table th {

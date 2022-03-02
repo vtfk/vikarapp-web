@@ -62,7 +62,7 @@ export default function useSubstitutions() {
     if(!Array.isArray(substitutions)) throw new Error('substitutions må være av type array');
     substitutions.forEach((sub) => {
       if(!sub.teacherUpn) throw new Error('teacherUpn kan ikke være tomt');
-      if(!sub.teamId) throw new Error(`teamsId kan ikke være tomt`)
+      if(!sub.teamId) throw new Error(`teamId kan ikke være tomt`)
     })
 
     const { bearerToken} = await login({ type: 'popup' })
@@ -80,11 +80,8 @@ export default function useSubstitutions() {
       }
     }
 
-    console.log('Request:', request)
-
     // Make the request
     const { data } = await axios.request(request);
-
     return data;
   }
 

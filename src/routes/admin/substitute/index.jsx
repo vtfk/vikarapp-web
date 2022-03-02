@@ -1,13 +1,34 @@
-import { SearchField } from "@vtfk/components";
-import { useState } from "react";
+import { Button, SearchField } from "@vtfk/components";
+import { useMemo, useState } from "react";
 import useTeachers from "../../../hooks/useTeachers";
+import useTeacherTeams from "../../../hooks/useTeacherTeams"
+import Table from '../../../components/Table'
+import useSubstitutions from "../../../hooks/useSubstitutions";
+import useError from "../../../components/ErrorField/useError";
 
 export default function SubstituteRelationships() {
+  /*
+    Hooks
+  */
   const { search } = useTeachers()
+  const { search: searchTeams } = useTeacherTeams();
+  const { post:postSubstitutions } = useSubstitutions()
+  const { add } = useError()
+
+  /*
+    State
+  */
+  // Substitute
+  const [ isLoadingSubstitutes, setIsLoadingSubstitutes] = useState(false)
   const [ availableSubstitutes, setAvailableSubstitutes] = useState([])
-  const [ selectedTeacher, setSelectedTeacher ] = useState()
   const [ selectedSubstitute, setSelectedSubstitute] = useState()
+
+  // Teacher
+  const [ isLoadingTeachers, setIsLoadingTeachers ] = useState(false)
+  const [ selectedTeacher, setSelectedTeacher ] = useState()
   const [ availableTeachers, setAvailableTeachers] = useState([])
+  const [ availableTeams, setAvailableTeams] = useState([])
+  const [ selectedTeamIds, setSelectedTeamIds] = useState([])
 
   const itemMapping = [
     { value: 'displayName' },
@@ -15,13 +36,58 @@ export default function SubstituteRelationships() {
     { value: 'officeLocation'}
   ]
 
-  async function searchForSubstitute(term) {
-    let result = await search(term)
-    console.log('Result', result)
-    if(selectedTeacher && result && result.length > 0) {
-      result = result.filter((i) => i.id !== selectedTeacher.id)
+  const tableHeaders = [
+    { label: 'Team / Klasse', value: 'displayName' }
+  ]
+  
+  /*
+    Memos
+  */
+  const isReadyToSave = useMemo(() => {
+    if(!selectedTeacher) return false;
+    if(!selectedSubstitute) return false;
+    if(!availableTeams || !Array.isArray(availableTeams) || availableTeams.length === 0) return false
+    if(!selectedTeamIds || !Array.isArray(selectedTeamIds) || selectedTeamIds.length === 0) return false
+
+    return true
+  }, [selectedTeacher, selectedSubstitute, availableTeams, selectedTeamIds])
+
+  /*
+    Substitute functions
+  */
+  async function onSubstituteSearchChanges(e) {
+    if(!e) {
+      setSelectedSubstitute(undefined)
+      return
     }
-    setAvailableSubstitutes(result)
+    setIsLoadingSubstitutes(true)
+  }
+
+  async function searchForSubstitute(term) {
+    try {
+      let result = await search(term)
+      console.log('Result', result)
+      if(selectedTeacher && result && result.length > 0) {
+        result = result.filter((i) => i.id !== selectedTeacher.id)
+      }
+      setAvailableSubstitutes(result)
+      setIsLoadingSubstitutes(false)
+    } catch (err) {
+      add(err)
+    }
+  }
+
+  /*
+    Functions
+  */
+  async function onTeacherSearchChanged(e) {
+    if(e === '') {
+      setSelectedSubstitute(undefined)
+      setAvailableTeams([])
+      return
+    }
+    
+    setIsLoadingTeachers(true)
   }
 
   async function searchForTeacher(term) {
@@ -30,33 +96,77 @@ export default function SubstituteRelationships() {
       result = result.filter((i) => i.id !== selectedSubstitute.id)
     }
     setAvailableTeachers(result)
+    setIsLoadingTeachers(false)
+  }
+
+  async function onSelectedTeacher(e) {
+    setSelectedTeacher(e)
+
+    // Search for teams
+    const teams = await searchTeams(e.userPrincipalName)
+    setAvailableTeams(teams)
+  }
+
+  // Post substitution
+  async function postSubstitution() {
+    if(!isReadyToSave) {
+      alert('Du er ikke klar til å sende denne henvendelsen');
+      return;
+    }
+
+    const substitutions = selectedTeamIds.map((i) => {
+      return {
+        teacherUpn: selectedTeacher.userPrincipalName,
+        teamId: i,
+      }
+    })
+
+    try {
+      const result = await postSubstitutions(selectedSubstitute.userPrincipalName, substitutions)
+      console.log('Result', result)
+    } catch (err) {
+      add({message: 'test'});
+    }
   }
 
   return (
-    <div>
-      <div className="column-group">
-        <p style={{margin: '0'}}>Vikar:</p>
-        <SearchField
-          items={availableSubstitutes}
-          itemMapping={itemMapping}
-          placeholder="Hvem skal være vikar?"
-          onChange={(e) => e.target.value === '' ? setSelectedSubstitute(undefined) : ''}
-          onSearch={(e) => { searchForSubstitute(e.target.value) }}
-          onSelected={(e) => { setSelectedSubstitute(e) }}
-          debounceMs={250}
-          rounded
-        />
-        <p style={{margin: '0'}}>Lærer:</p>
-        <SearchField
-          items={availableTeachers}
-          itemMapping={itemMapping}
-          placeholder="For hvilken lærer?"
-          onChange={(e) => e.target.value === '' ? setSelectedTeacher(undefined) : ''}
-          onSearch={(e) => { searchForTeacher(e.target.value) }}
-          onSelected={(e) => { setSelectedTeacher(e) }}
-          debounceMs={250}
-          rounded
-        />
+    <div className="column-group" style={{height: '100%'}}>
+      <h2 style={{margin: '0', color: '#FFBF00'}}>Vikar:</h2>
+      <SearchField
+        items={availableSubstitutes}
+        itemMapping={itemMapping}
+        placeholder="Hvem skal være vikar?"
+        loading={isLoadingSubstitutes}
+        onChange={(e) => onSubstituteSearchChanges(e.target.value)}
+        onSearch={(e) => { searchForSubstitute(e.target.value) }}
+        onSelected={(e) => { setSelectedSubstitute(e) }}
+        debounceMs={250}
+        rounded
+      />
+      <h2 style={{margin: '0', color: '#FFBF00'}}>Lærer:</h2>
+      <SearchField
+        items={availableTeachers}
+        itemMapping={itemMapping}
+        placeholder="For hvilken lærer?"
+        loading={isLoadingTeachers}
+        onChange={(e) => onTeacherSearchChanged(e.target.value)}
+        onSearch={(e) => { searchForTeacher(e.target.value) }}
+        onSelected={(e) => { onSelectedTeacher(e) }}
+        debounceMs={250}
+        rounded
+      />
+      <Table
+        itemId="id"
+        headers={tableHeaders}
+        items={availableTeams}
+        showSelect
+        selectOnClick
+        selectedTeamIds={selectedTeamIds}
+        onSelectedIdsChanged={(e) => setSelectedTeamIds(e)}
+      />
+      <div style={{marginTop: 'auto'}}>
+        <Button disabled={!isReadyToSave} onClick={() => postSubstitution()}>Legg til vikariat</Button>
+        <Button onClick={() => add({message: 'Error'})}>Add error</Button>
       </div>
     </div>
   )

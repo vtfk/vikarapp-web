@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { nanoid } from 'nanoid'
 import { mergeStyles, mergeClasses } from './lib/helpers'
 
-export default function Table({items, headers, itemId = '_id', selected, style, headerClass, headerStyle, itemClass, itemStyle, trClass, trStyle, isLoading, loadingText, loadingElement, dense = false, showSelect = true, selectOnClick = false, onSelectedIdsChanged, onSelectedItemsChanged}) {
+export default function Table({items, headers, itemId = '_id', selected, style, headerClass, headerStyle, itemClass, itemStyle, trClass, trStyle, isLoading, loadingText, loadingElement, noDataText, noDataElement, dense = false, showSelect = false, selectOnClick = false, onSelectedIdsChanged, onSelectedItemsChanged}) {
   // State
   const [selectedIds, setSelectedIds] = useState(selected && Array.isArray(selected) ? selected : [])
 
@@ -93,7 +93,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
             { 
               // Render checkboxs for selecting all items if applicable
               showSelect && items && 
-              <th className={mergeClasses('vtfk-table-checkbox', headerClass)} style={headerStyle} >
+              <th className={mergeClasses('vtfk-table-checkbox-cell', headerClass)} style={headerStyle} >
                 <Checkbox checked={isAllSelected()} name={"checkAll"} value={"checkAll"} label={" "} onChange={(e) => selectAll(e.target.checked)} style={{padding: 0, display: 'block'}}/>
               </th>
             }
@@ -135,7 +135,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
                   { 
                     // Render checkbox for selecting the item in the current row, if applicable
                     showSelect &&
-                    <td className='vtfk-table-checkbox'>
+                    <td className='vtfk-table-checkbox-cell'>
                       <Checkbox checked={isSelected(item)} onChange={(e) => handleCheckboxClick(e, item)} style={{display: 'block'}} />
                     </td>
                   }
@@ -158,8 +158,12 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
             })
           }
           {
-            !isLoading && items.length === 0 &&
-            <tr><td colSpan={headers.length + 1} style={{ textAlign: 'center'}}>Ingen data funnet</td></tr>
+            !isLoading && (!items || !Array.isArray(items) || items.length === 0) &&
+            <tr>
+              <td colSpan={headers.length + 1} style={{ textAlign: 'center'}}>
+                { noDataText || noDataElement || 'Ingen data er funnet'}
+              </td>
+            </tr>
           }
         </tbody>
       </table>
