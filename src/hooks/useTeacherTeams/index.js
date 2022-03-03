@@ -1,12 +1,14 @@
 import config from '../../config'
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { login } from '../../auth'
+import { ErrorContext } from '../../components/ErrorField/ErrorContext';
 
 export default function useTeacherTeams() {
   const [state, setState] = useState([]);
   const [isLoadingTeams, setIsLoading] = useState(false);
-
+  const { add:addError } = useContext(ErrorContext)
+  
   async function search(id) {
     if(!id || typeof id !== 'string' || id.length <= 8) return;
 
@@ -27,7 +29,8 @@ export default function useTeacherTeams() {
       setState(data);
       setIsLoading(false);
       return data;
-    } catch {
+    } catch(err) {
+      addError(err);
       setState([]);
       setIsLoading(false);
       return [];

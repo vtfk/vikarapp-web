@@ -10,8 +10,8 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
 
   useEffect(() => {
     // Update selected ids if updated externally
-    setSelectedIds(selected !== undefined ? selected : selectedIds || [])
-  }, [selected, selectedIds, setSelectedIds])
+    if(selected !== undefined) setSelectedIds(selected)
+  }, [selected])
   
   // Functions
   function updateSelected(tableItems) {
@@ -117,7 +117,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
                   {
                     !loadingElement ?
                     <div className='vtfk-table-loading-container'>
-                      <h2 style={{margin: 0, marginBottom: '1rem'}}>{ loadingText || 'Laster' }</h2>
+                      <h2 style={{margin: 0, marginBottom: '0.2rem'}}>{ loadingText || 'Laster' }</h2>
                       <Spinner size="large" />
                     </div>
                     :
@@ -161,7 +161,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
             !isLoading && (!items || !Array.isArray(items) || items.length === 0) &&
             <tr>
               <td colSpan={headers.length + 1} style={{ textAlign: 'center'}}>
-                { noDataText || noDataElement || 'Ingen data er funnet'}
+                { noDataElement || noDataText || 'Ingen data er funnet'}
               </td>
             </tr>
           }

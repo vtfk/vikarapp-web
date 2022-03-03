@@ -1,11 +1,13 @@
 import config from '../../config'
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { login } from '../../auth'
+import { ErrorContext } from '../../components/ErrorField/ErrorContext';
 
 export default function useSubstitutions() {
   const [state, setState] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const { add:addError } = useContext(ErrorContext)
 
   /**
    * Get substitutions
@@ -40,12 +42,15 @@ export default function useSubstitutions() {
     }
 
     // Make the request
-    const { data } = await axios.request(request);
-
-    // Set the state
-    setState(data)
-
-    return data
+    try {
+      const { data } = await axios.request(request);
+      // Set the state
+      setState(data)
+      setIsLoading(false)
+      return data
+    } catch (err) {
+      addError(err)
+    }
   }
 
   /**
@@ -81,8 +86,12 @@ export default function useSubstitutions() {
     }
 
     // Make the request
-    const { data } = await axios.request(request);
-    return data;
+    try {
+      const { data } = await axios.request(request);
+      return data;
+    } catch (err) {
+      addError(err)
+    }
   }
 
   return { state, get, post, isLoading }

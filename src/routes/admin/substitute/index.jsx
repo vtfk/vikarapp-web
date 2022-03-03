@@ -4,16 +4,14 @@ import useTeachers from "../../../hooks/useTeachers";
 import useTeacherTeams from "../../../hooks/useTeacherTeams"
 import Table from '../../../components/Table'
 import useSubstitutions from "../../../hooks/useSubstitutions";
-import useError from "../../../components/ErrorField/useError";
 
 export default function SubstituteRelationships() {
   /*
     Hooks
   */
   const { search } = useTeachers()
-  const { search: searchTeams } = useTeacherTeams();
+  const { search: searchTeams, isLoadingTeams } = useTeacherTeams();
   const { post:postSubstitutions } = useSubstitutions()
-  const { add } = useError()
 
   /*
     State
@@ -64,17 +62,12 @@ export default function SubstituteRelationships() {
   }
 
   async function searchForSubstitute(term) {
-    try {
-      let result = await search(term)
-      console.log('Result', result)
-      if(selectedTeacher && result && result.length > 0) {
-        result = result.filter((i) => i.id !== selectedTeacher.id)
-      }
-      setAvailableSubstitutes(result)
-      setIsLoadingSubstitutes(false)
-    } catch (err) {
-      add(err)
+    let result = await search(term)
+    if(selectedTeacher && result && result.length > 0) {
+      result = result.filter((i) => i.id !== selectedTeacher.id)
     }
+    setAvailableSubstitutes(result)
+    setIsLoadingSubstitutes(false)
   }
 
   /*
@@ -121,12 +114,8 @@ export default function SubstituteRelationships() {
       }
     })
 
-    try {
-      const result = await postSubstitutions(selectedSubstitute.userPrincipalName, substitutions)
-      console.log('Result', result)
-    } catch (err) {
-      add({message: 'test'});
-    }
+    postSubstitutions(selectedSubstitute.userPrincipalName, substitutions)
+
   }
 
   return (
@@ -159,6 +148,7 @@ export default function SubstituteRelationships() {
         itemId="id"
         headers={tableHeaders}
         items={availableTeams}
+        isLoading={isLoadingTeams}
         showSelect
         selectOnClick
         selectedTeamIds={selectedTeamIds}
@@ -166,7 +156,6 @@ export default function SubstituteRelationships() {
       />
       <div style={{marginTop: 'auto'}}>
         <Button disabled={!isReadyToSave} onClick={() => postSubstitution()}>Legg til vikariat</Button>
-        <Button onClick={() => add({message: 'Error'})}>Add error</Button>
       </div>
     </div>
   )

@@ -93,7 +93,7 @@ export default function SubstituteRelationships() {
   }
 
   return (
-    <div>
+    <div className='column-group'>
       <div style={{color: 'white'}}>Her setter du opp hvilke skoler som for lov til å være vikar for hverandre</div>
       <Table headers={headers} items={tableItems} showSelect={false} headerStyle={{textAlign: 'left'}} itemStyle={{textAlign: 'left'}} isLoading={isLoading}/>
       {
@@ -106,7 +106,7 @@ export default function SubstituteRelationships() {
             <div>
               <Checkbox
                 label="Alle"
-                checked={editedItem.permittedSchools.length >= schools.length}
+                checked={editedItem.permittedSchools?.length >= schools.length}
                 onChange={() => { onSchoolCheck('*') }}
                 style={{fontWeight: 'bold'}}
               />

@@ -1,14 +1,23 @@
 import { Button } from '@vtfk/components'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import './style.css'
 import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/default-highlight'
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 
-export default function ErrorField({ error }) {
+export default function ErrorField({ error, showDetails = false, showDetailsButton}) {
   /*
     State
   */
-  const [isShowDetails, setIsShowDetails] = useState(false)
+  const [isShowDetails, setIsShowDetails] = useState(showDetails || false)
+  const [isShowDetailsButton, setIsShowDetailsButton] = useState(showDetailsButton || false)
+
+  /*
+    UseEffect
+  */
+  useEffect(() => {
+    if(showDetails !== undefined) setIsShowDetails(showDetails)
+    if(showDetailsButton !== undefined) setIsShowDetailsButton(showDetailsButton)
+  }, [showDetails, showDetailsButton])
 
   /*
     Computed
@@ -67,23 +76,23 @@ export default function ErrorField({ error }) {
         <div style={{width: '100%'}}>
           {
             stack &&
-            <div className='vtfk-errorfield-stack'>
+            <div className='vtfk-errorfield-details'>
               <h3 style={{margin: '0'}}>Stack:</h3>
               {stack}
             </div>
           }
           {
             stringyfiedError &&
-            <div className='vtfk-errorfield-raw' style={{maxWidth: '100%', width: '100%'}}>
+            <div className='vtfk-errorfield-details' style={{maxWidth: '100%', width: '100%'}}>
               <h3 style={{margin: '0'}}>Full feilmelding:</h3>
-              <SyntaxHighlighter language='json' style={docco} customStyle={{ background: 'none' }} wrapLines>{stringyfiedError}</SyntaxHighlighter>
+              <SyntaxHighlighter language='json' style={docco} customStyle={{ background: 'none', overflowX: 'none', marginTop: '0' }} >{stringyfiedError}</SyntaxHighlighter>
             </div>
           }
         </div>
       }
-      { stringyfiedError && 
+      { isShowDetailsButton && 
       <div className='vtfk-errorfield-buttons'>
-        <Button size="small" onClick={() => { setIsShowDetails(!isShowDetails) }}>{ !isShowDetails ? 'Vis detaljer' : 'Skjul detaljer'}</Button> 
+        { isShowDetailsButton && <Button size="small" onClick={() => { setIsShowDetails(!isShowDetails) }}>{ !isShowDetails ? 'Vis detaljer' : 'Skjul detaljer'}</Button> }
       </div>
       }
     </div>

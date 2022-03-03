@@ -1,7 +1,6 @@
 import { Button, SearchField } from '@vtfk/components'
 import { useState } from 'react'
 import Table from '../../../components/Table'
-import Loading from '../../../components/Loading/Loading';
 import {
   Link, useNavigate
 } from "react-router-dom";
@@ -16,7 +15,7 @@ export default function Substitute () {
   
   const navigate = useNavigate()
   const { state:teachers, search:searchForTeachers, isLoading:isLoadingTeachers } = useTeacher();
-  const { state:teacherTeams, search:searchTeacherTeams, isLoading:isLoadingTeams } = useTeacherTeams();
+  const { state:teacherTeams, search:searchTeacherTeams, isLoadingTeams} = useTeacherTeams();
   const { post:postSubstitutions } = useSubstitutions();
 
   // Table headers
@@ -83,20 +82,18 @@ export default function Substitute () {
         items={teachers}
         itemMapping={itemMapping}
         onSearch={(e) => { searchForTeachers(e?.target?.value) }}
-        onSelected={(e) => { console.log('Selected teacher', e); setSelectedTeacher(e); searchTeacherTeams(e?.userPrincipalName) }}
+        onSelected={(e) => { setSelectedTeacher(e); searchTeacherTeams(e?.userPrincipalName) }}
         rounded
       />
       {
-        isLoadingTeams && <Loading title='Laster inn teams' message="Dette kan ta noen sekunder"/>
-      }
-      {
-        !isLoadingTeams && selectedTeacher &&
         <Table
           headers={headers}
           items={teacherTeams}
           itemId="id"
+          isLoading={isLoadingTeams}
           selectOnClick
           onSelectedItemsChanged={(e) => { setSelectedTeams(e)}}
+          noDataText={'Ingen teams er funnet'}
           style={{marginTop: '2rem'}}
         />
       }

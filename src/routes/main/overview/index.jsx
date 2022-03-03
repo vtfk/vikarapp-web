@@ -11,7 +11,7 @@ export default function MainOverview() {
   const [selectedIds, setSelectedIds] = useState([])
   const [selectedItems, setSelectedItems] = useState([])
   const [isShowRenewalDialog, setIsShowRenewalDialog] = useState(false);
-  const { state:substitutions, get } = useSubstitutions()
+  const { state:substitutions, get, isLoading } = useSubstitutions()
 
   // Table headers
   const headers = [
@@ -128,6 +128,7 @@ export default function MainOverview() {
         itemId="_id"
         headers={headers}
         items={tableItems}
+        isLoading={isLoading}
         selected={selectedIds}
         selectOnClick
         onSelectedIdsChanged={(e) => setSelectedIds(e)}
@@ -138,6 +139,7 @@ export default function MainOverview() {
           <Button>Jeg skal være vikar</Button>
         </Link>
         <Button disabled={selectedIds.length === 0} onClick={() => selectedItems.length > 0 && setIsShowRenewalDialog(true)}>Forleng vikariat</Button>
+        <Button>Historikk</Button>
       </div>
       <Dialog isOpen={isShowRenewalDialog} onDismiss={() => setIsShowRenewalDialog(false)}>
         <DialogTitle>Fornye vikariat?</DialogTitle>

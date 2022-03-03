@@ -9,7 +9,6 @@ import {
   useLocation,
 } from "react-router-dom";
 import * as auth from '../auth'
-import useError from '../components/ErrorField/useError';
 
 /*
   Import nested routes
@@ -20,12 +19,9 @@ import Admin from './admin'
 import SubstituteAdmin from './admin/substitute';
 import SubstituteRelationships from './admin/substituterelationships';
 import Debug from './Debug'
-import ErrorDialog from '../components/ErrorField/ErrorDialog';
-
 
 export default function Main() {
   const location = useLocation();
-  const { errors, remove, clear } = useError()
 
   const adminRoles = ['App.Admin', 'App.Config'];
   const userRoles = auth.getValidToken()?.roles;
@@ -79,7 +75,6 @@ export default function Main() {
           <img className='main-footer-logo' alt="footer-logo" src={logo} width="100px" />
         </div>
       </div>
-      <ErrorDialog errors={errors} onOk={(e) => { remove(e) }} onClear={() => { clear()}} />
     </main>
   )
 }

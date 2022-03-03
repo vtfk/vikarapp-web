@@ -1,11 +1,13 @@
 import config from '../../config'
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { login } from '../../auth'
+import { ErrorContext } from '../../components/ErrorField/ErrorContext';
 
 export default function useSchools() {
   const [state, setState] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { add:addError } = useContext(ErrorContext)
 
   async function get() {
     setIsLoading(true);
@@ -25,7 +27,8 @@ export default function useSchools() {
       setState(data);
       setIsLoading(false);
       return data;
-    } catch {
+    } catch(err) {
+      addError(err)
       setState([]);
       setIsLoading(false);
       return [];
@@ -49,7 +52,11 @@ export default function useSchools() {
     }
 
     // Update the relationship
-    await axios.request(request);
+    try {
+      await axios.request(request);
+    } catch (err) {
+      addError(err)
+    }
   }
 
   return { state, setState, get, put, isLoading }
