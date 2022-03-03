@@ -131,6 +131,7 @@ export default function MainOverview() {
         isLoading={isLoading}
         selected={selectedIds}
         selectOnClick
+        showSelect
         onSelectedIdsChanged={(e) => setSelectedIds(e)}
         onSelectedItemsChanged={(e) => setSelectedItems(e)}
       />

@@ -9,15 +9,19 @@ export default function useTeachers() {
   const [isLoading, setIsLoading] = useState(false);
   const { add:addError } = useContext(ErrorContext)
 
-  async function search(term) {
+  async function search(term, returnSelf) {
     if(!term || typeof term !== 'string' || term.length <= 3) return;
 
     setIsLoading(true);
 
     const { bearerToken } = await login({ type: 'popup' })
 
+    let query = ''
+    if(returnSelf) query += 'returnSelf=true'
+    if(query) query = `?${query}`
+
     const request = {
-      url: `${config.vikarAPIBaseurl}teachers/${term}`,
+      url: `${config.vikarAPIBaseurl}teachers/${term}${query}`,
       method: 'GET',
       headers: {
         Authorization: bearerToken

@@ -92,6 +92,7 @@ export default function Substitute () {
           itemId="id"
           isLoading={isLoadingTeams}
           selectOnClick
+          showSelect
           onSelectedItemsChanged={(e) => { setSelectedTeams(e)}}
           noDataText={'Ingen teams er funnet'}
           style={{marginTop: '2rem'}}

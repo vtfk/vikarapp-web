@@ -18,6 +18,7 @@ import Overview from './main/overview/'
 import Admin from './admin'
 import SubstituteAdmin from './admin/substitute';
 import SubstituteRelationships from './admin/substituterelationships';
+import History from './admin/history'
 import Debug from './Debug'
 
 export default function Main() {
@@ -65,6 +66,7 @@ export default function Main() {
             <Route path="/admin" element={<Admin />} />
             <Route path="/admin/substitute" element={<SubstituteAdmin />} />
             <Route path="/admin/substituterelationships" element={<SubstituteRelationships />} />
+            <Route path="/admin/history" element={<History />} />
             {
               process.env.NODE_ENV === 'development' &&
               <Route path="/debug" element={<Debug /> } />

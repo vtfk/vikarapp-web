@@ -21,6 +21,14 @@ export default function Admin() {
         </div>
       }
       {
+        isAdmin &&
+        <div className='admin-action-button'>
+          <Link to="/admin/history">
+            <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer'}}>Historikk</Button>
+          </Link>
+        </div>
+      }
+      {
         isConfig &&
         <div className='admin-action-button'>
         <Link to="/admin/substituterelationships">
