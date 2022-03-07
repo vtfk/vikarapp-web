@@ -1,6 +1,6 @@
-import { Button, SelectMultiple } from "@vtfk/components"
 import { useEffect, useMemo, useState } from "react"
 import PersonSearchField from "../../../components/PersonSearchField"
+import Select from "../../../components/Select"
 import Table from "../../../components/Table"
 import useSubstitutions from "../../../hooks/useSubstitutions"
 import './style.css'
@@ -42,6 +42,7 @@ const allStatuses = [
 
 export default function History() {
   const [ selectedStatuses, setSelectedStatuses ] = useState([])
+  const [ selectedYears, setSelectedYears ] = useState([])
   const { state:substitutions, get:getSubstitutions } = useSubstitutions()
   const [ selectedSubstitute, setSelectedSubstitute ] = useState()
   const [ selectedTeacher, setSelectedTeacher ] = useState()
@@ -59,15 +60,17 @@ export default function History() {
 
     if(selectedSubstitute && selectedSubstitute.id) copy = copy.filter((i) => i.substituteId === selectedSubstitute.id)
     if(selectedTeacher && selectedTeacher.id) copy = copy.filter((i) => i.teacherId === selectedTeacher.id)
+    if(Array.isArray(selectedYears) && selectedYears.length > 0) copy = copy.filter((i) => i.expirationTimestamp && selectedYears.includes(new Date(i.expirationTimestamp).getFullYear()))
+    if(Array.isArray(selectedStatuses) && selectedStatuses.length > 0) copy = copy.filter((i) => i.status && selectedStatuses.includes(i.status))
 
     return copy
-  },[substitutions, selectedSubstitute, selectedTeacher])
+  },[substitutions, selectedSubstitute, selectedTeacher, selectedStatuses, selectedYears])
 
   const availableYears = useMemo(() => {
-    if(!filteredSubstitutions) return []
+    if(!substitutions) return []
 
     const years = []
-    filteredSubstitutions.forEach((s) => {
+    substitutions.forEach((s) => {
       const d = Date.parse(s.expirationTimestamp)
       if(d) {
         const year = new Date(d).getFullYear()
@@ -78,15 +81,7 @@ export default function History() {
     years.sort()
 
     return years.map((y) => {return {label: y, value: y}})
-  }, [filteredSubstitutions])
-
-
-  function onStatusChanged(e) {
-    if(!e?.value) return;
-
-    if(!selectedStatuses.includes(e.value)) setSelectedStatuses([...selectedStatuses, e.value])
-    else setSelectedStatuses(selectedStatuses.filter((i) => i !== e.value))
-  }
+  }, [substitutions])
 
   return (
     <div className="column-group">
@@ -104,19 +99,21 @@ export default function History() {
         />
       </div>
       <div className="history-input-group">
-        <SelectMultiple
-          placeholder="status"
+        <Select
+          label="Status"
+          placeholder="Velg statuser"
           items={allStatuses}
-          selectedItems={selectedStatuses.map((i) => { return { label: 'test', value: i.value }})}
-          onChange={(e) => onStatusChanged(e)}
-          style={{width: '100%'}}
+          selected={selectedStatuses}
+          multiple
+          onChange={(e) => setSelectedStatuses(e)}
         />
-        <SelectMultiple
-          placeholder="År"
+        <Select
+          label="År"
+          placeholder="Velg år"
           items={availableYears}
-          style={{width: '100%'}}
+          multiple
+          onChange={(e) => setSelectedYears(e)}
         />
-        <Button size="small" onClick={() => getSubstitutions()}>Refresh</Button>
       </div>
       <h2 style={{margin: '0', color: '#FFBF00'}}>Vikariat</h2>
       <Table

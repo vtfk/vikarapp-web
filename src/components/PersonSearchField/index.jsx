@@ -8,7 +8,7 @@ const itemMapping = [
   { value: 'officeLocation'}
 ]
 
-export default function PersonSearchField({placeholder, onSelected, returnSelf}) {
+export default function PersonSearchField({placeholder, onSelected, returnSelf, style}) {
   const { state:teachers , search, isLoading} = useTeachers()
 
   async function onChange(value) {
@@ -20,18 +20,16 @@ export default function PersonSearchField({placeholder, onSelected, returnSelf})
   }
 
   return (
-    <div>
-      <SearchField
-        loading={isLoading}
-        items={teachers}
-        itemMapping={itemMapping}
-        placeholder={placeholder}
-        onChange={(e) => onChange(e?.target?.value)}
-        onSearch={(e) => search(e?.target?.value, returnSelf)}
-        onSelected={(e) => onSelectedTeacher(e)}
-        debounceMs={250}
-        rounded
-      />
-    </div>
+    <SearchField
+      loading={isLoading}
+      items={teachers}
+      itemMapping={itemMapping}
+      placeholder={placeholder}
+      onChange={(e) => onChange(e?.target?.value)}
+      onSearch={(e) => search(e?.target?.value, returnSelf)}
+      onSelected={(e) => onSelectedTeacher(e)}
+      debounceMs={250}
+      rounded
+    />
   )
 }

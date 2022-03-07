@@ -8,7 +8,7 @@ function isArray(item) {
   return true
 }
 
-export default function Select({id, items, itemLabel = 'label', itemValue = 'value', selected, label, placeholder, hint, open, multiple, showClear = true, disabled, required, rounded, style, onSelectedValues, onSelectedItems, onClickOutside, onClose}) {
+export default function Select({id, items, itemLabel = 'label', itemValue = 'value', selected, label, placeholder, hint, open, multiple, showClear = true, disabled, required, noDataText, noDataElement, style, containerStyle, onChange, onSelectedValues, onSelectedItems, onClickOutside, onClose}) {
   /*
     State
   */
@@ -68,10 +68,12 @@ export default function Select({id, items, itemLabel = 'label', itemValue = 'val
     // Handle a bit differently if the mode is multiple or not
     if(!multiple) {
       setSelectedValues([value])
+      if(onChange && onChange) onChange(value)
       if(onSelectedValues && onSelectedValues) onSelectedValues(value)
       if(onSelectedItems && typeof onSelectedItems === 'function') onSelectedItems(getSelectedItems(newValues)[0])
     } else {
       setSelectedValues(newValues)
+      if(onChange && onChange) onChange(newValues)
       if(onSelectedValues && onSelectedValues) onSelectedValues(newValues)
       if(onSelectedItems && typeof onSelectedItems === 'function') onSelectedItems(getSelectedItems(newValues))
     }
@@ -118,13 +120,15 @@ export default function Select({id, items, itemLabel = 'label', itemValue = 'val
     Render
   */
   return (
-    <div id={`select-${_id}`} className={selectClasses} style={style}>
+    <span id={`select-${_id}`} className={selectClasses} style={containerStyle}>
       {
-        label &&
-        <label htmlFor={`btn-${_id}`} title={label}>{label}</label>
+        (label || placeholder) &&
+        <label htmlFor={`btn-${_id}`} required={required || false} title={label || placeholder}>{label || placeholder}</label>
       }
       <button
         id={`btn-${_id}`}
+        className={`${required && !label && !placeholder ? 'required' : ''} rounded`}
+        style={style}
         disabled={disabled || false}
         required={required}
         aria-haspopup='listbox'
@@ -133,23 +137,20 @@ export default function Select({id, items, itemLabel = 'label', itemValue = 'val
       >
         <div className='vtfk-select-content'>
           {
-            !hasSelectedValues ? placeholder || 'Gjør ett valg' : getSelectedItems(selectedValues).map((i) => i[itemLabel]).join(', ')
+            !hasSelectedValues ? <span className='placeholder'>{placeholder || label || 'Gjør ett valg'}</span>
+            : getSelectedItems(selectedValues).map((i) => i[itemLabel]).join(', ')
           }
         </div>
         <div className='vtfk-select-button-group'>
           { showClear && <Icon name="close" size='auto' onClick={(e) => { clearItems(); e.preventDefault(); e.stopPropagation()}} alt='clear select' disabled={disabled || false} /> }
           <Icon name={isOpen ? 'chevronUp' : 'chevronDown'} size='auto' alt='open/close select' disabled={disabled || false} />
         </div>
-      </button>
-      {
-        hint && typeof hint === 'string' && <div className='hint'>{hint}</div>
-      }
-      {
+        {
         isOpen &&
         <div className='vtfk-select-popup'>
           {
-            !isArray(items) && items.length === 0 &&
-            <div>Ingen valg</div>
+            items.length === 0 &&
+            <div className='no-data'>{ noDataElement || noDataText || 'Ingen valg tilgjengelig' }</div>
           }
           {
             isArray(items) && items.length > 0 &&
@@ -166,7 +167,7 @@ export default function Select({id, items, itemLabel = 'label', itemValue = 'val
                           style={{marginRight: '0'}}
                         />
                       }
-                      {i[itemLabel]}
+                      <span>{i[itemLabel]}</span>
                     </div>
                   )
                 })
@@ -175,6 +176,7 @@ export default function Select({id, items, itemLabel = 'label', itemValue = 'val
           }
         </div>
       }
-    </div>
+      </button>
+    </span>
   )
 }
