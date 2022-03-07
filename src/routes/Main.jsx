@@ -1,12 +1,12 @@
 import './Main.css'
 import logo from '../images/vtfk-logo.svg'
 // import gear from '../images/gear.svg'
-import { IconButton, Button } from '@vtfk/components'
+import { IconButton } from '@vtfk/components'
 import {
   Routes,
   Route,
   Link,
-  useLocation,
+  useLocation
 } from "react-router-dom";
 import * as auth from '../auth'
 
@@ -56,10 +56,12 @@ export default function Main() {
             {
               isAdmin && 
               <Link to="/admin">
-                <Button size="small" type="secondary">Admin</Button>
+                <IconButton icon="activity" />
               </Link>
             }
           </div>
+          
+          
         </div>
         <div className='main-content'>
           <Routes>
