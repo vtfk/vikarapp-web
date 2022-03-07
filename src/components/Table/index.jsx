@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { nanoid } from 'nanoid'
 import { mergeStyles, mergeClasses } from './lib/helpers'
 
-export default function Table({items, headers, itemId = '_id', selected, style, headerClass, headerStyle, itemClass, itemStyle, trClass, trStyle, isLoading, loadingText, loadingElement, noDataText, noDataElement, dense = false, showSelect = false, selectOnClick = false, onSelectedIdsChanged, onSelectedItemsChanged}) {
+export default function Table({items, headers, itemId = '_id', selected, style, headerClass, headerStyle, itemClass, itemStyle, trClass, trStyle, isLoading, loadingText, loadingElement, noDataText, noDataElement, dense = false, showSelect = false, selectOnClick = false, onSelectedIdsChanged, onSelectedItemsChanged, onModeChanged}) {
   // State
   const [selectedIds, setSelectedIds] = useState(selected && Array.isArray(selected) ? selected : [])
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
@@ -100,6 +100,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
   }
 
   function handleCheckboxClick(e, item) {
+    e.stopPropagation();
     updateSelected(item);
   }
 
@@ -213,13 +214,24 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
             {
               items.map((item) => {
                 return(
-                  <tr key={item[itemId]} className={mergeClasses('vtfk-table-mobile-item', dense ? 'td-dense' : '', itemClass)}>
+                  <tr
+                    key={item[itemId]}
+                    onClick={(e) => selectOnClick && handleRowClick(e, item)}
+                    className={mergeClasses('vtfk-table-mobile-item', dense ? 'td-dense' : '', itemClass, isSelected(item) ? 'tr-selected' : '')}
+                  >
+                    {
+                      showSelect &&
+                      <td className='vtfk-table-mobile-row'>
+                        <div></div>
+                        <div><Checkbox checked={isSelected(item)} onChange={(e) => handleCheckboxClick(e, item)} style={{display: 'block', padding: '0', margin: '0'}} /></div>
+                      </td>
+                    }
                     {
                       validHeaders.map((header) => {
                         return(
                           <td key={`${item[itemId]}-${header.value}`} className="vtfk-table-mobile-row">
                             <div className='vtfk-table-mobile-item-header '>{header.label}</div>
-                            <div>{getItemValue(item, header)}</div>
+                            <div className='vtfk-table-mobile-item-value'>{getItemValue(item, header)}</div>
                           </td>
                         )
                       })

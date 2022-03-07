@@ -88,3 +88,7 @@
 .vtfk-table-mobile-item-header {
   font-weight: 900;
 }
+
+.vtfk-table-mobile-item-value {
+  text-align: right;
+}
