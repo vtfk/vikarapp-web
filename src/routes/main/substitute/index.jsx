@@ -1,20 +1,19 @@
-import { Button, SearchField } from '@vtfk/components'
+import { Button } from '@vtfk/components'
 import { useState } from 'react'
 import Table from '../../../components/Table'
 import {
   Link, useNavigate
 } from "react-router-dom";
-import useTeacher from '../../../hooks/useTeachers'
 import useTeacherTeams from '../../../hooks/useTeacherTeams';
 import useSubstitutions from '../../../hooks/useSubstitutions';
 import { getValidToken } from '../../../auth'
+import PersonSearchField from '../../../components/PersonSearchField';
 
 export default function Substitute () {
   const [selectedTeacher, setSelectedTeacher] = useState(undefined);
   const [selectedTeams, setSelectedTeams] = useState([])
   
   const navigate = useNavigate()
-  const { state:teachers, search:searchForTeachers, isLoading:isLoadingTeachers } = useTeacher();
   const { state:teacherTeams, search:searchTeacherTeams, isLoadingTeams} = useTeacherTeams();
   const { post:postSubstitutions } = useSubstitutions();
 
@@ -32,13 +31,6 @@ export default function Substitute () {
       style: {textAlign: 'left'},
       itemStyle: {textAlign: 'left'}
     }
-  ]
-
-  // Item mapping for the search results
-  const itemMapping = [
-    { value: 'displayName' },
-    { value: 'jobTitle' },
-    { value: 'officeLocation'}
   ]
 
   async function activateSubstitution() {
@@ -75,15 +67,9 @@ export default function Substitute () {
 
   return (
     <div style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
-      <SearchField
-        loading={isLoadingTeachers}
-        debounceMs={250}
+      <PersonSearchField 
         placeholder="Søk etter læreren du skal være vikar for"
-        items={teachers}
-        itemMapping={itemMapping}
-        onSearch={(e) => { searchForTeachers(e?.target?.value) }}
         onSelected={(e) => { setSelectedTeacher(e); searchTeacherTeams(e?.userPrincipalName) }}
-        rounded
       />
       {
         <Table

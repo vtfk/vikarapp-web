@@ -1,0 +1,79 @@
+.vtfk-select {
+  position: relative;
+  width: 100%;
+  border-bottom: 1px solid black;
+
+  & > label {
+    display: inline-block;
+    transform: translateX(5px);
+  }
+
+  &.disabled {
+    cursor: not-allowed!important;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  & > button {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+
+    &[required]::before {
+      position: absolute;
+      top: -3px;
+      left: 0;
+      content: '*';
+      color: red;
+    }
+
+    /* Remove default button styling */
+    max-width: none;
+    border: none;
+    box-shadow: none;
+    background: none;
+    user-select: none;
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+  }
+
+  .item:hover {
+    background-color: lightblue;
+  }
+
+  .hint {
+    position: absolute;
+    bottom: -20px;
+  }
+}
+
+.vtfk-select-content {
+  width: 100%;
+  text-align: left;
+}
+
+.vtfk-select-button-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  &> .icon:hover {
+    transform: scale(1.25);
+  }
+}
+
+.vtfk-select-popup {
+  position: absolute;
+  background-color: white;
+  width: 100%;
+  top: 20px;
+  padding: 0.5rem;
+  border-radius: 10px;
+}
