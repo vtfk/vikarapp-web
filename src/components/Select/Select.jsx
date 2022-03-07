@@ -87,6 +87,7 @@ export default function Select({id, items, itemLabel = 'label', itemValue = 'val
     if(multiple) newValues = [];
 
     setSelectedValues([]);
+    if(onChange && onChange) onChange(newValues)
     if(onSelectedValues && onSelectedValues) onSelectedValues(newValues)
     if(onSelectedItems && typeof onSelectedItems === 'function') onSelectedItems(newValues)
   }

@@ -60,8 +60,6 @@ export default function Main() {
               </Link>
             }
           </div>
-          
-          
         </div>
         <div className='main-content'>
           <Routes>
