@@ -1,9 +1,9 @@
-import { Dialog, DialogActions, Button, IconButton } from "@vtfk/components";
+import { Dialog, DialogActions, Button, IconButton, DialogBody } from "@vtfk/components";
 import { useEffect, useState } from "react";
 import ErrorField from '.'
 import './style.css'
 
-export default function ErrorDialog({ errors, onOk, onClear }) {
+export default function ErrorDialog({ errors, onOk, onClear, style }) {
   const [errorIndex, setErrorIndex] = useState(0)
   const [isShowDetails, setIsShowDetails] = useState(false)
 
@@ -34,7 +34,9 @@ export default function ErrorDialog({ errors, onOk, onClear }) {
 
   return(
     <Dialog isOpen={errors.length > 0} onDismiss={() => onClear()} showCloseButton={false}>
-      <ErrorField error={errors[errorIndex]} showDetails={isShowDetails}/>
+      <DialogBody>
+        <ErrorField error={errors[errorIndex]} showDetails={isShowDetails}/>
+      </DialogBody>
       <hr/>
       <DialogActions className='vtfk-errordialog-actions'>
         <Button size="small" onClick={() => handleOk()}>Ok</Button>

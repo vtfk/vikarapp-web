@@ -63,7 +63,11 @@ export function ErrorProvider({children}) {
     <ErrorContext.Provider value={{errors, add, remove, clear, setIsShowDialog}}>
       { children }
       { isShowDialog && 
-        <ErrorDialog errors={errors} onOk={(e) => { remove(e) }} onClear={() => { clear()}} />
+        <ErrorDialog
+          errors={errors}
+          onOk={(e) => { remove(e) }}
+          onClear={() => { clear()}}
+        />
       }
     </ErrorContext.Provider>
   )

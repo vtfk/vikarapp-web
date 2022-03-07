@@ -1,3 +1,7 @@
 a {
   text-decoration: none;
 }
+
+.dialog {
+  max-width: 75%;
+}
