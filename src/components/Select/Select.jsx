@@ -122,8 +122,8 @@ export default function Select({id, items, itemLabel = 'label', itemValue = 'val
   return (
     <span id={`select-${_id}`} className={selectClasses} style={containerStyle}>
       {
-        (label || placeholder) &&
-        <label htmlFor={`btn-${_id}`} required={required || false} title={label || placeholder}>{label || placeholder}</label>
+        label &&
+        <label htmlFor={`btn-${_id}`} required={required || false} title={label}>{label}</label>
       }
       <button
         id={`btn-${_id}`}

@@ -48,7 +48,9 @@ export default function Main() {
             }
           </div>
           <div className='main-header-item'>
-            <h1 className='main-title' style={{margin: 0, fontSize: '3rem'}}>VikarApp</h1>
+            <Link to="/">
+              <h1 className='main-title' style={{margin: 0, fontSize: '3rem'}}>VikarApp</h1>
+            </Link>
           </div>
           <div className='main-header-item'> 
             {

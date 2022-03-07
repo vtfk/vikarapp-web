@@ -100,7 +100,6 @@ export default function History() {
       </div>
       <div className="history-input-group">
         <Select
-          label="Status"
           placeholder="Velg statuser"
           items={allStatuses}
           selected={selectedStatuses}
@@ -108,7 +107,6 @@ export default function History() {
           onChange={(e) => setSelectedStatuses(e)}
         />
         <Select
-          label="År"
           placeholder="Velg år"
           items={availableYears}
           multiple

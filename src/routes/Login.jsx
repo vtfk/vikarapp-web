@@ -26,7 +26,7 @@ export default function LoginPage() {
     <div className="container">
       <div className="title">Du logges inn</div>
       <div className="subtitle">Hvis det ikke skjer automatisk, vennligst forsøk knappen</div>
-      <div>User agent {window.navigator.userAgent.toLocaleLowerCase()}</div>
+      {/* <div>User agent {window.navigator.userAgent.toLocaleLowerCase()}</div> */}
       <button onClick={() => authenticate()}>Login</button>
     </div>
   )

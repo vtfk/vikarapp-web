@@ -14,27 +14,21 @@ export default function Admin() {
     <div className='admin-container'>
       {
         isAdmin &&
-        <div className='admin-action-button'>
-          <Link to="/admin/substitute">
-            <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer'}}>Behandle vikariat</Button>
-          </Link>
-        </div>
+        <Link to="/admin/substitute" className='admin-action-button'>
+          <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer'}}>Behandle vikariat</Button>
+        </Link>
       }
       {
         isAdmin &&
-        <div className='admin-action-button'>
-          <Link to="/admin/history">
-            <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer'}}>Historikk</Button>
-          </Link>
-        </div>
+        <Link to="/admin/history" className='admin-action-button'>
+          <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer'}}>Historikk</Button>
+        </Link>
       }
       {
         isConfig &&
-        <div className='admin-action-button'>
-        <Link to="/admin/substituterelationships">
+        <Link to="/admin/substituterelationships" className='admin-action-button'>
           <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer', textDecoration: 'none'}}>Behandle søkerettigheter</Button>
         </Link>
-      </div>
       }
     </div>
   )

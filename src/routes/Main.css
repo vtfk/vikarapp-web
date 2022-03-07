@@ -1,6 +1,8 @@
 .main-container {
   padding: 4rem;
   height: 100vh;
+  width: 100vw;
+  overflow-y: auto;
 }
 
 .app-container {
@@ -20,6 +22,7 @@
   justify-content: center;
   align-items: center;
   min-height: 4rem;
+  flex-wrap: wrap;
 }
 
 .main-header-item {
@@ -55,6 +58,7 @@
 
 .main-footer-button-group {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.75rem;
   justify-content: center;
   margin-right: 0.5rem;
@@ -84,13 +88,13 @@
   gap: 1rem;
 }
 
-@media only screen and (max-height: 1000px) {
+/* @media only screen and (max-height: 1000px) {
   .main-container {
     padding: 0 4rem;
   }
-}
+} */
 
-@media only screen and (max-width: 750px) {
+@media screen and (max-width: 750px) {
   .main-container {
     padding: 0;
     margin-bottom: 0;
@@ -98,6 +102,7 @@
 
   .main-content {
     margin: 0;
+    width: 100%;
   }
 
   .app-container {

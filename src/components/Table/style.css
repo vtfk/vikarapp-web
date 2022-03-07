@@ -66,3 +66,25 @@
   margin: 0.5rem;
 }
 
+/*
+  Mobile
+*/
+.vtfk-table-mobile-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.vtfk-table-mobile tr {
+  padding: 0.2rem 0;
+}
+
+.vtfk-table-mobile-row {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 0.2rem!important;
+  padding-bottom: 0.2rem!important;
+}
+
+.vtfk-table-mobile-item-header {
+  font-weight: 900;
+}

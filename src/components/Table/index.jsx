@@ -1,18 +1,44 @@
 import './style.css'
 import { Checkbox, Spinner } from '@vtfk/components'
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { nanoid } from 'nanoid'
 import { mergeStyles, mergeClasses } from './lib/helpers'
 
 export default function Table({items, headers, itemId = '_id', selected, style, headerClass, headerStyle, itemClass, itemStyle, trClass, trStyle, isLoading, loadingText, loadingElement, noDataText, noDataElement, dense = false, showSelect = false, selectOnClick = false, onSelectedIdsChanged, onSelectedItemsChanged}) {
   // State
   const [selectedIds, setSelectedIds] = useState(selected && Array.isArray(selected) ? selected : [])
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
 
   useEffect(() => {
     // Update selected ids if updated externally
     if(selected !== undefined) setSelectedIds(selected)
+
+    function handleResize() {
+      setWindowWidth(window.innerWidth);
+    }
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
   }, [selected])
   
+  const mode = useMemo(() => {
+    if(windowWidth <= 750) return 'mobile'
+    return 'desktop'
+  },[windowWidth])
+
+  const validHeaders = useMemo(() => {
+    if(!Array.isArray(headers) || headers.length === 0) return [];
+
+    const vHeaders = []
+    headers.forEach((h) => {
+      if(h.label && h.value) vHeaders.push(h)
+    })
+
+    return vHeaders
+  }, [headers])
+
   // Functions
   function updateSelected(tableItems) {
     if(items.length === 0) return;
@@ -83,11 +109,22 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
     updateSelected(item);
   }
 
+  function getItemValue(item, header) {
+    if(!item || !header || !header.value) return '';
+    return item._elements?.[header.value] || item[header.value] || ''
+  }
+
   // Render function
   return(
     <div className='vtfk-table-container' style={style} >
-    { headers ?
-      <table className="vtfk-table" cellSpacing="0" cellPadding="0">
+    { validHeaders.length === 0 && <div>Table cannot be shown when no headers are specified</div> }
+    
+    { validHeaders.length > 0 && 
+      <>
+      {/* Desktop mode */}
+      {
+        mode === 'desktop' &&
+        <table className="vtfk-table" cellSpacing="0" cellPadding="0">
         <thead>
           <tr>
             { 
@@ -148,7 +185,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
                           className={mergeClasses(dense ? 'td-dense' : '', itemClass, header.itemClass)}
                           style={mergeStyles(itemStyle, header.itemStyle)}
                         >
-                          { item._elements?.[header.value] || item[header.value] || '' }
+                          { getItemValue(item, header) }
                         </td>
                       )
                     })
@@ -166,9 +203,36 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
             </tr>
           }
         </tbody>
-      </table>
-      :
-      <div>Table cannot be shown when no headers are specified</div>
+        </table>
+      }
+      {
+        /* Mobile mode */
+        mode === 'mobile' &&
+        <table className='vtfk-table vtfk-table-mobile'>
+          <tbody>
+            {
+              items.map((item) => {
+                return(
+                  <tr key={item[itemId]} className={mergeClasses('vtfk-table-mobile-item', dense ? 'td-dense' : '', itemClass)}>
+                    {
+                      validHeaders.map((header) => {
+                        return(
+                          <td key={`${item[itemId]}-${header.value}`} className="vtfk-table-mobile-row">
+                            <div className='vtfk-table-mobile-item-header '>{header.label}</div>
+                            <div>{getItemValue(item, header)}</div>
+                          </td>
+                        )
+                      })
+                    }
+                    
+                  </tr>
+                )
+              })
+            }
+          </tbody>
+        </table>
+      }
+      </>
     }
     </div>
   )
