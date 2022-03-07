@@ -132,6 +132,7 @@ export default function MainOverview() {
         selected={selectedIds}
         selectOnClick
         showSelect
+        mobileHeaderText="Mine vikariat"
         onSelectedIdsChanged={(e) => setSelectedIds(e)}
         onSelectedItemsChanged={(e) => setSelectedItems(e)}
       />

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { nanoid } from 'nanoid'
 import { mergeStyles, mergeClasses } from './lib/helpers'
 
-export default function Table({items, headers, itemId = '_id', selected, style, headerClass, headerStyle, itemClass, itemStyle, trClass, trStyle, isLoading, loadingText, loadingElement, noDataText, noDataElement, dense = false, showSelect = false, selectOnClick = false, onSelectedIdsChanged, onSelectedItemsChanged, onModeChanged}) {
+export default function Table({items, headers, itemId = '_id', selected, style, headerClass, headerStyle, itemClass, itemStyle, trClass, trStyle, isLoading, loadingText, loadingElement, noDataText, noDataElement, dense = false, showSelect = false, selectOnClick = false, mobileHeaderText, mobileHeaderElement, onSelectedIdsChanged, onSelectedItemsChanged, onModeChanged}) {
   // State
   const [selectedIds, setSelectedIds] = useState(selected && Array.isArray(selected) ? selected : [])
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
@@ -122,8 +122,8 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
     
     { validHeaders.length > 0 && 
       <>
-      {/* Desktop mode */}
       {
+        /* Desktop mode */
         mode === 'desktop' &&
         <table className="vtfk-table" cellSpacing="0" cellPadding="0">
         <thead>
@@ -210,6 +210,18 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
         /* Mobile mode */
         mode === 'mobile' &&
         <table className='vtfk-table vtfk-table-mobile'>
+          {
+            (mobileHeaderElement || mobileHeaderText) &&
+            <thead>
+            <tr className='vtfk-table-mobile-header-row'>
+              <td>
+                { !!mobileHeaderElement && mobileHeaderElement }
+                { !mobileHeaderElement && <div className='vtfk-table-mobile-header'>{mobileHeaderText}</div>}
+              </td>
+            </tr>
+          </thead>
+          }
+          
           <tbody>
             {
               items.map((item) => {

@@ -1,16 +1,17 @@
 .main-container {
-  padding: 4rem;
-  height: 100vh;
   width: 100vw;
-  overflow-y: auto;
+  min-height: 100%;
+  padding: 4rem 0;
+  height: 100%;
 }
 
 .app-container {
   margin: 0 auto;
   padding: 1rem 1rem;
   width: 100%;
-  max-width: 750px;
+  max-width: 800px;
   height: 100%;
+  
   background-color: #567090;
   display: flex;
   flex-direction: column;
@@ -21,8 +22,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 4rem;
   flex-wrap: wrap;
+  margin-bottom: 1rem;
 }
 
 .main-header-item {
@@ -40,7 +41,6 @@
 .main-content {
   flex: 1 0 auto;
   margin-bottom: 0.5rem;
-  padding-top: 1rem;
 }
 
 .main-content-bg {
@@ -98,6 +98,7 @@
   .main-container {
     padding: 0;
     margin-bottom: 0;
+    height: 0%;
   }
 
   .main-content {
@@ -106,7 +107,8 @@
   }
 
   .app-container {
-    width: '100%';
+    width: 100%;
+    height: 100vh;
   }
 
   .main-footer-logo {

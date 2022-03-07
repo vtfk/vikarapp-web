@@ -69,6 +69,25 @@
 /*
   Mobile
 */
+.vtfk-table-mobile {
+  border-collapse: collapse;
+  border: none;
+}
+
+
+.vtfk-table-mobile-header-row {
+  background-color: #88A6B0;
+}
+
+.vtfk-table-mobile-header {
+  color: rgb(39, 39, 39);
+  font-weight: 700;
+  font-size: 24px;
+  text-align: center;
+  border-collapse: collapse;
+  border: none;
+}
+
 .vtfk-table-mobile-item {
   display: flex;
   flex-direction: column;
@@ -87,8 +106,10 @@
 
 .vtfk-table-mobile-item-header {
   font-weight: 900;
+  font-size: 14px;
 }
 
 .vtfk-table-mobile-item-value {
   text-align: right;
+  font-size: 14px;
 }
