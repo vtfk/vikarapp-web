@@ -5,6 +5,16 @@ body {
   background-color: #DDEBE3;
 }
 
+#root {
+  height:100%;
+}
+
 h1 {
   margin: 0;
+}
+
+@media screen and (max-width: 750px) {
+  #root {
+    height:fit-content;
+  }
 }
