@@ -30,7 +30,7 @@ export default function Admin() {
       }
       {
         isConfig &&
-        <Link to="/admin/substituterelationships" className='admin-action-button'>
+        <Link to="/admin/schools" className='admin-action-button'>
           <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer', textDecoration: 'none'}}>Behandle søkerettigheter</Button>
         </Link>
       }

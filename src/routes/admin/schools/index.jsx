@@ -100,7 +100,7 @@ export default function SubstituteRelationships() {
       <Table headers={headers} items={tableItems} showSelect={false} headerStyle={{textAlign: 'left'}} itemStyle={{textAlign: 'left'}} isLoading={isLoading} mobileHeaderText="Skoler"/>
       {
         editedItem && 
-        <Dialog isOpen={editedItem !== undefined} onDismiss={() => setEditedItem(undefined)} persistent>
+        <Dialog isOpen={editedItem !== undefined} onDismiss={() => setEditedItem(undefined)}>
           <DialogTitle>{editedItem._id ? 'Rediger skole' : 'Legg til skole'}</DialogTitle>
           <DialogBody>
             { editedItem._id ? <div>Her endrer du hvilke skoler lærere på <b>{editedItem.name}</b> kan være vikar for.</div> : <div>Her oppretter du en ny skole</div>}
