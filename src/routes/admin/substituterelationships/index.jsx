@@ -105,7 +105,7 @@ export default function SubstituteRelationships() {
           <DialogBody>
             { editedItem._id ? <div>Her endrer du hvilke skoler lærere på <b>{editedItem.name}</b> kan være vikar for.</div> : <div>Her oppretter du en ny skole</div>}
             <div>Navnet på skolen må være navnet som skolen har i <b>officeLocation</b> i Active Directory</div>
-            <TextField placeholder="Navn på skole" rounded style={{marginTop: '1rem'}} onChange={(e) => setEditedItem({...editedItem, name: e.target.value})} />
+            <TextField value={editedItem.name} placeholder="Navn på skole" rounded style={{marginTop: '1rem'}} onChange={(e) => setEditedItem({...editedItem, name: e.target.value})} />
             <div style={{marginTop: '1rem', marginBottom: '0.2rem'}}>Lærer skal kunne vikariere for disse skolene:</div>
             <div style={{height: '275px', maxHeight: '275px', overflowY: 'auto'}}>
             <div>

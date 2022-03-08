@@ -15,7 +15,7 @@ export default function Admin() {
   if(roles?.includes('App.Config') || isDev()) isConfig = true;
 
   return (
-    <div className='admin-container'>
+    <div className='column-group'>
       {
         isAdmin &&
         <Link to="/admin/substitute" className='admin-action-button'>
