@@ -1,5 +1,3 @@
-const redirectUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3000/handlelogin' : 'https://witty-water-0af444f03.1.azurestaticapps.net/handlelogin'
-
 const config = {
   auth: {
     loginUrl: '/loginredirect',
@@ -12,19 +10,19 @@ const config = {
     azuread: {
       client: {
         auth: {
-          clientId: 'e4ecefc1-524f-4be8-9ac7-dbd23902b533',
-          authority: 'https://login.microsoftonline.com/08f3813c-9f29-482f-9aec-16ef7cbf477a',
-          redirectUri: redirectUrl,
+          clientId: process.env.REACT_APP_auth_azuread_client_auth_clientId,
+          authority: process.env.REACT_APP_auth_azuread_client_auth_authority,
+          redirectUri: process.env.NODE_ENV === 'development' ? 'http://localhost:3000/handlelogin' : process.env.REACT_APP_auth_azuread_client_auth_navigateToLoginRequestUrl,
           navigateToLoginRequestUrl: false,
-          postLogoutRedirectUri: 'https://www.vtfk.no/'
+          postLogoutRedirectUri: process.env.REACT_APP_auth_azuread_client_auth_navigateToLoginRequestUrl
         },
         cache: {
-          cacheLocation: 'localStorage',
+          cacheLocation: process.env.REACT_APP_auth_azuread_client_cache_cacheLocation,
           storeAuthStateInCookie: false
         }
       },
       login: {
-        scopes: ['e4ecefc1-524f-4be8-9ac7-dbd23902b533/.default']
+        scopes: [process.env.REACT_APP_auth_azuread_login_scopes]
       }
     }
   },

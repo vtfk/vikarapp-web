@@ -4,6 +4,7 @@ import './index.css';
 import App from './App.js';
 import * as microsoftTeams from '@microsoft/teams-js';
 import { BaseStyle } from '@vtfk/components'
+import config from '../src/config'
 
 async function main() {
   /*
@@ -14,6 +15,10 @@ async function main() {
     const { worker } = require('./mocks/browser')
     await worker.start()
   }
+
+  console.log('Config', config)
+  console.log('Environment', process.env)
+
   // Teams client
   microsoftTeams.initialize();
   microsoftTeams.authentication.initialize();
