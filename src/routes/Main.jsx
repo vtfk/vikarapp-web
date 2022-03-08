@@ -20,8 +20,8 @@ import Debug from './Debug'
 
 export default function Main() {
   return (
-    <main className='main-container'>
-      <div className='app-container'>
+    <main className='app-container'>
+      <div className='main-container'>
         <div className='main-header'>
           <Header />
         </div>
