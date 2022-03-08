@@ -21,7 +21,7 @@ jobs:
           REACT_APP_auth_azuread_client_auth_redirectUri: ${{ secrets.TEST_REACT_APP_auth_azuread_client_auth_redirectUri }}
           REACT_APP_auth_azuread_client_auth_postLogoutRedirectUri: ${{ secrets.TEST_REACT_APP_auth_azuread_client_auth_postLogoutRedirectUri }}
           REACT_APP_auth_azuread_login_scopes: ${{ secrets.TEST_REACT_APP_auth_azuread_login_scopes }}
-          REACT_APP_VTFK_VIKARAPI_BASEURL: ${{ secrets.REACT_APP_VTFK_VIKARAPI_BASEURL }}
+          REACT_APP_VTFK_VIKARAPI_BASEURL: ${{ secrets.TEST_REACT_APP_VTFK_VIKARAPI_BASEURL }}
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_WITTY_WATER_0AF444F03 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
