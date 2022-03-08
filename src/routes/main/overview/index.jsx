@@ -2,7 +2,7 @@ import './style.css'
 import Table from '../../../components/Table'
 import { Button, Dialog, DialogTitle, DialogBody, DialogActions} from '@vtfk/components'
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import useSubstitutions from '../../../hooks/useSubstitutions'
 import { getValidToken } from '../../../auth'
 
@@ -12,6 +12,7 @@ export default function MainOverview() {
   const [selectedItems, setSelectedItems] = useState([])
   const [isShowRenewalDialog, setIsShowRenewalDialog] = useState(false);
   const { state:substitutions, post:postSubstitutions, get, isLoading } = useSubstitutions()
+  const navigate = useNavigate()
 
   // Table headers
   const headers = [
@@ -148,7 +149,7 @@ export default function MainOverview() {
           <Button>Jeg skal være vikar</Button>
         </Link>
         <Button disabled={selectedIds.length === 0} onClick={() => selectedItems.length > 0 && setIsShowRenewalDialog(true)}>Forleng vikariat</Button>
-        <Button>Historikk</Button>
+        <Button onClick={() => navigate('/history')}>Historikk</Button>
       </div>
       <Dialog isOpen={isShowRenewalDialog} onDismiss={() => setIsShowRenewalDialog(false)}>
         <DialogTitle>Fornye vikariat?</DialogTitle>

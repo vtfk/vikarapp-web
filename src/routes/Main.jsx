@@ -13,12 +13,13 @@ import * as auth from '../auth'
 /*
   Import nested routes
 */
-import Substitute from './main/substitute';
 import Overview from './main/overview/'
+import Substitute from './main/substitute';
+import History from './main/history'
 import Admin from './admin'
 import SubstituteAdmin from './admin/substitute';
 import SubstituteRelationships from './admin/substituterelationships';
-import History from './admin/history'
+
 import Debug from './Debug'
 
 export default function Main() {
@@ -39,7 +40,7 @@ export default function Main() {
     <main className='main-container'>
       <div className='app-container'>
         <div className='main-header'>
-          <div className='main-header-item'>
+          <div className='main-header-item main-header-item-1'>
             {
               location && location.pathname !== '/' &&
               <Link to="/">
@@ -47,12 +48,12 @@ export default function Main() {
               </Link>
             }
           </div>
-          <div className='main-header-item'>
+          <div className='main-header-item main-header-item-2'>
             <Link to="/">
-              <h1 className='main-title' style={{margin: 0, fontSize: '3rem'}}>VikarApp</h1>
+              <h1 className='main-header-title' style={{margin: 0, fontSize: '3rem'}}>VikarApp</h1>
             </Link>
           </div>
-          <div className='main-header-item'> 
+          <div className='main-header-item main-header-item-3'> 
             {
               isAdmin && 
               <Link to="/admin">
@@ -63,8 +64,9 @@ export default function Main() {
         </div>
         <div className='main-content'>
           <Routes>
-            <Route path="substitute" element={<Substitute />} />
             <Route path="/" element={<Overview />} />
+            <Route path="/substitute" element={<Substitute />} />
+            <Route path="/history" element={<History />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/admin/substitute" element={<SubstituteAdmin />} />
             <Route path="/admin/substituterelationships" element={<SubstituteRelationships />} />

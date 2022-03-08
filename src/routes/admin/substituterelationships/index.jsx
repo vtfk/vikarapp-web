@@ -120,7 +120,7 @@ export default function SubstituteRelationships() {
                 schools && schools.length > 0 &&
                 schools.filter((s) => s._id !== editedItem._id).map((s) => {
                   return (
-                    <div key={s.value}>
+                    <div key={s.name}>
                       <Checkbox checked={editedItem.permittedSchools.includes(s._id)} label={s.name} onChange={() => {onSchoolCheck(s._id)}} />
                     </div>
                   )
