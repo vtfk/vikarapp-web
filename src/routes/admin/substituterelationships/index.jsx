@@ -97,7 +97,7 @@ export default function SubstituteRelationships() {
     <div className='column-group'>
       <div style={{color: 'white', textAlign: 'center'}}>Her setter du opp hvilke skoler som for lov til å være vikar for hverandre</div>
       <Button style={{marginLeft: 'auto'}} onClick={() => onEditItem({name: '', permittedSchools: []})} size="small">Legg til ny skole</Button>
-      <Table headers={headers} items={tableItems} showSelect={false} headerStyle={{textAlign: 'left'}} itemStyle={{textAlign: 'left'}} isLoading={isLoading}/>
+      <Table headers={headers} items={tableItems} showSelect={false} headerStyle={{textAlign: 'left'}} itemStyle={{textAlign: 'left'}} isLoading={isLoading} mobileHeaderText="Skoler"/>
       {
         editedItem && 
         <Dialog isOpen={editedItem !== undefined} onDismiss={() => setEditedItem(undefined)} persistent>
