@@ -1,4 +1,5 @@
 import { SearchField } from "@vtfk/components";
+import { useState } from "react";
 import useTeachers from "../../hooks/useTeachers";
 
 // Item mapping for the search results
@@ -9,10 +10,23 @@ const itemMapping = [
 ]
 
 export default function PersonSearchField({placeholder, onSelected, returnSelf, style}) {
-  const { state:teachers , search, isLoading} = useTeachers()
+  const [isLoading, setIsLoading] = useState(false)
+  const [items, setItems] = useState([])
+  const {search} = useTeachers()
 
   async function onChange(value) {
-    if(!value) onSelectedTeacher(undefined)
+    if(!value) {
+      onSelectedTeacher(undefined)
+      setIsLoading(false)
+    } else {
+      setIsLoading(true)
+    }
+  }
+
+  async function onSearch(term) {
+    const items = await search(term, returnSelf);
+    setItems(items)
+    setIsLoading(false)
   }
 
   async function onSelectedTeacher(item) {
@@ -22,11 +36,11 @@ export default function PersonSearchField({placeholder, onSelected, returnSelf, 
   return (
     <SearchField
       loading={isLoading}
-      items={teachers}
+      items={items}
       itemMapping={itemMapping}
       placeholder={placeholder}
       onChange={(e) => onChange(e?.target?.value)}
-      onSearch={(e) => search(e?.target?.value, returnSelf)}
+      onSearch={(e) => onSearch(e.target.value)}
       onSelected={(e) => onSelectedTeacher(e)}
       debounceMs={250}
       rounded

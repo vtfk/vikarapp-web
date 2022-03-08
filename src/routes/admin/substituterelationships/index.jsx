@@ -1,12 +1,11 @@
-import { Button, Checkbox, Dialog, DialogActions, DialogBody, DialogTitle } from "@vtfk/components";
+import { Button, Checkbox, Dialog, DialogActions, DialogBody, DialogTitle, TextField } from "@vtfk/components";
 import { useEffect, useMemo, useState } from "react";
 import Table from "../../../components/Table";
 import useSchools from "../../../hooks/useSchools"
 
 export default function SubstituteRelationships() {
   const [editedItem, setEditedItem] = useState(undefined);
-
-  const { state:schools, get, put, isLoading } = useSchools();
+  const { state:schools, get, put, post, isLoading } = useSchools();
   
 
   const headers = [
@@ -84,25 +83,31 @@ export default function SubstituteRelationships() {
   }
 
   async function saveChange() {
-    if(!editedItem._id) return;
+    if(!editedItem) return;
 
-    await put(editedItem)
-    await get();
-
-    setEditedItem(undefined)
+    try {
+      if(editedItem._id) await put(editedItem)
+      else await await post(editedItem)
+      await get();
+      setEditedItem(undefined)
+    } catch {}
   }
 
   return (
     <div className='column-group'>
-      <div style={{color: 'white'}}>Her setter du opp hvilke skoler som for lov til å være vikar for hverandre</div>
+      <div style={{color: 'white', textAlign: 'center'}}>Her setter du opp hvilke skoler som for lov til å være vikar for hverandre</div>
+      <Button style={{marginLeft: 'auto'}} onClick={() => onEditItem({name: '', permittedSchools: []})} size="small">Legg til ny skole</Button>
       <Table headers={headers} items={tableItems} showSelect={false} headerStyle={{textAlign: 'left'}} itemStyle={{textAlign: 'left'}} isLoading={isLoading}/>
       {
         editedItem && 
         <Dialog isOpen={editedItem !== undefined} onDismiss={() => setEditedItem(undefined)} persistent>
-          <DialogTitle>Endre forhold</DialogTitle>
+          <DialogTitle>{editedItem._id ? 'Rediger skole' : 'Legg til skole'}</DialogTitle>
           <DialogBody>
-            <div>Her endrer du hvilke skoler lærere på <b>{editedItem.school}</b> kan være vikar for.</div>
-            <div style={{height: '275px', maxHeight: '275px', marginTop: '1rem', overflowY: 'auto'}}>
+            { editedItem._id ? <div>Her endrer du hvilke skoler lærere på <b>{editedItem.name}</b> kan være vikar for.</div> : <div>Her oppretter du en ny skole</div>}
+            <div>Navnet på skolen må være navnet som skolen har i <b>officeLocation</b> i Active Directory</div>
+            <TextField placeholder="Navn på skole" rounded style={{marginTop: '1rem'}} onChange={(e) => setEditedItem({...editedItem, name: e.target.value})} />
+            <div style={{marginTop: '1rem', marginBottom: '0.2rem'}}>Lærer skal kunne vikariere for disse skolene:</div>
+            <div style={{height: '275px', maxHeight: '275px', overflowY: 'auto'}}>
             <div>
               <Checkbox
                 label="Alle"

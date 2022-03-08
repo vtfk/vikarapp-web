@@ -40,10 +40,10 @@ export default function useSchools() {
 
     const { bearerToken} = await login({ type: 'popup' })
 
-    delete item.elements;
+    delete item._elements;
 
     const request = {
-      url: `${config.vikarAPIBaseurl}substituterelationships/${item._id}`,
+      url: `${config.vikarAPIBaseurl}schools/${item._id}`,
       method: 'PUT',
       headers: {
         Authorization: bearerToken
@@ -56,8 +56,39 @@ export default function useSchools() {
       await axios.request(request);
     } catch (err) {
       addError(err)
+      throw err;
     }
   }
 
-  return { state, setState, get, put, isLoading }
+  async function post(school) {
+    try {
+      // Validation
+      if(!school) throw new Error('Kan ikke opprette en ny skole når school er tom')
+      if(!school.name) throw new Error(`Kan ikke opprette ny skole når 'name' er tomt`)
+
+      // Ensure valid token
+      const { bearerToken} = await login({ type: 'popup' })
+
+      // Prepare the request
+      const request = {
+        url: `${config.vikarAPIBaseurl}schools`,
+        method: 'POST',
+        headers: {
+          Authorization: bearerToken
+        },
+        data: school
+      }
+
+      // Make the request
+      const { data } = await axios.request(request);
+
+      // Return the data
+      return data
+    } catch (err) {
+      addError(err)
+      throw err;
+    }
+  }
+
+  return { state, setState, get, post, put, isLoading }
 }
