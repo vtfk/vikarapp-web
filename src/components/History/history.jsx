@@ -28,6 +28,8 @@ export default function History() {
   const [ selectedSubstitute, setSelectedSubstitute ] = useState()
   const [ selectedTeacher, setSelectedTeacher ] = useState()
 
+  const isAdmin = ['development', 'test'].includes(process.env.NODE_ENV) || getValidToken()?.roles?.includes('App.Admin')
+
   useEffect(() => {
     async function load() {
       await getSubstitutions()
@@ -68,7 +70,7 @@ export default function History() {
     <div className="column-group">
       <h2 style={{margin: '0', color: '#FFBF00'}}>Filtrering</h2>
       <div className="history-input-group">
-        { getValidToken()?.roles?.includes('App.Admin') &&
+        { isAdmin &&
           <PersonSearchField
             placeholder="Vikar"
             returnSelf

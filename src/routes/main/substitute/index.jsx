@@ -90,9 +90,9 @@ export default function Substitute () {
       }
       {
       <div className='main-footer-button-group'>
-        <Button size="small" disabled={selectedTeams.length === 0} onClick={() => activateSubstitution()}>Ok</Button>
+        <Button disabled={selectedTeams.length === 0} onClick={() => activateSubstitution()}>Ok</Button>
         <Link to="/">
-          <Button size="small">Avbryt</Button>
+          <Button>Avbryt</Button>
         </Link>
       </div>
       }

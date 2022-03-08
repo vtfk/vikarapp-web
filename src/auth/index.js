@@ -51,8 +51,27 @@ export function getValidToken(options = config.auth || {}) {
  * @param {Object} options 
  * @returns {Boolean}
  */
- export function isAuthenticated(options = config.auth || {}) {
+export function isAuthenticated(options = config.auth || {}) {
   if(getValidToken(options)) return true;
+  return false;
+}
+
+/**
+ * Checks if the logged in user has one or more roles
+ * Will return true if any of the roles match
+ * @param {String || [String]} roles 
+ */
+export function hasRole(roles) {
+  if(!roles) return false;
+  if(!Array.isArray(roles)) roles = [roles]
+
+  const token = getValidToken();
+  if(!token || !token.roles || !Array.isArray(token.roles) || token.roles.length === 0) return false;
+
+  for(const role of roles) {
+    if(typeof role !== 'string') continue;
+    if(token.roles.includes(role)) return true;
+  }
   return false;
 }
 
