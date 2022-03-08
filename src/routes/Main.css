@@ -20,6 +20,8 @@
 .main-content {
   flex: 1 0 auto;
   margin-bottom: 0.5rem;
+  display: flex;
+  align-items: stretch;
 }
 
 .main-content-bg {
@@ -75,8 +77,6 @@
   .main-content {
     margin: 0;
     width: 100%;
-    display: flex;
-    align-items: stretch;
   }
 
   .main-container {

@@ -70,7 +70,7 @@ export default function Substitute () {
   }
 
   return (
-    <div style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
+    <div style={{width: '100%', display: 'flex', flexDirection: 'column'}}>
       <PersonSearchField 
         placeholder="Søk etter læreren du skal være vikar for"
         onSelected={(e) => { setSelectedTeacher(e); searchTeacherTeams(e?.userPrincipalName) }}

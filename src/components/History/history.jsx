@@ -1,30 +1,10 @@
 import { useEffect, useMemo, useState } from "react"
 import PersonSearchField from "../PersonSearchField"
 import Select from "../Select"
-import Table from "../Table"
 import useSubstitutions from "../../hooks/useSubstitutions"
 import { getValidToken } from "../../auth"
 import './style.css'
-
-
-const tableHeaders = [
-  {
-    label: 'Vikar',
-    value: 'substituteName'
-  },
-  {
-    label: 'Lærer',
-    value: 'teacherName'
-  },
-  {
-    label: 'Status',
-    value: 'status'
-  },
-  {
-    label: 'Utløpsdato',
-    value: 'expirationTimestamp'
-  }
-]
+import SubstitutionTable from "../SubstitutionTable/SubstitutionTable"
 
 const allStatuses = [
   {
@@ -117,8 +97,7 @@ export default function History() {
         />
       </div>
       <h2 style={{margin: '0', color: '#FFBF00'}}>Vikariat</h2>
-      <Table
-        headers={tableHeaders}
+      <SubstitutionTable
         items={filteredSubstitutions}
       />
     </div>
