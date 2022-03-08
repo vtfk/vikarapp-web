@@ -1,5 +1,6 @@
 name: 'Test: Azure Static Web App deployment'
 on:
+  workflow_dispatch:
   push:
     branches:
       - test
