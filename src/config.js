@@ -12,12 +12,12 @@ const config = {
         auth: {
           clientId: process.env.REACT_APP_auth_azuread_client_auth_clientId,
           authority: process.env.REACT_APP_auth_azuread_client_auth_authority,
-          redirectUri: process.env.NODE_ENV === 'development' ? 'http://localhost:3000/handlelogin' : process.env.REACT_APP_auth_azuread_client_auth_navigateToLoginRequestUrl,
+          redirectUri: process.env.NODE_ENV === 'development' ? 'http://localhost:3000/handlelogin' : process.env.REACT_APP_auth_azuread_client_auth_redirectUri,
           navigateToLoginRequestUrl: false,
-          postLogoutRedirectUri: process.env.REACT_APP_auth_azuread_client_auth_navigateToLoginRequestUrl
+          postLogoutRedirectUri: process.env.REACT_APP_auth_azuread_client_auth_postLogoutRedirectUri
         },
         cache: {
-          cacheLocation: process.env.REACT_APP_auth_azuread_client_cache_cacheLocation,
+          cacheLocation: process.env.REACT_APP_auth_azuread_client_cache_cacheLocation || 'localStorage',
           storeAuthStateInCookie: false
         }
       },
