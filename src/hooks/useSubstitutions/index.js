@@ -60,37 +60,34 @@ export default function useSubstitutions() {
    * @param {String} substitutions.teacherUpn
    * @param {String} substitutions.teamIds
    */
-  async function post(substituteUpn, substitutions) {
-    // Input validation
-    if(!substituteUpn) throw new Error('Vikariat kan ikke registreres, substituteteacherUpn mangler');
-    if(!substitutions) throw new Error('Vikariat kan ikke registreres, teamdId mangler');
-    if(!Array.isArray(substitutions)) throw new Error('substitutions må være av type array');
-    substitutions.forEach((sub) => {
-      if(!sub.teacherUpn) throw new Error('teacherUpn kan ikke være tomt');
-      if(!sub.teamId) throw new Error(`teamId kan ikke være tomt`)
-    })
-
-    const { bearerToken} = await login({ type: 'popup' })
-
-    // Create the request
-    const request = {
-      url: `${config.vikarAPIBaseurl}substitutions`,
-      method: 'POST',
-      headers: {
-        Authorization: bearerToken
-      },
-      data: {
-        substituteUpn,
-        substitutions
-      }
-    }
-
-    // Make the request
+  async function post(substitutions) {
     try {
+      // Input validation
+      if(!substitutions || !Array.isArray(substitutions) || substitutions.length === 0) throw new Error('Vikariat kan ikke være tomt');
+      for(const substitution of substitutions) {
+        if(!substitution.substituteUpn) throw new Error(`Kan ikke fornye vikariat fordi substituteUpn mangler`)
+        if(!substitution.teacherUpn) throw new Error(`Kan ikke fornye vikariat fordi teacherUpn mangler`)
+        if(!substitution.teamId) throw new Error(`Kan ikke fornye vikariat for fordi teamId mangler`)
+      }
+
+      const { bearerToken} = await login({ type: 'popup' })
+
+      // Create the request
+      const request = {
+        url: `${config.vikarAPIBaseurl}substitutions`,
+        method: 'POST',
+        headers: {
+          Authorization: bearerToken
+        },
+        data: substitutions
+      }
+
+      // Make the request
       const { data } = await axios.request(request);
       return data;
     } catch (err) {
       addError(err)
+      throw err;
     }
   }
 

@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import useTeacherTeams from '../../../hooks/useTeacherTeams';
 import useSubstitutions from '../../../hooks/useSubstitutions';
-import { getValidToken } from '../../../auth'
+import { login } from '../../../auth'
 import PersonSearchField from '../../../components/PersonSearchField';
 
 export default function Substitute () {
@@ -43,21 +43,25 @@ export default function Substitute () {
       alert('Du må velge velge en eller flere klasse å vikariere for');
       return;
     }
+
     // Verify that the request should be made
     let message = `Ønsker du å vikarere for lærer ${selectedTeacher.displayName}?\n\n`
     message += 'Klasser:\n'
     selectedTeams.map((t) => message += `${t.displayName}\n`)
     if(!window.confirm(message)) return;
 
+    const token = await login({ type: 'popup'} )
+
     const substitutions = selectedTeams.map((i) => {
       return {
+        substituteUpn: token.username,
         teacherUpn: selectedTeacher.userPrincipalName,
         teamId: i.id
       }
     })
 
     // Make the request
-    const data = await postSubstitutions(getValidToken().username, substitutions)
+    const data = await postSubstitutions(substitutions)
 
     // Route back to the front page
     if(data) {

@@ -11,7 +11,7 @@ export default function MainOverview() {
   const [selectedIds, setSelectedIds] = useState([])
   const [selectedItems, setSelectedItems] = useState([])
   const [isShowRenewalDialog, setIsShowRenewalDialog] = useState(false);
-  const { state:substitutions, get, isLoading } = useSubstitutions()
+  const { state:substitutions, post:postSubstitutions, get, isLoading } = useSubstitutions()
 
   // Table headers
   const headers = [
@@ -109,17 +109,24 @@ export default function MainOverview() {
     // Input validation
     if(!selectedItems || selectedItems.length === 0) return;
 
-    // window.alert('TODO: Implementere fornying');
-
+    // Make an array of each request
+    const request = []
     for(const substitution of selectedItems) {
-
-      console.log('Fornyer:', substitution)
+      request.push({
+        substituteUpn: substitution.substituteUpn,
+        teacherUpn: substitution.teacherUpn,
+        teamId: substitution.teamId
+      })
     }
 
+    try {
+      await postSubstitutions(request)
+      setSelectedIds([]);
+      setSelectedItems([]);
+      await get(getValidToken().username)
+    } catch {}
     
     setIsShowRenewalDialog(false)
-    setSelectedIds([]);
-    setSelectedItems([]);
   }
 
   return (

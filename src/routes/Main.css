@@ -104,6 +104,7 @@
     padding: 0;
     margin-bottom: 0;
     background-color: #567090;
+    min-height: 100vh;
   }
 
   .main-content {
@@ -113,6 +114,7 @@
 
   .app-container {
     width: 100%;
+    min-height: 100vh;
   }
 
   .main-footer-button-group {

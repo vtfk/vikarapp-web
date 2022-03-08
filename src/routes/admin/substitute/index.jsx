@@ -1,15 +1,14 @@
-import { Button, SearchField } from "@vtfk/components";
+import { Button } from "@vtfk/components";
 import { useMemo, useState } from "react";
-import useTeachers from "../../../hooks/useTeachers";
 import useTeacherTeams from "../../../hooks/useTeacherTeams"
 import Table from '../../../components/Table'
 import useSubstitutions from "../../../hooks/useSubstitutions";
+import PersonSearchField from "../../../components/PersonSearchField";
 
 export default function SubstituteRelationships() {
   /*
     Hooks
   */
-  const { search } = useTeachers()
   const { search: searchTeams, isLoadingTeams } = useTeacherTeams();
   const { post:postSubstitutions } = useSubstitutions()
 
@@ -17,23 +16,14 @@ export default function SubstituteRelationships() {
     State
   */
   // Substitute
-  const [ isLoadingSubstitutes, setIsLoadingSubstitutes] = useState(false)
-  const [ availableSubstitutes, setAvailableSubstitutes] = useState([])
   const [ selectedSubstitute, setSelectedSubstitute] = useState()
 
   // Teacher
-  const [ isLoadingTeachers, setIsLoadingTeachers ] = useState(false)
   const [ selectedTeacher, setSelectedTeacher ] = useState()
-  const [ availableTeachers, setAvailableTeachers] = useState([])
   const [ availableTeams, setAvailableTeams] = useState([])
   const [ selectedTeamIds, setSelectedTeamIds] = useState([])
 
-  const itemMapping = [
-    { value: 'displayName' },
-    { value: 'jobTitle' },
-    { value: 'officeLocation'}
-  ]
-
+  // Headers for the table
   const tableHeaders = [
     { label: 'Team / Klasse', value: 'displayName' }
   ]
@@ -51,49 +41,14 @@ export default function SubstituteRelationships() {
   }, [selectedTeacher, selectedSubstitute, availableTeams, selectedTeamIds])
 
   /*
-    Substitute functions
-  */
-  async function onSubstituteSearchChanges(e) {
-    if(!e) {
-      setSelectedSubstitute(undefined)
-      return
-    }
-    setIsLoadingSubstitutes(true)
-  }
-
-  async function searchForSubstitute(term) {
-    let result = await search(term)
-    if(selectedTeacher && result && result.length > 0) {
-      result = result.filter((i) => i.id !== selectedTeacher.id)
-    }
-    setAvailableSubstitutes(result)
-    setIsLoadingSubstitutes(false)
-  }
-
-  /*
     Functions
   */
-  async function onTeacherSearchChanged(e) {
-    if(e === '') {
-      setSelectedSubstitute(undefined)
-      setAvailableTeams([])
-      return
-    }
-    
-    setIsLoadingTeachers(true)
-  }
-
-  async function searchForTeacher(term) {
-    let result = await search(term)
-    if(selectedSubstitute && result && result.length > 0) {
-      result = result.filter((i) => i.id !== selectedSubstitute.id)
-    }
-    setAvailableTeachers(result)
-    setIsLoadingTeachers(false)
-  }
-
   async function onSelectedTeacher(e) {
     setSelectedTeacher(e)
+    if(!e) {
+      setAvailableTeams([])
+      return;
+    }
 
     // Search for teams
     const teams = await searchTeams(e.userPrincipalName)
@@ -109,19 +64,31 @@ export default function SubstituteRelationships() {
 
     const substitutions = selectedTeamIds.map((i) => {
       return {
+        substituteUpn: selectedSubstitute.userPrincipalName,
         teacherUpn: selectedTeacher.userPrincipalName,
         teamId: i,
       }
     })
-
-    postSubstitutions(selectedSubstitute.userPrincipalName, substitutions)
-
+    
+    try {
+      postSubstitutions(substitutions)
+    } catch {}
   }
 
   return (
     <div className="column-group" style={{height: '100%'}}>
       <h2 style={{margin: '0', color: '#FFBF00'}}>Vikar:</h2>
-      <SearchField
+      <PersonSearchField
+        placeholder="Hvem skal være vikar?"
+        onSelected={(e) => setSelectedSubstitute(e)}
+        returnSelf
+      />
+      <PersonSearchField
+        placeholder="For hvilken lærer?"
+        onSelected={(e) => onSelectedTeacher(e)}
+        returnSelf
+      />
+      {/* <SearchField
         items={availableSubstitutes}
         itemMapping={itemMapping}
         placeholder="Hvem skal være vikar?"
@@ -143,7 +110,7 @@ export default function SubstituteRelationships() {
         onSelected={(e) => { onSelectedTeacher(e) }}
         debounceMs={250}
         rounded
-      />
+      /> */}
       <Table
         itemId="id"
         headers={tableHeaders}
