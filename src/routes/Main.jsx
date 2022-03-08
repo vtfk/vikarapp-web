@@ -1,14 +1,10 @@
 import './Main.css'
 import logo from '../images/vtfk-logo.svg'
-// import gear from '../images/gear.svg'
-import { IconButton } from '@vtfk/components'
 import {
   Routes,
   Route,
-  Link,
-  useLocation
 } from "react-router-dom";
-import * as auth from '../auth'
+import Header from '../components/Header/Header';
 
 /*
   Import nested routes
@@ -23,44 +19,11 @@ import SubstituteRelationships from './admin/substituterelationships';
 import Debug from './Debug'
 
 export default function Main() {
-  const location = useLocation();
-
-  const adminRoles = ['App.Admin', 'App.Config'];
-  const userRoles = auth.getValidToken()?.roles;
-
-  let isAdmin = false;
-  userRoles.forEach((userRole) => {
-    if(adminRoles.includes(userRole)) {
-      isAdmin = true;
-      return;
-    }
-  })
-
   return (
     <main className='main-container'>
       <div className='app-container'>
         <div className='main-header'>
-          <div className='main-header-item main-header-item-1'>
-            {
-              location && location.pathname !== '/' &&
-              <Link to="/">
-                <IconButton icon="home"/>
-              </Link>
-            }
-          </div>
-          <div className='main-header-item main-header-item-2'>
-            <Link to="/">
-              <h1 className='main-header-title' style={{margin: 0, fontSize: '3rem'}}>VikarApp</h1>
-            </Link>
-          </div>
-          <div className='main-header-item main-header-item-3'> 
-            {
-              isAdmin && 
-              <Link to="/admin">
-                <IconButton icon="activity" />
-              </Link>
-            }
-          </div>
+          <Header />
         </div>
         <div className='main-content'>
           <Routes>

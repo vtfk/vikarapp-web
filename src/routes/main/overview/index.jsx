@@ -2,7 +2,7 @@ import './style.css'
 import Table from '../../../components/Table'
 import { Button, Dialog, DialogTitle, DialogBody, DialogActions} from '@vtfk/components'
 import { useEffect, useMemo, useState } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import useSubstitutions from '../../../hooks/useSubstitutions'
 import { getValidToken } from '../../../auth'
 

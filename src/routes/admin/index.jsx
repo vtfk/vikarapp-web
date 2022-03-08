@@ -3,12 +3,16 @@ import { Link } from 'react-router-dom'
 import './style.css'
 import { getValidToken } from '../../auth'
 
+function isDev() {
+  return ['development', 'test'].includes(process.env.NODE_ENV)
+}
+
 export default function Admin() {
   const roles = getValidToken()?.roles;
-  let isAdmin = true;
+  let isAdmin = false;
   let isConfig = false;
-  if(roles?.includes('App.Admin')) isAdmin = true;
-  if(roles?.includes('App.Config')) isConfig = true;
+  if(roles?.includes('App.Admin') || isDev()) isAdmin = true;
+  if(roles?.includes('App.Config') || isDev()) isConfig = true;
 
   return (
     <div className='admin-container'>
