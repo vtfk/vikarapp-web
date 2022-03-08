@@ -26,7 +26,7 @@ const config = {
       }
     }
   },
-  vikarAPIBaseurl: process.env.VTFK_VIKARAPI_BASEURL || 'http://localhost:7070/api/'
+  vikarAPIBaseurl: process.env.REACT_APP_VTFK_VIKARAPI_BASEURL || 'http://localhost:7070/api/'
 }
 
 module.exports = config;
