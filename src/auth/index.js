@@ -3,7 +3,8 @@
 */
 import * as microsoftTeams from '@microsoft/teams-js';
 import { isFromTeams, getTeamsContext } from './lib/helpers';
-const config = require('../config');
+import merge from 'lodash.merge';
+import config from './config';
 const providers = require('./providers/_providers');
 const providerHelpers = require('./providers/_helpers');
 
@@ -18,7 +19,7 @@ const tokenName = 'auth_token';
  * Returns the current valid token if existing
  * @param {Object} options
  */
-export function getValidToken(options = config.auth || {}) {
+export function getValidToken(options = config.common || {}) {
   // Retreive the token from storage
   const rawToken = options.storage === 'local' ? localStorage.getItem(tokenName) : sessionStorage.getItem(tokenName);
   if(!rawToken) return;
@@ -51,7 +52,7 @@ export function getValidToken(options = config.auth || {}) {
  * @param {Object} options 
  * @returns {Boolean}
  */
-export function isAuthenticated(options = config.auth || {}) {
+export function isAuthenticated(options = config.common || {}) {
   if(getValidToken(options)) return true;
   return false;
 }
@@ -84,7 +85,7 @@ export function hasRole(roles) {
 function saveToken(token, options = {}) {
   // Apply default values to the options
   if(!options) options = {};
-  options = Object.assign(config.auth, options);
+  options = Object.assign(config.common, options);
   
   // Parse and prepare the token
   const formattedToken = {
@@ -105,8 +106,8 @@ function saveToken(token, options = {}) {
   return formattedToken;
 }
 
-function getProvider(options) {
-  const providerName = options?.provider || config.auth.provider || 'azuread';
+function getProvider(options = {}) {
+  const providerName = options?.provider || config.common.provider || 'azuread';
   const provider = providers[providerName];
   if(!provider) throw new Error('Cannot authenticate because no authentication provider was found');
   if(!provider.name) throw new Error('Authentication provider cannot be used because it has no name implemented');
@@ -115,9 +116,9 @@ function getProvider(options) {
 
 function getProviderConfiguration(providerName, clientOptions, loginOptions) {
   let providerClientOptions = providerHelpers.getProviderClientConfig(providerName) || {};
-  providerClientOptions = Object.assign(providerClientOptions, config.auth.clientOptions || {}, clientOptions || {})
+  merge(providerClientOptions, providerClientOptions, config.common?.client || {} || clientOptions || {})
   let providerLoginOptions = providerHelpers.getProviderLoginConfig(providerName) || {};
-  providerLoginOptions = Object.assign(providerLoginOptions, config.auth.loginOptions || {}, loginOptions || {});
+  merge(providerLoginOptions, providerLoginOptions, config.common?.login || {} || loginOptions || {})
 
   return { providerClientOptions, providerLoginOptions}
 }
@@ -138,15 +139,14 @@ export async function login(options = {}) {
     // If is from teams, attempt to retreive a loginHint
     if(isFromTeams()) {
       const teamsContext = await getTeamsContext(microsoftTeams);
-      if(teamsContext) config.auth.loginOptions.loginHint = teamsContext.loginHint || teamsContext.upn || teamsContext.userPrincipalName
+      if(teamsContext) config.common.loginOptions.loginHint = teamsContext.loginHint || teamsContext.upn || teamsContext.userPrincipalName
     }
 
     /*
       Get what authentication provider to use and retreive its options
     */
     const provider = getProvider(options);
-    let { providerClientOptions, providerLoginOptions } = getProviderConfiguration(provider.name);
-    Object.assign(providerLoginOptions, options)
+    let { providerClientOptions, providerLoginOptions } = getProviderConfiguration(provider.name, {}, options);
 
     /*
       Initialize the provider if applicable
@@ -160,7 +160,7 @@ export async function login(options = {}) {
       if(provider.silentLogin && typeof provider.silentLogin === 'function') {
         token = await provider.silentLogin(providerClientOptions, providerLoginOptions);
         if(!token) throw new Error('Silent token retreival failed')
-        token = saveToken(token, config.auth);
+        token = saveToken(token, config.common);
         return token;
       } 
     } catch {}
@@ -171,9 +171,9 @@ export async function login(options = {}) {
       Everything here will be handled here and return early not hitting services below
       Teams auth works by creating a popup window that opens a login-route that redirects to the authprovider, then redirects back to a page that handles the response
     */
-    if(isFromTeams() && !window?.location?.href.endsWith(config.auth.loginUrl)) {
-      const url = options.loginUrl || config.auth.loginUrl || `${window.location.href}`
-      if(!url) throw new Error('Authentication not possible because config.auth.loginUrl is not set');
+    if(isFromTeams() && !window?.location?.href.endsWith(config.common.loginUrl)) {
+      const url = options.loginUrl || config.common.loginUrl || `${window.location.href}`
+      if(!url) throw new Error('Authentication not possible because config.common.loginUrl is not set');
       authenticationPromise = new Promise((resolve) => {
         const teamsConfig = {
           url: url,
@@ -194,7 +194,7 @@ export async function login(options = {}) {
       Save and return the token
     */
     if(!token) throw new Error('Authentication failed, no token recevied')
-    token = saveToken(token, config.auth);
+    token = saveToken(token, config.common);
     return token;
   } catch (err) {
     console.error('Authentication failed: ' + err.message);
@@ -219,7 +219,7 @@ export async function handleRedirect(options = {}) {
 
     // Save the token;
     if(token) {
-      saveToken(token, config.auth);
+      saveToken(token, config.common);
       authenticationPromise = undefined;
     }
     

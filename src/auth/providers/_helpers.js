@@ -1,7 +1,7 @@
 /*
   Import dependencies
 */
-const config = require('../../config');
+import config from '../config'
 
 /**
  * Retreives the config for a given provider
@@ -10,7 +10,6 @@ const config = require('../../config');
  */
 export function getProviderConfig(providerName) {
   if(!providerName) return undefined;
-
   if(config && config.providers && config.providers[providerName]) return config.providers[providerName]
   return undefined;
 }
