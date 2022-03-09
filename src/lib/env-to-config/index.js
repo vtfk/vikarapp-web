@@ -82,16 +82,17 @@ export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
   // Spread variables
   if(spreadPrefixes) {
     const toSpread = environmentVariables.filter((i) => spreadPrefixes.some((p) => p.startsWith(i.path)));
+    console.log('Spreading', toSpread)
     for(const spreadVar of toSpread) {
       let val = process.env[spreadVar.key];
       if(!val) continue;
       const vals = val.split(/\r?\n/)
-
-      vals.forEach((i) => {
-        if(!i.includes('=')) return;
-        const [key, value] = i.split('=');
+      console.log('Rows', vals)
+      for(const val of vals) {
+        if(!val.includes('=')) continue;
+        const [key, value] = val.split('=');
         environmentVariables.push({ key, path: key, value })
-      })
+      }
     }
   }
 
