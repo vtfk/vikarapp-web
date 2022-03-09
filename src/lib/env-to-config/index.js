@@ -1,6 +1,17 @@
+/*
+  Import dependencies
+*/
 import set from 'lodash.set';
 import merge from 'lodash.merge';
 
+/*
+  Configuration object
+*/
+let config = undefined;
+
+/*
+  Helper functions
+*/
 function typeifyVariable(variable) {
   if(!variable) return variable;
 
@@ -22,7 +33,8 @@ function typeifyVariable(variable) {
     if(variable.toLocaleLowerCase() === 'true') return true;
 
     // Dates
-    if(Date.parse(variable)) return new Date(variable)
+    const ISODateRegex = /^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])/
+    if(ISODateRegex.exec(variable)) return new Date(variable)
 
     // Arrays
     if(variable.startsWith('[') && variable.endsWith(']')) {
@@ -37,14 +49,30 @@ function typeifyVariable(variable) {
   return variable;
 }
 
+function trimAwayMatch(regex, variable) {
+  if(!regex) return variable;
+  if(typeof variable !== 'string') return variable;
+
+  const match = regex.exec(variable);
+  if(match && match[0]) variable = variable.substring(match[0].length)
+
+  return variable
+}
+
 /**
  * @param {Object} defaultConfig Object containing default configuration
  * @param {String || [String]} prefixes The prefixes of the enviroment variables to generate config from
  * @param {String || [String]} spreadPrefixes Drill down and spread environment variables stored in a environment variables
+ * @param {Boolean} force Should the function run again?
  * @returns {Object}
  */
 /* eslint-disable import/no-anonymous-default-export */
-export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
+export default function (defaultConfig = {}, prefixes, spreadPrefixes, force) {
+  /*
+    Declarations
+  */
+  if(config && !force) return config;
+
   // Input validation/normalization
   if(!process.env) return
   if(typeof defaultConfig !== 'object') defaultConfig = {}
@@ -65,13 +93,13 @@ export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
     let normalKey = key;
 
     // Strip away any system prefixes
-    const systemMatch = systemPrefixes.exec(normalKey);
-    if(systemMatch && systemMatch[0]) normalKey = normalKey.substring(systemMatch[0].length)
+    normalKey = trimAwayMatch(systemPrefixes, normalKey);
 
     // Add the normalized key to the array
     environmentVariables.push({key, path: normalKey});
   }
   console.log('Before spreading', environmentVariables);
+
   // Spread variables
   if(spreadPrefixes) {
     const toSpread = environmentVariables.filter((i) => spreadPrefixes.some((p) => p.startsWith(i.path)));
@@ -81,10 +109,10 @@ export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
       if(!val) continue;
       const rows = val.split(/\r?\n/)
       for(const row of rows) {
-        if(!row.includes('=')) continue;
+        if(!row.includes('=') || /^(\s)*#/.exec(row)) continue;
         console.log('Row ' + row)
         const [key, value] = row.split('=');
-        environmentVariables.push({ key, path: key, value })
+        environmentVariables.push({ key, path: trimAwayMatch(systemPrefixes, key), value })
       }
     }
   }
@@ -96,6 +124,7 @@ export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
   if(prefixPattern) {
     console.log('Pattern: ', prefixPattern)
     for(const envvar of environmentVariables) {
+      if(!envvar) continue;
       const match = prefixPattern.exec(envvar.path);
       if(!match || !match[0]) continue;
       envvar.path = envvar.path.substring(match[0].length).replace(/^\.*/, '')
@@ -120,11 +149,13 @@ export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
     set(environmentConfig, path, value)
   }
   console.log('Parsed environment config', environmentConfig)
+
   // Merge the default and environment config
   let mergedConfig = {};
   merge(mergedConfig, defaultConfig, environmentConfig);
 
   // Return the merged config
-  return mergedConfig;
+  config = mergedConfig;
+  return config;
 }
 
