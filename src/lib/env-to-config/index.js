@@ -33,8 +33,10 @@ function typeifyVariable(variable) {
     if(variable.toLocaleLowerCase() === 'true') return true;
 
     // Dates
-    const ISODateRegex = /^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])/
-    if(ISODateRegex.exec(variable)) return new Date(variable)
+    const ISO8601_Date = /^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])$/m
+    const ISO8601_DateTime = /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d$/m
+    const ISO8601_DateTimeMs = /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+Z$/m
+    if(ISO8601_Date.exec(variable) || ISO8601_DateTime.exec(variable) || ISO8601_DateTimeMs.exec(variable)) return new Date(variable)
 
     // Arrays
     if(variable.startsWith('[') && variable.endsWith(']')) {
