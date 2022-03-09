@@ -188,7 +188,7 @@ export async function login(options = {}) {
     /*
       Make regular auth provider request
     */
-    // if(provider.login && typeof provider.login === 'function') token = await provider.login(providerClientOptions, providerLoginOptions);
+    if(provider.login && typeof provider.login === 'function') token = await provider.login(providerClientOptions, providerLoginOptions);
 
     /*
       Save and return the token
