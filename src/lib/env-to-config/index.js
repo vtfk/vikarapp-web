@@ -78,7 +78,7 @@ export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
     // Add the normalized key to the array
     environmentVariables.push({key, path: normalKey});
   }
-
+  console.log('Before spreading', environmentVariables);
   // Spread variables
   if(spreadPrefixes) {
     const toSpread = environmentVariables.filter((i) => spreadPrefixes.some((p) => p.startsWith(i.path)));
@@ -95,6 +95,8 @@ export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
       }
     }
   }
+
+  console.log('After spreading', environmentVariables)
 
   // Parse values and create config object
   const environmentConfig = {}
