@@ -29,7 +29,7 @@ const defaultConfig = {
     }
   }
 }
-
+console.log('Getting authentication config')
 const config = envToConfig(defaultConfig, 'auth');
 console.log('Authentication config', config)
 

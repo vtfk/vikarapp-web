@@ -68,13 +68,6 @@ export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
     const systemMatch = systemPrefixes.exec(normalKey);
     if(systemMatch && systemMatch[0]) normalKey = normalKey.substring(systemMatch[0].length)
 
-    // Filter out any keys not matching the prefixes
-    if(prefixPattern) {
-      const match = prefixPattern.exec(normalKey)
-      if(!match || !match[0]) continue;
-      normalKey = normalKey.substring(match[0].length).replace(/^\.*/, '');
-    }
-
     // Add the normalized key to the array
     environmentVariables.push({key, path: normalKey});
   }
@@ -98,9 +91,24 @@ export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
 
   console.log('After spreading', environmentVariables)
 
+  // Filter out environment variables that does not match
+  const filteredEnvironmentVariables = [];
+  if(prefixPattern) {
+    console.log('Pattern: ', prefixPattern)
+    for(const envvar of environmentVariables) {
+      const match = prefixPattern.exec(envvar.path);
+      if(!match || !match[0]) continue;
+      envvar.path = envvar.path.substring(match[0].length).replace(/^\.*/, '')
+      filteredEnvironmentVariables.push(envvar);
+    }
+    console.log('FILTERED!', filteredEnvironmentVariables)
+  }
+  environmentVariables = filteredEnvironmentVariables;
+  console.log('After filter', environmentVariables)
+
   // Parse values and create config object
   const environmentConfig = {}
-  for(const envvar of environmentVariables) {
+  for(const envvar of filteredEnvironmentVariables) {
     let path = envvar.path;
     let value = envvar.value || process.env[envvar.key];
 
