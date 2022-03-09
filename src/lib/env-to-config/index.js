@@ -109,7 +109,7 @@ export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
     // Set the value to the environment config
     set(environmentConfig, path, value)
   }
-  
+  console.log('Parsed environment config', environmentConfig)
   // Merge the default and environment config
   let mergedConfig = {};
   merge(mergedConfig, defaultConfig, environmentConfig);
