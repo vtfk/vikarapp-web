@@ -5,11 +5,6 @@ import set from 'lodash.set';
 import merge from 'lodash.merge';
 
 /*
-  Configuration object
-*/
-let config = undefined;
-
-/*
   Helper functions
 */
 function typeifyVariable(variable) {
@@ -69,12 +64,10 @@ function trimAwayMatch(regex, variable) {
  * @returns {Object}
  */
 /* eslint-disable import/no-anonymous-default-export */
-export default function (defaultConfig = {}, prefixes, spreadPrefixes, force) {
+export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
   /*
     Declarations
   */
-  if(config && !force) return config;
-
   // Input validation/normalization
   if(!process.env) return
   if(typeof defaultConfig !== 'object') defaultConfig = {}
@@ -100,31 +93,27 @@ export default function (defaultConfig = {}, prefixes, spreadPrefixes, force) {
     // Add the normalized key to the array
     environmentVariables.push({key, path: normalKey});
   }
-  console.log('Before spreading', environmentVariables);
 
   // Spread variables
   if(spreadPrefixes) {
     const toSpread = environmentVariables.filter((i) => spreadPrefixes.some((p) => p.startsWith(i.path)));
-    console.log('Spreading', toSpread)
     for(const spreadVar of toSpread) {
       let val = process.env[spreadVar.key];
       if(!val) continue;
       const rows = val.split(/\r?\n/)
       for(const row of rows) {
         if(!row.includes('=') || /^(\s)*#/.exec(row)) continue;
-        console.log('Row ' + row)
         const [key, value] = row.split('=');
         environmentVariables.push({ key, path: trimAwayMatch(systemPrefixes, key), value })
       }
     }
   }
-
-  console.log('After spreading', environmentVariables)
+  console.log('Environment: ', environmentVariables)
 
   // Filter out environment variables that does not match
-  const filteredEnvironmentVariables = [];
+  
   if(prefixPattern) {
-    console.log('Pattern: ', prefixPattern)
+    const filteredEnvironmentVariables = [];
     for(const envvar of environmentVariables) {
       if(!envvar) continue;
       const match = prefixPattern.exec(envvar.path);
@@ -132,14 +121,14 @@ export default function (defaultConfig = {}, prefixes, spreadPrefixes, force) {
       envvar.path = envvar.path.substring(match[0].length).replace(/^\.*/, '')
       filteredEnvironmentVariables.push(envvar);
     }
-    console.log('FILTERED!', filteredEnvironmentVariables)
+    environmentVariables = filteredEnvironmentVariables;
   }
-  environmentVariables = filteredEnvironmentVariables;
+
   console.log('After filter', environmentVariables)
 
   // Parse values and create config object
   const environmentConfig = {}
-  for(const envvar of filteredEnvironmentVariables) {
+  for(const envvar of environmentVariables) {
     let path = envvar.path;
     let value = envvar.value || process.env[envvar.key];
 
@@ -157,7 +146,6 @@ export default function (defaultConfig = {}, prefixes, spreadPrefixes, force) {
   merge(mergedConfig, defaultConfig, environmentConfig);
 
   // Return the merged config
-  config = mergedConfig;
-  return config;
+  return mergedConfig;
 }
 
