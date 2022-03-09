@@ -52,7 +52,7 @@ export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
   if(spreadPrefixes && !Array.isArray(spreadPrefixes)) spreadPrefixes = [spreadPrefixes]
 
   // Determine the prefix patterns
-  const systemPrefixes = /^REACT_APP_|^VUE_APP_/
+  const systemPrefixes = /REACT_APP_|VUE_APP_/
   const prefixPattern = prefixes ? new RegExp(prefixes.map((p) => `^${p}`).join('|')) : undefined;
 
   // Determine spread variables
@@ -86,11 +86,11 @@ export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
     for(const spreadVar of toSpread) {
       let val = process.env[spreadVar.key];
       if(!val) continue;
-      const vals = val.split(/\r?\n/)
-      console.log('Rows', vals)
-      for(const val of vals) {
-        if(!val.includes('=')) continue;
-        const [key, value] = val.split('=');
+      const rows = val.split(/\r?\n/)
+      for(const row of rows) {
+        if(!row.includes('=')) continue;
+        console.log('Row ' + row)
+        const [key, value] = row.split('=');
         environmentVariables.push({ key, path: key, value })
       }
     }
