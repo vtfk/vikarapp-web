@@ -15,7 +15,7 @@ export default function useSchools() {
     const { bearerToken} = await login({ type: 'popup' })
 
     const request = {
-      url: `${config.vikarAPIBaseurl}schools`,
+      url: `${config.VTFK_VIKARAPI_BASEURL}schools`,
       method: 'GET',
       headers: {
         Authorization: bearerToken
@@ -43,7 +43,7 @@ export default function useSchools() {
     delete item._elements;
 
     const request = {
-      url: `${config.vikarAPIBaseurl}schools/${item._id}`,
+      url: `${config.VTFK_VIKARAPI_BASEURL}schools/${item._id}`,
       method: 'PUT',
       headers: {
         Authorization: bearerToken
@@ -71,7 +71,7 @@ export default function useSchools() {
 
       // Prepare the request
       const request = {
-        url: `${config.vikarAPIBaseurl}schools`,
+        url: `${config.VTFK_VIKARAPI_BASEURL}schools`,
         method: 'POST',
         headers: {
           Authorization: bearerToken

@@ -22,7 +22,7 @@ export default function useTeachers() {
       if(query) query = `?${query}`
 
       const request = {
-        url: `${config.vikarAPIBaseurl}teachers/${term}${query}`,
+        url: `${config.VTFK_VIKARAPI_BASEURL}teachers/${term}${query}`,
         method: 'GET',
         headers: {
           Authorization: bearerToken

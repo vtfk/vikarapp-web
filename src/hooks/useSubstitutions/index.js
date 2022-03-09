@@ -34,7 +34,7 @@ export default function useSubstitutions() {
 
     // Create the request
     const request = {
-      url: `${config.vikarAPIBaseurl}substitutions${query}`,
+      url: `${config.VTFK_VIKARAPI_BASEURL}substitutions${query}`,
       method: 'GET',
       headers: {
         Authorization: bearerToken
@@ -74,7 +74,7 @@ export default function useSubstitutions() {
 
       // Create the request
       const request = {
-        url: `${config.vikarAPIBaseurl}substitutions`,
+        url: `${config.VTFK_VIKARAPI_BASEURL}substitutions`,
         method: 'POST',
         headers: {
           Authorization: bearerToken
