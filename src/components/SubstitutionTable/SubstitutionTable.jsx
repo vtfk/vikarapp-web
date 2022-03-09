@@ -27,6 +27,7 @@ export default function SubstitutionTable({items, mobileHeaderText, isLoading, s
   const tableItems = useMemo(() => {
     // Make a copy of the data
     const _items = JSON.parse(JSON.stringify(items))
+    if(!items || !Array.isArray(_items)) return []
 
     // Support function
     // Translate status for display
