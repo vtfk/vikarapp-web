@@ -43,7 +43,8 @@ function typeifyVariable(variable) {
  * @param {String || [String]} spreadPrefixes Drill down and spread environment variables stored in a environment variables
  * @returns {Object}
  */
-export default (defaultConfig = {}, prefixes, spreadPrefixes) => {
+/* eslint-disable import/no-anonymous-default-export */
+export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
   // Input validation/normalization
   if(!process.env) return
   if(typeof defaultConfig !== 'object') defaultConfig = {}
@@ -97,7 +98,6 @@ export default (defaultConfig = {}, prefixes, spreadPrefixes) => {
   // Parse values and create config object
   const environmentConfig = {}
   for(const envvar of environmentVariables) {
-    let key = envvar.key;
     let path = envvar.path;
     let value = envvar.value || process.env[envvar.key];
 
