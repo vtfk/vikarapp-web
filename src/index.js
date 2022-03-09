@@ -5,16 +5,13 @@ import App from './App.js';
 import * as microsoftTeams from '@microsoft/teams-js';
 import { BaseStyle } from '@vtfk/components'
 import config from '../src/config'
-import envToConfig from './lib/env-to-config'
-
-envToConfig();
 
 async function main() {
   /*
     Initialization
   */
   // MSW - MockServiceWorker
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === 'development' && config.USE_MOCK !== false) {
     const { worker } = require('./mocks/browser')
     await worker.start()
   }

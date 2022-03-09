@@ -8,7 +8,7 @@ function isArray(item) {
   return true
 }
 
-export default function Select({id, items, itemLabel = 'label', itemValue = 'value', selected, label, placeholder, hint, open, multiple, showClear = true, disabled, required, noDataText, noDataElement, style, containerStyle, onChange, onSelectedValues, onSelectedItems, onClickOutside, onClose}) {
+export default function Select({id, items, itemLabel = 'label', itemValue = 'value', selected, label, placeholder, open, multiple, showClear = true, disabled, required, noDataText, noDataElement, style, containerStyle, onChange, onSelectedValues, onSelectedItems, onClickOutside, onClose}) {
   /*
     State
   */
