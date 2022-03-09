@@ -5,6 +5,9 @@ import App from './App.js';
 import * as microsoftTeams from '@microsoft/teams-js';
 import { BaseStyle } from '@vtfk/components'
 import config from '../src/config'
+import envToConfig from './lib/env-to-config'
+
+envToConfig();
 
 async function main() {
   /*
