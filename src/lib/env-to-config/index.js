@@ -134,7 +134,7 @@ export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
 
     // Retreive the value and trim it
     if(value && typeof value === 'string') value = value.trim()
-    value = typeifyVariable(value);
+    if(!spreadPrefixes.some((i) => envvar.path.startsWith(i))) value = typeifyVariable(value);
 
     // Set the value to the environment config
     set(environmentConfig, path, value)
