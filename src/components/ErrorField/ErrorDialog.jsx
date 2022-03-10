@@ -41,7 +41,7 @@ export default function ErrorDialog({ errors, onOk, onClear, style }) {
       <DialogActions className='vtfk-errordialog-actions'>
         <Button size="small" onClick={() => handleOk()}>Ok</Button>
         { errors.length > 1 && <Button size="small" onClick={() => handleClear()}>Ok til alle</Button> }
-        <Button onClick={() => setIsShowDetails(!isShowDetails)}>{!isShowDetails ? 'Vis detaljer' : 'Skjul detaljer'}</Button>
+        <Button size="small" onClick={() => setIsShowDetails(!isShowDetails)}>{!isShowDetails ? 'Vis detaljer' : 'Skjul detaljer'}</Button>
         { errors.length > 1 && 
           <div className='vtfk-errordialog-multiple-error-button-group'>
             <IconButton icon="arrowLeft" onClick={() => decrementErrorIndex()} disabled={errorIndex === 0} style={{margin: '0'}}/>
