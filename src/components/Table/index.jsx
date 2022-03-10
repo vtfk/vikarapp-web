@@ -212,14 +212,14 @@ export default function Table({headers, items, itemId = '_id', selected, mode, s
       {
         /* Mobile mode */
         renderMode === 'mobile' &&
-        <table className='vtfk-table vtfk-table-mobile'>
+        <table className='vtfk-table vtfk-table-mobile' cellSpacing="0" cellPadding="0">
           {
           (mobileHeaderElement || mobileHeaderText) &&
             <thead>
             <tr className='vtfk-table-mobile-header-row'>
               <td>
                 { !!mobileHeaderElement && mobileHeaderElement }
-                { !mobileHeaderElement && <div className='vtfk-table-mobile-header'>{mobileHeaderText}</div>}
+                { !mobileHeaderElement && <div className={mergeClasses('vtfk-table-mobile-header', headerClass)} style={mergeStyles(headerStyle)}>{mobileHeaderText}</div>}
               </td>
             </tr>
           </thead>
