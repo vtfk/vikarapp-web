@@ -57,6 +57,13 @@ export default function Table({headers, items, itemId = '_id', selected, mode, s
     return (items && Array.isArray(items) && items.length > 0)
   }, [items])
 
+  // Are every items selected?
+  const isAllSelected = useMemo(() => {
+    if(!items || !Array.isArray(items) || items.length === 0) 
+    if(!selectedIds || !Array.isArray(selectedIds) || selectedIds.length === 0) return false;
+    return items.length === selectedIds.length;
+  })
+
   /*
     Functions
   */
@@ -106,13 +113,6 @@ export default function Table({headers, items, itemId = '_id', selected, mode, s
     return selectedIds.includes(item[itemId]);
   }
 
-  // Returns if all items are selected
-  function isAllSelected() {
-    if(!items || !Array.isArray(items) || items.length === 0) 
-    if(!selectedIds || !Array.isArray(selectedIds) || selectedIds.length === 0) return false;
-    return items.length === selectedIds.length;
-  }
-
   // Gets the appropriate value to render for a item
   function getItemValue(item, header) {
     if(!item || !header || !header.value) return '';
@@ -138,7 +138,7 @@ export default function Table({headers, items, itemId = '_id', selected, mode, s
               // Render checkboxs for selecting all items if applicable
               showSelect && items && 
               <th className={mergeClasses('vtfk-table-checkbox-cell', headerClass)} style={headerStyle} >
-                <Checkbox checked={isAllSelected()} name={"checkAll"} value={"checkAll"} label={" "} onChange={(e) => selectAll()} style={{padding: 0, display: 'block'}}/>
+                <Checkbox checked={isAllSelected} name={"checkAll"} value={"checkAll"} label={" "} onChange={(e) => selectAll()} style={{padding: 0, margin: 0, marginRight: 0, display: 'block'}}/>
               </th>
             }
             { 
@@ -214,12 +214,16 @@ export default function Table({headers, items, itemId = '_id', selected, mode, s
         renderMode === 'mobile' &&
         <table className='vtfk-table vtfk-table-mobile' cellSpacing="0" cellPadding="0">
           {
-          (mobileHeaderElement || mobileHeaderText) &&
+          (mobileHeaderElement || mobileHeaderText || showSelect) &&
             <thead>
             <tr className='vtfk-table-mobile-header-row'>
               <td>
                 { !!mobileHeaderElement && mobileHeaderElement }
-                { !mobileHeaderElement && <div className={mergeClasses('vtfk-table-mobile-header', headerClass)} style={mergeStyles(headerStyle)}>{mobileHeaderText}</div>}
+                { !mobileHeaderElement &&
+                  <div className={mergeClasses('vtfk-table-mobile-header', headerClass)} style={mergeStyles(headerStyle)}>
+                    <div className='vtfk-table-mobile-header-text'>{mobileHeaderText}</div>
+                    <div className='vtfk-table-mobile-selectall'><Checkbox checked={isAllSelected} name={"checkAll"} value={"checkAll"} label={" "} onChange={(e) => selectAll()} style={{padding: 0, margin: 0, marginRight: 0, display: 'block'}}/></div>
+                  </div>}
               </td>
             </tr>
           </thead>

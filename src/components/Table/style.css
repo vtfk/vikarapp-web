@@ -80,12 +80,27 @@
 }
 
 .vtfk-table-mobile-header {
+  position: relative;
   color: rgb(39, 39, 39);
   font-weight: 700;
   font-size: 24px;
   text-align: center;
   border-collapse: collapse;
   border: none;
+  display: flex;
+  justify-content: center;
+}
+
+.vtfk-table-mobile-header-text {
+  flex-grow: 1;
+}
+
+.vtfk-table-mobile-selectall {
+  position: absolute;
+  display: inline-block;
+  right: -1.2rem;
+  width: 45px;
+  max-width: 45px;
 }
 
 .vtfk-table-mobile-item {
