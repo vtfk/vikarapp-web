@@ -65,7 +65,7 @@ export default function Table({headers, items, itemId = '_id', selected, mode, s
     // Input validation
     if(items.length === 0) return;
     if(!id) return;
-    if(typeof id !== 'string') return;
+    if(typeof id !== 'string' && !Array.isArray(id)) return;
 
     // The new ids
     let newIds = [];
