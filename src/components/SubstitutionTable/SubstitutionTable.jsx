@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import Table from "../Table";
+import { localizations, locale } from '../../localization'
 
 // Table headers
 const headers = [
@@ -9,15 +10,15 @@ const headers = [
     itemStyle: { textTransform: 'capitalize' },
   },
   {
-    label: 'Lærer',
+    label: locale(localizations.teacher),
     value: 'teacherName'
   },
   {
-    label: 'Klasse / team',
+    label: locale(localizations.classes),
     value: 'teamName'
   },
   {
-    label: 'Utløper',
+    label: locale(localizations.expires),
     value: 'expirationTimestamp'
   }
 ]

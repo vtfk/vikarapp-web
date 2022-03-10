@@ -23,7 +23,7 @@ const defaultConfig = {
         },
         cache: {
           cacheLocation: 'localStorage',
-          storeAuthStateInCookie: false
+          storeAuthStateInCookie: false,
         }
       },
     }

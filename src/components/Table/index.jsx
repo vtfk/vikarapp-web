@@ -4,15 +4,21 @@ import { useEffect, useMemo, useState } from 'react';
 import { nanoid } from 'nanoid'
 import { mergeStyles, mergeClasses } from './lib/helpers'
 
-export default function Table({items, headers, itemId = '_id', selected, style, headerClass, headerStyle, itemClass, itemStyle, trClass, trStyle, isLoading, loadingText, loadingElement, noDataText, noDataElement, dense = false, showSelect = false, selectOnClick = false, mobileHeaderText, mobileHeaderElement, onSelectedIdsChanged, onSelectedItemsChanged, onModeChanged}) {
-  // State
+export default function Table({headers, items, itemId = '_id', selected, mode, showSelect = false, selectOnClick = false, isLoading, loadingText, loadingElement, noDataText, noDataElement, mobileHeaderText, mobileHeaderElement, onSelectedIdsChanged, onSelectedItemsChanged, style, headerClass, headerStyle, itemClass, itemStyle, trClass, trStyle}) {
+  /*
+    State
+  */
   const [selectedIds, setSelectedIds] = useState(selected && Array.isArray(selected) ? selected : [])
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
 
+  /*
+    Effects
+  */
   useEffect(() => {
     // Update selected ids if updated externally
     if(selected !== undefined) setSelectedIds(selected)
 
+    // Handle when window is resized
     function handleResize() {
       setWindowWidth(window.innerWidth);
     }
@@ -23,11 +29,19 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
     }
   }, [selected])
   
-  const mode = useMemo(() => {
+  /*
+    Memos
+  */
+  // Is the table rendered in desktop or mobile mode?
+  const renderMode = useMemo(() => {
+    // If the mode has been provided in props
+    if(mode && ['desktop','mobile'].includes('mode')) return mode;
+    // Determine the mode based on window width treshold
     if(windowWidth <= 750) return 'mobile'
     return 'desktop'
-  },[windowWidth])
+  },[windowWidth, mode])
 
+  // Parse and get valid headers to use in the table
   const validHeaders = useMemo(() => {
     if(!Array.isArray(headers) || headers.length === 0) return [];
 
@@ -39,83 +53,75 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
     return vHeaders
   }, [headers])
 
-  // Functions
-  function updateSelected(tableItems) {
-    if(items.length === 0) return;
+  const hasData = useMemo(() => {
+    return (items && Array.isArray(items) && items.length > 0)
+  }, [items])
 
+  /*
+    Functions
+  */
+  // Function to update what items are selected and trigger callbacks
+  function updateSelected(id) {
+    // Input validation
+    if(items.length === 0) return;
+    if(!id) return;
+    if(typeof id !== 'string') return;
+
+    // The new ids
     let newIds = [];
 
-    if(Array.isArray(tableItems)) {
-      newIds = tableItems;
-    } else if(typeof tableItems === 'object') {
-      // If the item don't exist, add it. Else remove it
-      if(!selectedIds.includes(tableItems[itemId])){
-        newIds = [...selectedIds, tableItems[itemId]];
-      }
-      else {
-        newIds = selectedIds.filter((i) => i !== tableItems[itemId])
-      }
-    }
+    // Add or remove id based on what is applicable
+    if(Array.isArray(id)) newIds = id;
+    else if(!selectedIds.includes(id)) newIds = [...selectedIds, id]
+    else newIds = selectedIds.filter((i) => i !== id)
 
-    let newItems = items.filter((i) => newIds.includes(i[itemId]));
-    // Strip away the _elements before returning
-    newItems = newItems.map((i) => {
-      let {_elements, ...clean} = i
-      return clean
-    })
-
+    // Update the state
     setSelectedIds(newIds)
 
+    // Determine what items are selected
+    const selectedItems = items.filter((i) => newIds.includes(i[itemId]))
+
+    // Trigger callback
     if(onSelectedIdsChanged && typeof onSelectedIdsChanged === 'function') onSelectedIdsChanged(newIds);
-    if(onSelectedItemsChanged && typeof onSelectedItemsChanged === 'function') onSelectedItemsChanged(newItems);
+    if(onSelectedItemsChanged && typeof onSelectedItemsChanged === 'function') onSelectedItemsChanged(selectedItems);
   }
 
-  function selectAll(bool) {
+  // Select or deselect all items
+  function selectAll() {
     if(items.length === 0) return;
 
+    // Updated ids and items
     let newIds = undefined;
-    let newItems = undefined;
-    if(bool) {
-      newIds = items.map((i) => i[itemId]);
-      newItems = items
-    } else {
-      newIds = [];
-      newItems = [];
-    }
+    
+    // Determine what to do
+    if(selectedIds.length !== items.length) newIds = items.map((i) => i[itemId]);
+    else newIds = [];
 
-    setSelectedIds(newIds)
-
-    if(onSelectedIdsChanged && typeof onSelectedIdsChanged === 'function') onSelectedIdsChanged(newIds);
-    if(onSelectedItemsChanged && typeof onSelectedItemsChanged === 'function') onSelectedItemsChanged(newItems);
+    // Update the selected
+    updateSelected(newIds)
   }
 
+  // Returns if a item is selected
   function isSelected(item) {
     return selectedIds.includes(item[itemId]);
   }
 
+  // Returns if all items are selected
   function isAllSelected() {
     if(!items || !Array.isArray(items) || items.length === 0) 
     if(!selectedIds || !Array.isArray(selectedIds) || selectedIds.length === 0) return false;
     return items.length === selectedIds.length;
   }
 
-  function handleCheckboxClick(e, item) {
-    e.stopPropagation();
-    updateSelected(item);
-  }
-
-  function handleRowClick(e, item) {
-    const targetNodeType = e.target.nodeName;
-    if(targetNodeType !== 'TD' && targetNodeType !== 'TR') return;
-    updateSelected(item);
-  }
-
+  // Gets the appropriate value to render for a item
   function getItemValue(item, header) {
     if(!item || !header || !header.value) return '';
     return item._elements?.[header.value] || item[header.value] || ''
   }
 
-  // Render function
+  /*
+    Render
+  */
   return(
     <div className='vtfk-table-container' style={style} >
     { validHeaders.length === 0 && <div>Table cannot be shown when no headers are specified</div> }
@@ -124,7 +130,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
       <>
       {
         /* Desktop mode */
-        mode === 'desktop' &&
+        renderMode === 'desktop' &&
         <table className="vtfk-table" cellSpacing="0" cellPadding="0">
         <thead>
           <tr>
@@ -132,7 +138,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
               // Render checkboxs for selecting all items if applicable
               showSelect && items && 
               <th className={mergeClasses('vtfk-table-checkbox-cell', headerClass)} style={headerStyle} >
-                <Checkbox checked={isAllSelected()} name={"checkAll"} value={"checkAll"} label={" "} onChange={(e) => selectAll(e.target.checked)} style={{padding: 0, display: 'block'}}/>
+                <Checkbox checked={isAllSelected()} name={"checkAll"} value={"checkAll"} label={" "} onChange={(e) => selectAll()} style={{padding: 0, display: 'block'}}/>
               </th>
             }
             { 
@@ -149,32 +155,29 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
           {
             isLoading &&
             <tr>
-              {
-                !loadingElement && 
+              { 
+                loadingElement ? loadingElement :
                 <td colSpan={1000} height='100%' className={mergeClasses('vtfk-table-loading-td')}>
                   {
-                    !loadingElement ?
                     <div className='vtfk-table-loading-container'>
                       <h2 style={{margin: 0, marginBottom: '0.2rem'}}>{ loadingText || 'Laster' }</h2>
                       <Spinner size="large" />
                     </div>
-                    :
-                    loadingElement
                   }
                 </td>
               }
             </tr>
           }
           {
-            !isLoading && (items && Array.isArray(items) && items.length > 0) &&
+            !isLoading && hasData &&
             items.map((item) => {
               return (
-                <tr key={item[itemId]} onClick={(e) => selectOnClick && handleRowClick(e, item)} className={mergeClasses(trClass, isSelected(item) ? 'tr-selected' : '', selectOnClick ? 'tr-select-onclick' : '')} style={mergeStyles(trStyle)}>
+                <tr key={item[itemId]} onClick={(e) => selectOnClick && updateSelected(item[itemId])} className={mergeClasses(trClass, isSelected(item) ? 'tr-selected' : '', selectOnClick ? 'tr-select-onclick' : '')} style={mergeStyles(trStyle)}>
                   { 
                     // Render checkbox for selecting the item in the current row, if applicable
                     showSelect &&
                     <td className='vtfk-table-checkbox-cell'>
-                      <Checkbox checked={isSelected(item)} onChange={(e) => handleCheckboxClick(e, item)} style={{display: 'block'}} />
+                      <Checkbox checked={isSelected(item)} onChange={() => updateSelected(item[itemId])} onClick={(e) => e.stopPropagation()} style={{display: 'block'}} />
                     </td>
                   }
                   {
@@ -183,7 +186,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
                       return (
                         <td
                           key={nanoid()}
-                          className={mergeClasses(dense ? 'td-dense' : '', itemClass, header.itemClass)}
+                          className={mergeClasses(itemClass, header.itemClass)}
                           style={mergeStyles(itemStyle, header.itemStyle)}
                         >
                           { getItemValue(item, header) }
@@ -196,7 +199,7 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
             })
           }
           {
-            !isLoading && (!items || !Array.isArray(items) || items.length === 0) &&
+            !isLoading && !hasData &&
             <tr>
               <td colSpan={headers.length + 1} style={{ textAlign: 'center'}}>
                 { noDataElement || noDataText || 'Ingen data er funnet'}
@@ -208,10 +211,10 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
       }
       {
         /* Mobile mode */
-        mode === 'mobile' &&
+        renderMode === 'mobile' &&
         <table className='vtfk-table vtfk-table-mobile'>
           {
-            (mobileHeaderElement || mobileHeaderText) &&
+          (mobileHeaderElement || mobileHeaderText) &&
             <thead>
             <tr className='vtfk-table-mobile-header-row'>
               <td>
@@ -221,21 +224,37 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
             </tr>
           </thead>
           }
-          
           <tbody>
             {
+              isLoading &&
+              <tr>
+                { 
+                  loadingElement ? loadingElement :
+                  <td colSpan={1000} height='100%' className={mergeClasses('vtfk-table-loading-td')}>
+                    {
+                      <div className='vtfk-table-loading-container'>
+                        <h2 style={{margin: 0, marginBottom: '0.2rem'}}>{ loadingText || 'Laster' }</h2>
+                        <Spinner size="large" />
+                      </div>
+                    }
+                  </td>
+                }
+              </tr>
+            }
+            {
+              !isLoading && hasData &&
               items.map((item) => {
                 return(
                   <tr
                     key={item[itemId]}
-                    onClick={(e) => selectOnClick && handleRowClick(e, item)}
-                    className={mergeClasses('vtfk-table-mobile-item', dense ? 'td-dense' : '', itemClass, isSelected(item) ? 'tr-selected' : '')}
+                    onClick={(e) => selectOnClick && updateSelected(item[itemId])}
+                    className={mergeClasses('vtfk-table-mobile-item', itemClass, isSelected(item) ? 'tr-selected' : '')}
                   >
                     {
                       showSelect &&
                       <td className='vtfk-table-mobile-row'>
                         <div></div>
-                        <div><Checkbox checked={isSelected(item)} onChange={(e) => handleCheckboxClick(e, item)} style={{display: 'block', padding: '0', margin: '0'}} /></div>
+                        <div><Checkbox checked={isSelected(item)} onChange={(e) => updateSelected(item[itemId])} onClick={(e) => e.stopPropagation()} style={{display: 'block', padding: '0', margin: '0'}} /></div>
                       </td>
                     }
                     {
@@ -252,6 +271,14 @@ export default function Table({items, headers, itemId = '_id', selected, style, 
                   </tr>
                 )
               })
+            }
+            {
+              !isLoading && !hasData &&
+              <tr>
+                <td colSpan={headers.length + 1} style={{ textAlign: 'center'}}>
+                  { noDataElement || noDataText || 'Ingen data er funnet'}
+                </td>
+              </tr>
             }
           </tbody>
         </table>

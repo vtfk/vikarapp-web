@@ -93,6 +93,7 @@ function saveToken(token, options = {}) {
     username: token.account?.username || token.idTokenClaims?.preferred_username || undefined,
     expiration: token.expiresOn || token.extExpiresOn || token.expiration || token.exp,
     scopes: token.scopes || options.scopes || [],
+    language: token.idTokenClaims?.xms_pl,
     roles: token.roles || token.idTokenClaims?.roles || token.account?.idTokenClaims?.roles || [],
     bearerToken: `Bearer ${token.accessToken || token.token || token.idToken }`,
     token: token
