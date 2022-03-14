@@ -141,6 +141,8 @@ export async function login(options = {}) {
     if(isFromTeams()) {
       const teamsContext = await getTeamsContext(microsoftTeams);
       if(teamsContext) config.common.loginOptions.loginHint = teamsContext.loginHint || teamsContext.upn || teamsContext.userPrincipalName
+      alert('Teams context');
+      alert(JSON.stringify(teamsContext, null, 2))
     }
 
     /*
