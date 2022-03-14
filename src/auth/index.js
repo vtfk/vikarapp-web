@@ -158,6 +158,10 @@ export async function login(options = {}) {
       Attempt to handle silent/SSO authentication before using methods that affect user experience
     */
     try {
+      console.log('Logging in with auth options: ', providerClientOptions);
+      console.log('Logging in with login options', providerLoginOptions)
+      alert(JSON.stringify(providerClientOptions, null, 2))
+      alert(JSON.stringify(providerLoginOptions, null, 2))
       if(provider.silentLogin && typeof provider.silentLogin === 'function') {
         token = await provider.silentLogin(providerClientOptions, providerLoginOptions);
         if(!token) throw new Error('Silent token retreival failed')
