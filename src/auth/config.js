@@ -10,7 +10,7 @@ const defaultConfig = {
   common: {
     loginUrl: '/loginredirect',
     storage: 'local',
-    loginOptions: {
+    login: {
       type: 'redirect'
     }
   },
