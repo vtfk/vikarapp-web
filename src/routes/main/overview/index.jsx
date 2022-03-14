@@ -3,7 +3,7 @@ import { Button, Dialog, DialogTitle, DialogBody, DialogActions} from '@vtfk/com
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import useSubstitutions from '../../../hooks/useSubstitutions'
-import { getValidToken } from '../../../auth'
+import { getValidToken, logout } from '../../../auth'
 import SubstitutionTable from '../../../components/SubstitutionTable/SubstitutionTable'
 
 export default function MainOverview() {
@@ -45,6 +45,7 @@ export default function MainOverview() {
 
   return (
     <div className="overview">
+      <button onClick={() => { logout()}}>Logout</button>
       <SubstitutionTable
         itemId="_id"
         items={substitutions}
