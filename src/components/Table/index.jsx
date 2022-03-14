@@ -62,7 +62,7 @@ export default function Table({headers, items, itemId = '_id', selected, mode, s
     if(!items || !Array.isArray(items) || items.length === 0) 
     if(!selectedIds || !Array.isArray(selectedIds) || selectedIds.length === 0) return false;
     return items.length === selectedIds.length;
-  })
+  }, [items, selectedIds])
 
   /*
     Functions
