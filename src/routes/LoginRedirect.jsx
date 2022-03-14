@@ -15,7 +15,6 @@ export default function Login() {
     if(!isLoggingIn) {
       setIsLoggingIn(true);
       try {
-        throw new Error('Noe er feil')
         auth.login({force: true});
       } catch (err) {
         setError(err);
