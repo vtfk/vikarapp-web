@@ -2,6 +2,13 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Environment variables
+| Variable | Description | Example
+|---|---|---|
+|REACT_APP_auth.providers.azuread.client.auth.clientId | Azure App ClientId|43c96b94-41f9-445f-bae4-22280c5df379
+|REACT_APP_auth.providers.azuread.client.auth.authority | Azure Authority URL | https://login.microsoftonline.com/[TenantID]/
+|REACT_APP_auth.providers.azuread.login.scopes | Application scopes | ['[AzureAppClientID]/.default']
+
 ## Available Scripts
 
 In the project directory, you can run:

@@ -108,7 +108,7 @@ export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
       }
     }
   }
-  console.log('Environment: ', environmentVariables)
+  // console.log('Environment: ', environmentVariables)
 
   // Filter out environment variables that does not match
   
@@ -124,8 +124,6 @@ export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
     environmentVariables = filteredEnvironmentVariables;
   }
 
-  console.log('After filter', environmentVariables)
-
   // Parse values and create config object
   const environmentConfig = {}
   for(const envvar of environmentVariables) {
@@ -139,7 +137,6 @@ export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
     // Set the value to the environment config
     set(environmentConfig, path, value)
   }
-  console.log('Parsed environment config', environmentConfig)
 
   // Merge the default and environment config
   let mergedConfig = {};

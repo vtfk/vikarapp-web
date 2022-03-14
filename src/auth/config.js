@@ -18,6 +18,8 @@ const defaultConfig = {
     azuread: {
       client: {
         auth: {
+          clientId: '[Requred in environment variables]',
+          authority: 'https://sts.windows.net/08f3813c-9f29-482f-9aec-16ef7cbf477a',
           redirectUri: 'http://localhost:3000/handlelogin',
           navigateToLoginRequestUrl: false,
         },
@@ -26,6 +28,9 @@ const defaultConfig = {
           storeAuthStateInCookie: false,
         }
       },
+      login: {
+        scopes: ['clientId/.default']
+      }
     }
   }
 }

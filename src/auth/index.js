@@ -189,6 +189,8 @@ export async function login(options = {}) {
     /*
       Make regular auth provider request
     */
+   console.log('Logging in with client', providerClientOptions);
+   console.log('Logging in with login', providerLoginOptions)
     if(provider.login && typeof provider.login === 'function') token = await provider.login(providerClientOptions, providerLoginOptions);
 
     /*
