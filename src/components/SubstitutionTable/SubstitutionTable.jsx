@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import Table from "../Table";
+import { Table } from "@vtfk/components"
 import { localizations, locale } from '../../localization'
 
 // Table headers

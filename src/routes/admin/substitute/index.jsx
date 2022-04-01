@@ -1,7 +1,7 @@
 import { Button } from "@vtfk/components";
 import { useMemo, useState } from "react";
 import useTeacherTeams from "../../../hooks/useTeacherTeams"
-import Table from '../../../components/Table'
+import { Table } from "@vtfk/components";
 import useSubstitutions from "../../../hooks/useSubstitutions";
 import PersonSearchField from "../../../components/PersonSearchField";
 

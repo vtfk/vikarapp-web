@@ -1,6 +1,6 @@
 import { Button, Checkbox, Dialog, DialogActions, DialogBody, DialogTitle, TextField } from "@vtfk/components";
 import { useEffect, useMemo, useState } from "react";
-import Table from "../../../components/Table";
+import { Table } from "@vtfk/components";
 import useSchools from "../../../hooks/useSchools"
 
 export default function SubstituteRelationships() {
