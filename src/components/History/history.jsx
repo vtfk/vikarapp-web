@@ -27,44 +27,53 @@ export default function History() {
   const { state:substitutions, get:getSubstitutions } = useSubstitutions()
   const [ selectedSubstitute, setSelectedSubstitute ] = useState()
   const [ selectedTeacher, setSelectedTeacher ] = useState()
+  const [ hasInitialized, setHasInitialized ] = useState(false);
 
   const isAdmin = ['development', 'test'].includes(process.env.NODE_ENV) || getValidToken()?.roles?.includes('App.Admin')
 
+  /*
+    Use effect
+  */
   useEffect(() => {
     async function load() {
-      await getSubstitutions()
+      // Only make a general search when admin
+      if(getValidToken()?.roles?.includes('App.Admin')) await getSubstitutions()
     }
     load()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const filteredSubstitutions = useMemo(() => {
-    let copy = [...substitutions]
+  // Load data when filtering options change
+  useEffect(() => {
+    if(!hasInitialized) {
+      setHasInitialized(true);
+      return;
+    }
 
-    if(selectedSubstitute && selectedSubstitute.id) copy = copy.filter((i) => i.substituteId === selectedSubstitute.id)
-    if(selectedTeacher && selectedTeacher.id) copy = copy.filter((i) => i.teacherId === selectedTeacher.id)
-    if(Array.isArray(selectedYears) && selectedYears.length > 0) copy = copy.filter((i) => i.expirationTimestamp && selectedYears.includes(new Date(i.expirationTimestamp).getFullYear()))
-    if(Array.isArray(selectedStatuses) && selectedStatuses.length > 0) copy = copy.filter((i) => i.status && selectedStatuses.includes(i.status))
+    // Retreive the data
+    getSubstitutions(selectedSubstitute?.userPrincipalName, selectedTeacher?.userPrincipalName, selectedStatuses, selectedYears)
 
-    return copy
-  },[substitutions, selectedSubstitute, selectedTeacher, selectedStatuses, selectedYears])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedSubstitute, selectedTeacher, selectedStatuses, selectedYears])
 
+  /*
+    Memos
+  */
   const availableYears = useMemo(() => {
     if(!substitutions) return []
 
-    const years = []
-    substitutions.forEach((s) => {
-      const d = Date.parse(s.expirationTimestamp)
-      if(d) {
-        const year = new Date(d).getFullYear()
-        if(!years.includes(year)) years.push(year)
-      }
-    })
-
-    years.sort()
+    const thisYear = new Date().getFullYear();
+    const years = [];
+    for(let i = 2020; i <= thisYear; i++) {
+      years.push(i);
+    }
 
     return years.map((y) => {return {label: y, value: y}})
   }, [substitutions])
+
+  /*
+    Functions
+  */
 
   return(
     <div className="column-group">
@@ -100,7 +109,7 @@ export default function History() {
       </div>
       <h2 style={{margin: '0', color: '#FFBF00'}}>Vikariat</h2>
       <SubstitutionTable
-        items={filteredSubstitutions}
+        items={substitutions}
       />
     </div>
   )

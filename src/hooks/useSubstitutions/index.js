@@ -15,7 +15,7 @@ export default function useSubstitutions() {
    * @param {String=} teacherUpn 
    * @param {String=} status 
    */
-  async function get(substituteUpn, teacherUpn, status) {
+  async function get(substituteUpn, teacherUpn, status, years) {
     setIsLoading(true);
 
     const { bearerToken} = await login({ type: 'popup' })
@@ -25,10 +25,13 @@ export default function useSubstitutions() {
     if(substituteUpn) queryParams.push(`substituteUpn=${substituteUpn}`)
     if(teacherUpn) queryParams.push(`teacherUpn=${teacherUpn}`)
     if(status) queryParams.push(`status=${status}`)
+    if(years) queryParams.push(`years=${years}`)
 
     let query = '';
     for(let i = 0; i < queryParams.length; i++) {
       if(i === 0) query += '?'
+      else query += '&'
+
       query += queryParams[i]
     }
 
