@@ -1,7 +1,7 @@
 /*
   Import modules
 */
-import envToConfig from '../lib/env-to-config'
+import envToObj from '../lib/env-to-config'
 
 /*
   Default configuration
@@ -35,7 +35,7 @@ const defaultConfig = {
   }
 }
 
-const config = envToConfig(defaultConfig, 'auth');
+const config = envToObj(defaultConfig, { prefixes: 'auth' });
 console.log('Authentication config', config)
 
 export default config;

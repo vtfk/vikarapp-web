@@ -58,21 +58,30 @@ function trimAwayMatch(regex, variable) {
 
 /**
  * @param {Object} defaultConfig Object containing default configuration
- * @param {String || [String]} prefixes The prefixes of the enviroment variables to generate config from
- * @param {String || [String]} spreadPrefixes Drill down and spread environment variables stored in a environment variables
- * @param {Boolean} force Should the function run again?
+ * @param {Object} options
+ * @param {String} options.delimiter What character delimits the path parts of the environment variables?
+ * @param {String || [String]} options.prefixes The prefixes of the enviroment variables to generate config from
+ * @param {String || [String]} options.spreadPrefixes Drill down and spread environment variables stored in a environment variables
+ * @param {Boolean} options.force Should the function run again?
  * @returns {Object}
  */
 /* eslint-disable import/no-anonymous-default-export */
-export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
+function envToObj (defaultConfig = {}, options = {}) {
   /*
     Declarations
   */
+  // Destructure options
+  let { prefixes, spreadPrefixes, delimiter, force} = options;
+
   // Input validation/normalization
   if(!process.env) return
   if(typeof defaultConfig !== 'object') defaultConfig = {}
   if(prefixes && !Array.isArray(prefixes)) prefixes = [prefixes]
   if(spreadPrefixes && !Array.isArray(spreadPrefixes)) spreadPrefixes = [spreadPrefixes]
+  defaultConfig.delimiter = '_'
+  // Check if there is a specific delimiter to use
+  const _delimiter = process.env.REACT_APP_ENV_PATH_DELIMITER
+  if(!delimiter && _delimiter && typeof _delimiter === 'string' && _delimiter.length === 1) delimiter = _delimiter;
 
   // Determine the prefix patterns
   const systemPrefixes = /REACT_APP_|VUE_APP_/
@@ -84,16 +93,19 @@ export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
   // Normalize the environment variables
   let environmentVariables = []
   for(const key of Object.keys(process.env)) {
-    // Normalized key
-    let normalKey = key;
-
     // Strip away any system prefixes
-    normalKey = trimAwayMatch(systemPrefixes, normalKey);
+    let path = trimAwayMatch(systemPrefixes, key);
+
+    //
+    if(path === 'ENV_PATH_DELIMITER') continue;
+
+    // If a delimiter is specified, split on that and join on '.' to get a valid JSON path
+    if(delimiter) path = path.split(delimiter).join('.')
 
     // Add the normalized key to the array
-    environmentVariables.push({key, path: normalKey});
+    environmentVariables.push({key, path: path});
   }
-
+  
   // Spread variables
   if(spreadPrefixes) {
     const toSpread = environmentVariables.filter((i) => spreadPrefixes.some((p) => p.startsWith(i.path)));
@@ -103,15 +115,15 @@ export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
       const rows = val.split(/\r?\n/)
       for(const row of rows) {
         if(!row.includes('=') || /^(\s)*#/.exec(row)) continue;
-        const [key, value] = row.split('=');
+        let [key, value] = row.split('=');
+        
         environmentVariables.push({ key, path: trimAwayMatch(systemPrefixes, key), value })
       }
     }
   }
-  // console.log('Environment: ', environmentVariables)
+  console.log('Parsed: ', environmentVariables)
 
   // Filter out environment variables that does not match
-  
   if(prefixPattern) {
     const filteredEnvironmentVariables = [];
     for(const envvar of environmentVariables) {
@@ -146,3 +158,4 @@ export default function (defaultConfig = {}, prefixes, spreadPrefixes) {
   return mergedConfig;
 }
 
+export default envToObj;

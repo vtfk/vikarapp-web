@@ -30,6 +30,7 @@
   margin: 0;
   padding: 0;
   text-align: center;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 750px) {
