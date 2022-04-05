@@ -1,4 +1,4 @@
-import envToConfig from "./lib/env-to-config";
+import envToConfig from "./lib/envToObj";
 
 let config = undefined;
 

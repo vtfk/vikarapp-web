@@ -34,6 +34,12 @@ export default function Admin() {
           <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer', textDecoration: 'none'}}>Behandle søkerettigheter</Button>
         </Link>
       }
+      {
+        isAdmin &&
+        <Link to="/admin/logs" className='admin-action-button'>
+          <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer'}}>Logger</Button>
+        </Link>
+      }
     </div>
   )
 }

@@ -15,6 +15,7 @@ import History from './main/history'
 import Admin from './admin'
 import SubstituteAdmin from './admin/substitute';
 import Schools from './admin/schools';
+import Logs from './admin/logs'
 
 import Debug from './Debug'
 
@@ -34,6 +35,7 @@ export default function Main() {
             <Route path="/admin/substitute" element={<SubstituteAdmin />} />
             <Route path="/admin/schools" element={<Schools />} />
             <Route path="/admin/history" element={<History />} />
+            <Route path="/admin/logs" element={<Logs /> } />
             {
               process.env.NODE_ENV === 'development' &&
               <Route path="/debug" element={<Debug /> } />

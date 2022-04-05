@@ -5,6 +5,11 @@ import set from 'lodash.set';
 import merge from 'lodash.merge';
 
 /*
+  State
+*/
+const cache = {}
+
+/*
   Helper functions
 */
 function typeifyVariable(variable) {
@@ -68,6 +73,13 @@ function trimAwayMatch(regex, variable) {
 /* eslint-disable import/no-anonymous-default-export */
 function envToObj (defaultConfig = {}, options = {}) {
   /*
+    Defaults
+  */
+  const defaultOptions = {
+    delimiter: '__'
+  }
+  Object.assign(options, defaultOptions, options || {})
+  /*
     Declarations
   */
   // Destructure options
@@ -75,14 +87,14 @@ function envToObj (defaultConfig = {}, options = {}) {
 
   // Input validation/normalization
   if(!process.env) return
-  if(typeof defaultConfig !== 'object') defaultConfig = {}
+  if(!defaultConfig || typeof defaultConfig !== 'object') defaultConfig = {}
   if(prefixes && !Array.isArray(prefixes)) prefixes = [prefixes]
   if(spreadPrefixes && !Array.isArray(spreadPrefixes)) spreadPrefixes = [spreadPrefixes]
-  defaultConfig.delimiter = '_'
-  // Check if there is a specific delimiter to use
-  const _delimiter = process.env.REACT_APP_ENV_PATH_DELIMITER
-  if(!delimiter && _delimiter && typeof _delimiter === 'string' && _delimiter.length === 1) delimiter = _delimiter;
-
+  
+  // Check the cache if this has already been processed
+  const cacheKey = prefixes ? prefixes.join('_') : '*'
+  if(force !== true && cache[cacheKey]) return cache[cacheKey]
+  
   // Determine the prefix patterns
   const systemPrefixes = /REACT_APP_|VUE_APP_/
   const prefixPattern = prefixes ? new RegExp(prefixes.map((p) => `^${p}`).join('|')) : undefined;
@@ -90,14 +102,26 @@ function envToObj (defaultConfig = {}, options = {}) {
   // Determine spread variables
   spreadPrefixes = spreadPrefixes || ['ENVIRONMENT']
   
+  // Search for system-keys
+  for(const key of Object.keys(process.env)) {
+    // Strip away any system prefixes
+    let path = trimAwayMatch(systemPrefixes, key);
+    // If delimiter-key
+    if(path === 'ENV_PATH_DELIMITER') {
+      const _delimiter = process.env[key]
+      if(!delimiter && _delimiter && typeof _delimiter === 'string' && _delimiter.length === 1) delimiter = _delimiter;
+    }
+  }
+
   // Normalize the environment variables
   let environmentVariables = []
+  const systemPaths = ['ENV_PATH_DELIMITER']
   for(const key of Object.keys(process.env)) {
     // Strip away any system prefixes
     let path = trimAwayMatch(systemPrefixes, key);
 
-    //
-    if(path === 'ENV_PATH_DELIMITER') continue;
+    // If any of the system paths, just skip
+    if(systemPaths.includes(path)) continue;
 
     // If a delimiter is specified, split on that and join on '.' to get a valid JSON path
     if(delimiter) path = path.split(delimiter).join('.')
@@ -121,7 +145,6 @@ function envToObj (defaultConfig = {}, options = {}) {
       }
     }
   }
-  console.log('Parsed: ', environmentVariables)
 
   // Filter out environment variables that does not match
   if(prefixPattern) {
@@ -153,6 +176,9 @@ function envToObj (defaultConfig = {}, options = {}) {
   // Merge the default and environment config
   let mergedConfig = {};
   merge(mergedConfig, defaultConfig, environmentConfig);
+
+  // Cache the result
+  cache[cacheKey] = mergedConfig;
 
   // Return the merged config
   return mergedConfig;

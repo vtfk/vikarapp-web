@@ -1,7 +1,7 @@
 /*
   Import modules
 */
-import envToObj from '../lib/env-to-config'
+import envToObj from '../lib/envToObj'
 
 /*
   Default configuration
