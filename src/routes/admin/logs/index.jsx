@@ -1,4 +1,4 @@
-import { Table } from "@vtfk/components";
+import { Icon, Table } from "@vtfk/components";
 import { useEffect } from "react";
 import useLogs from '../../../hooks/useLogs'
 
@@ -12,7 +12,19 @@ export default function Logs () {
     },
     {
       label: 'Type',
-      value: 'type'
+      value: 'type',
+      itemTooltip: 'type',
+      itemRender: (value, item, header, index) => {
+        return(
+          <>
+            {console.log(value)}
+            {
+              
+              <Icon name={value} />
+            }
+          </>
+        )
+      }
     },
     {
       label: 'Endepunkt',
@@ -24,7 +36,14 @@ export default function Logs () {
     },
     {
       label: 'Varighet',
-      value: 'duration'
+      value: 'duration',
+      itemRender: (item, index, header) => {
+        return(
+          <>
+            { `${((item[header.value] || 1000) / 1000).toFixed(1)} sek` }
+          </>
+        )
+      }
     }
   ]
 

@@ -4,7 +4,7 @@ import { login } from '../../auth'
 import { useContext, useState } from "react";
 import { ErrorContext } from '../../components/ErrorField/ErrorContext';
 
-export default function useSchools() {
+export default function useLogs() {
   const [state, setState] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const { add:addError } = useContext(ErrorContext)

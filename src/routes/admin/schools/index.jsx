@@ -17,44 +17,29 @@ export default function SubstituteRelationships() {
       label: 'Skoler',
       value: 'schools',
       style: { textAlign: 'center' },
-      itemStyle: { textAlign: 'center' }
+      itemStyle: { textAlign: 'center' },
+      itemRender: (val, item) => {
+        return (
+          <>
+            { item.permittedSchools?.length || 0 }
+          </>
+        )
+      }
     },
     {
       label: 'Handlinger',
       value: 'actions',
       style: { textAlign: 'center' },
-      itemStyle: { textAlign: 'center' }
-    }
-  ]
-
-  const tableItems = useMemo(() => {
-    // Make a copy of the items and break all references
-    let tableItems = JSON.parse(JSON.stringify(schools))
-
-    // Update the fields with custom components
-    tableItems.forEach((i, index) => {
-      function Action () {
-        const item = {...schools[index]}
+      itemStyle: { textAlign: 'center' },
+      itemRender: (val, item) => {
         return (
           <div style={{display: 'flex', justifyContent: 'center'}}>
             <Button size="small" onClick={() => onEditItem(item)} style={{minHeight: '25px', padding: '0 1rem'}}>Rediger</Button>
           </div>
         )
       }
-      function SchoolCount () {
-        let str = i.permittedSchools?.length || 0;
-        if(i.permittedSchools?.includes('*')) str = 'Alle'
-
-        return (
-          <div>{str}</div>
-        )
-      }
-      i.actions = <Action />
-      i.schools = <SchoolCount />
-    })
-    // Return the prepared tableItems
-    return tableItems
-  }, [schools])
+    }
+  ]
 
   useEffect(() => {
     function getData () { get() }
@@ -70,6 +55,8 @@ export default function SubstituteRelationships() {
     if(!schoolId || !editedItem) return;
 
     let item = {...editedItem}
+
+    if(!item.permittedSchools || !Array.isArray(item.permittedSchools)) item.permittedSchools = [];
 
     if(schoolId === '*') {
       if(item.permittedSchools.length === schools.length) item.permittedSchools = [];
@@ -97,7 +84,7 @@ export default function SubstituteRelationships() {
     <div className='column-group'>
       <div style={{color: 'white', textAlign: 'center'}}>Her setter du opp hvilke skoler som for lov til å være vikar for hverandre</div>
       <Button style={{marginLeft: 'auto'}} onClick={() => onEditItem({name: '', permittedSchools: []})} size="small">Legg til ny skole</Button>
-      <Table headers={headers} items={tableItems} showSelect={false} headerStyle={{textAlign: 'left'}} itemStyle={{textAlign: 'left'}} isLoading={isLoading} mobileHeaderText="Skoler"/>
+      <Table headers={headers} items={schools} showSelect={false} headerStyle={{textAlign: 'left'}} itemStyle={{textAlign: 'left'}} isLoading={isLoading} mobileHeaderText="Skoler"/>
       {
         editedItem && 
         <Dialog isOpen={editedItem !== undefined} onDismiss={() => setEditedItem(undefined)}>
@@ -121,7 +108,7 @@ export default function SubstituteRelationships() {
                 schools.filter((s) => s._id !== editedItem._id).map((s) => {
                   return (
                     <div key={s.name}>
-                      <Checkbox checked={editedItem.permittedSchools.includes(s._id)} label={s.name} onChange={() => {onSchoolCheck(s._id)}} />
+                      <Checkbox checked={editedItem.permittedSchools?.includes(s._id)} label={s.name} onChange={() => {onSchoolCheck(s._id)}} />
                     </div>
                   )
                 })
