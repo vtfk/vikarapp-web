@@ -18,6 +18,7 @@ function typeifyVariable(variable) {
   function parseNumber(variable) {
     let parsed = undefined;
     if(variable.match(/-|:/)) return undefined; // Prevents parsing dates as numbers
+    if(variable.match((/\D/))) return undefined; // Prevents parsing strings with text as number
     if(variable.includes('.') || variable.includes(',')) parsed = parseFloat(variable);
     else parsed = parseInt(variable)
 
@@ -140,8 +141,10 @@ function envToObj (defaultConfig = {}, options = {}) {
       for(const row of rows) {
         if(!row.includes('=') || /^(\s)*#/.exec(row)) continue;
         let [key, value] = row.split('=');
-        
-        environmentVariables.push({ key, path: trimAwayMatch(systemPrefixes, key), value })
+        // If a delimiter is specified, split on that and join on '.' to get a valid JSON path
+        let path = key;
+        if(delimiter) path = key.split(delimiter).join('.')
+        environmentVariables.push({ key, path: trimAwayMatch(systemPrefixes, path), value })
       }
     }
   }
