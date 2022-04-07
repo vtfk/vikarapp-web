@@ -29,15 +29,12 @@ export default function useSubstitutions() {
 
     let query = '';
     for(let i = 0; i < queryParams.length; i++) {
-      if(i === 0) query += '?'
-      else query += '&'
-
-      query += queryParams[i]
+      query += '&' + queryParams[i]
     }
 
     // Create the request
     const request = {
-      url: `${config.VTFK_VIKARAPI_BASEURL}substitutions${query}`,
+      url: `${config.VTFK_VIKARAPI_BASEURL}substitutions?code=${config.VTFK_VIKARAPI_APPKEY}${query}`,
       method: 'GET',
       headers: {
         Authorization: bearerToken

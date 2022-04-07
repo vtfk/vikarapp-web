@@ -15,7 +15,7 @@ export default function useSchools() {
     const { bearerToken} = await login({ type: 'popup' })
 
     const request = {
-      url: `${config.VTFK_VIKARAPI_BASEURL}schools`,
+      url: `${config.VTFK_VIKARAPI_BASEURL}schools?code=${config.VTFK_VIKARAPI_APPKEY}`,
       method: 'GET',
       headers: {
         Authorization: bearerToken

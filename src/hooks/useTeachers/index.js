@@ -19,10 +19,9 @@ export default function useTeachers() {
 
       let query = ''
       if(returnSelf) query += 'returnSelf=true'
-      if(query) query = `?${query}`
 
       const request = {
-        url: `${config.VTFK_VIKARAPI_BASEURL}teachers/${term}${query}`,
+        url: `${config.VTFK_VIKARAPI_BASEURL}teachers/${term}?code=${config.VTFK_VIKARAPI_APPKEY}&${query}`,
         method: 'GET',
         headers: {
           Authorization: bearerToken

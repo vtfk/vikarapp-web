@@ -17,7 +17,7 @@ export default function useTeacherTeams() {
     const { bearerToken } = await login({ type: 'popup' })
 
     const request = {
-      url: `${config.VTFK_VIKARAPI_BASEURL}teacherteams/${id}`,
+      url: `${config.VTFK_VIKARAPI_BASEURL}teacherteams/${id}?code=${config.VTFK_VIKARAPI_APPKEY}`,
       method: 'GET',
       headers: {
         Authorization: bearerToken
