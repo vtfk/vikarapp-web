@@ -1,5 +1,5 @@
 import { Button, Checkbox, Dialog, DialogActions, DialogBody, DialogTitle, TextField } from "@vtfk/components";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Table } from "@vtfk/components";
 import useSchools from "../../../hooks/useSchools"
 

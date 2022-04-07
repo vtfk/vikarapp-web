@@ -80,6 +80,7 @@ export default function Logs () {
 
   useEffect(() => {
     get();
+    // eslint-disable-next-line
   }, [])
 
   return(
@@ -92,7 +93,7 @@ export default function Logs () {
       <Dialog isOpen={!!openedItem} style={{maxHeight: '90%'}} onDismiss={() => setOpenedItem()}>
         <DialogTitle>Detaljer</DialogTitle>
         <DialogBody style={{overflow: 'auto'}}>
-          <SyntaxHighlighter language='json' style={docco} customStyle={{ background: 'none', overflowX: 'none', marginTop: '0' }} >{JSON.stringify(openedItem, null, 2)}</SyntaxHighlighter>
+          <SyntaxHighlighter language='json' style={docco} customStyle={{ background: 'none', overflowX: 'none', marginTop: '0' }} >{openedItem && JSON.stringify(openedItem, null, 2)}</SyntaxHighlighter>
         </DialogBody>
         <DialogActions>
           <Button size="small" onClick={() => setOpenedItem(undefined)}>Ok</Button>
