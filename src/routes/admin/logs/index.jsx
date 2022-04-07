@@ -1,25 +1,46 @@
-import { Icon, Table } from "@vtfk/components";
-import { useEffect } from "react";
+import { Button, Dialog, DialogActions, DialogBody, DialogTitle, Icon, IconButton, Table } from "@vtfk/components";
+import { useEffect, useState } from "react";
 import useLogs from '../../../hooks/useLogs'
+
+import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/default-highlight'
+import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs'
+
+function formatDate(date) {
+  function padTo2Digits(num) {
+    return num.toString().padStart(2, '0');
+  }
+  return [
+    padTo2Digits(date.getDate()),
+    padTo2Digits(date.getMonth() + 1),
+    date.getFullYear(),
+  ].join('.');
+}
 
 export default function Logs () {
   const { get, state, isLoading } = useLogs();
+  const [openedItem, setOpenedItem] = useState(undefined)
   
   const headers = [
     {
       label: 'Tidspunkt',
-      value: 'startTimestamp'
+      value: 'startTimestamp',
+      itemRender: (val) => {
+        return (
+          <>
+            { formatDate(new Date(val)) }
+          </>
+        )
+      }
     },
     {
       label: 'Type',
       value: 'type',
       itemTooltip: 'type',
+      style: { textAlign: 'center' },
       itemRender: (value, item, header, index) => {
         return(
           <>
-            {console.log(value)}
             {
-              
               <Icon name={value} />
             }
           </>
@@ -37,11 +58,21 @@ export default function Logs () {
     {
       label: 'Varighet',
       value: 'duration',
-      itemRender: (item, index, header) => {
+      itemRender: (val, item, index, header) => {
         return(
           <>
-            { `${((item[header.value] || 1000) / 1000).toFixed(1)} sek` }
+            { `${((parseInt(val) || 1000) / 1000).toFixed(2)} sek` }
           </>
+        )
+      }
+    },
+    {
+      label: 'Detailjer',
+      itemRender: (val, i) => {
+        return (
+          <div style={{width: '32px'}}>
+            <IconButton icon="external" onClick={() => setOpenedItem(i)} />
+          </div>
         )
       }
     }
@@ -58,6 +89,15 @@ export default function Logs () {
         items={state}
         isLoading={isLoading}
       />
+      <Dialog isOpen={!!openedItem} style={{maxHeight: '90%'}} onDismiss={() => setOpenedItem()}>
+        <DialogTitle>Detaljer</DialogTitle>
+        <DialogBody style={{overflow: 'auto'}}>
+          <SyntaxHighlighter language='json' style={docco} customStyle={{ background: 'none', overflowX: 'none', marginTop: '0' }} >{JSON.stringify(openedItem, null, 2)}</SyntaxHighlighter>
+        </DialogBody>
+        <DialogActions>
+          <Button size="small" onClick={() => setOpenedItem(undefined)}>Ok</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   )
 }
