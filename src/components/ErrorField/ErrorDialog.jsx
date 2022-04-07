@@ -37,7 +37,6 @@ export default function ErrorDialog({ errors, onOk, onClear, style }) {
       <DialogBody>
         <ErrorField error={errors[errorIndex]} showDetails={isShowDetails}/>
       </DialogBody>
-      <hr/>
       <DialogActions className='vtfk-errordialog-actions'>
         <Button size="small" onClick={() => handleOk()}>Ok</Button>
         { errors.length > 1 && <Button size="small" onClick={() => handleClear()}>Ok til alle</Button> }

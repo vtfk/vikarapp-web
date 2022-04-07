@@ -16,8 +16,10 @@ async function main() {
     await worker.start()
   }
 
-  console.log('Config', config)
-  console.log('Environment', process.env)
+  if(process.env.NODE_ENV === 'development') {
+    console.log('Application configuration', config)
+    console.log('Environment', process.env)
+  }
 
   // Teams client
   microsoftTeams.initialize();

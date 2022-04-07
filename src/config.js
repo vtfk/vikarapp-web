@@ -9,6 +9,5 @@ const defaultConfig = {
 }
 
 if(!config) config = envToConfig(defaultConfig)
-console.log('Application configuration', config)
 
 export default config;

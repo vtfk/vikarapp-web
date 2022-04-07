@@ -36,6 +36,7 @@ const defaultConfig = {
 }
 
 const config = envToObj(defaultConfig, { prefixes: 'auth' });
-console.log('Authentication config', config)
+if(process.env.NODE_ENV === 'development') console.log('Authentication configuration', config)
+
 
 export default config;
