@@ -43,7 +43,7 @@ export default function useSchools() {
     delete item._elements;
 
     const request = {
-      url: `${config.VTFK_VIKARAPI_BASEURL}schools/${item._id}`,
+      url: `${config.VTFK_VIKARAPI_BASEURL}schools/${item._id}?code=${config.VTFK_VIKARAPI_APPKEY}`,
       method: 'PUT',
       headers: {
         Authorization: bearerToken
@@ -71,7 +71,7 @@ export default function useSchools() {
 
       // Prepare the request
       const request = {
-        url: `${config.VTFK_VIKARAPI_BASEURL}schools`,
+        url: `${config.VTFK_VIKARAPI_BASEURL}schools?code=${config.VTFK_VIKARAPI_APPKEY}`,
         method: 'POST',
         headers: {
           Authorization: bearerToken

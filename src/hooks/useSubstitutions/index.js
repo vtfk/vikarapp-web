@@ -74,7 +74,7 @@ export default function useSubstitutions() {
 
       // Create the request
       const request = {
-        url: `${config.VTFK_VIKARAPI_BASEURL}substitutions`,
+        url: `${config.VTFK_VIKARAPI_BASEURL}substitutions?code=${config.VTFK_VIKARAPI_APPKEY}`,
         method: 'POST',
         headers: {
           Authorization: bearerToken
