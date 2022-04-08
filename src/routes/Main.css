@@ -15,13 +15,15 @@
   background-color: #567090;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .main-content {
-  flex: 1 0 auto;
+  flex: 1 1 auto;
   margin-bottom: 0.5rem;
   display: flex;
   align-items: stretch;
+  overflow-y: auto;
 }
 
 .main-content-bg {

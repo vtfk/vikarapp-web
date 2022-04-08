@@ -24,6 +24,7 @@ export default function Logs () {
     {
       label: 'Tidspunkt',
       value: 'startTimestamp',
+      itemTooltip: 'startTimestamp',
       itemRender: (val) => {
         return (
           <>
@@ -41,7 +42,7 @@ export default function Logs () {
         return(
           <>
             {
-              <Icon name={value} />
+              <Icon name={value} style={{fill: value === 'error' ? '#dc3545' : '#71a4f7'}} />
             }
           </>
         )
@@ -68,6 +69,7 @@ export default function Logs () {
     },
     {
       label: 'Detailjer',
+      value: '',
       itemRender: (val, i) => {
         return (
           <div style={{width: '32px'}}>
