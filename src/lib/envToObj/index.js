@@ -139,10 +139,11 @@ function envToObj (defaultConfig = {}, options = {}) {
       if(!val) continue;
       const rows = val.split(/\r?\n/)
       for(const row of rows) {
-        if(!row.includes('=') || /^(\s)*#/.exec(row)) continue;
-        let [key, value] = row.split('=');
-        // If a delimiter is specified, split on that and join on '.' to get a valid JSON path
+        if(!row.includes('=') || /^(\s)*#/.exec(row)) continue; // If the row dont start includes = or it starts with # it is not a valid entry, continue
+
+        let [key, value] = row.split(/=(.*)/); // Split on the first occurance of =
         let path = key;
+        // If a delimiter is specified, split on that and join on '.' to get a valid JSON path
         if(delimiter) path = key.split(delimiter).join('.')
         environmentVariables.push({ key, path: trimAwayMatch(systemPrefixes, path), value })
       }
