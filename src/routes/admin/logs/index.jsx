@@ -109,6 +109,8 @@ export default function Logs () {
         headers={headers}
         items={state}
         isLoading={isLoading}
+        mobileHeaderText="Logger"
+        selectOnClick={false}
       />
       </div>
       <Dialog isOpen={!!openedItem} style={{maxHeight: '90%'}} onDismiss={() => setOpenedItem()}>
