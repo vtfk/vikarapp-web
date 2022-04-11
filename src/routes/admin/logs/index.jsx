@@ -1,6 +1,7 @@
-import { Button, Dialog, DialogActions, DialogBody, DialogTitle, Icon, IconButton, Table } from "@vtfk/components";
+import { Button, Datepicker, Dialog, DialogActions, DialogBody, DialogTitle, Icon, IconButton, Table } from "@vtfk/components";
 import { useEffect, useState } from "react";
 import useLogs from '../../../hooks/useLogs'
+import './styles.scss'
 
 import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/default-highlight'
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs'
@@ -17,9 +18,13 @@ function formatDate(date) {
 }
 
 export default function Logs () {
+  const today = new Date();
+
   const { get, state, isLoading } = useLogs();
   const [openedItem, setOpenedItem] = useState(undefined)
-  
+  const [from, setFrom] = useState(new Date(today.setHours(0, 0, 0, 0)))
+  const [to, setTo] = useState(new Date(today.setHours(24, 0, 0, 0)))
+
   const headers = [
     {
       label: 'Tidspunkt',
@@ -81,17 +86,31 @@ export default function Logs () {
   ]
 
   useEffect(() => {
-    get();
+    if(from && to) {
+      console.log('Getting')
+      get(from, to);
+    }
+
     // eslint-disable-next-line
-  }, [])
+  }, [from, to])
 
   return(
     <div className='column-group'>
+      <div className="toolbar" style={{display: 'flex'}}>
+        <div style={{display: 'flex', alignItems: 'center'}}>
+          <Datepicker placeholder="Fra" selected={from} onChange={(e) => { setFrom(e) }} />
+        </div>
+        <div style={{display: 'flex', alignItems: 'center'}}>
+          <Datepicker placeholder="Til" selected={to} onChange={(e) => { setTo(e) }} />
+        </div>
+      </div>
+      <div style={{overflow: 'auto', flexGrow: 1}}>
       <Table
         headers={headers}
         items={state}
         isLoading={isLoading}
       />
+      </div>
       <Dialog isOpen={!!openedItem} style={{maxHeight: '90%'}} onDismiss={() => setOpenedItem()}>
         <DialogTitle>Detaljer</DialogTitle>
         <DialogBody style={{overflow: 'auto'}}>

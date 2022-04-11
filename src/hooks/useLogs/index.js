@@ -9,7 +9,7 @@ export default function useLogs() {
   const [isLoading, setIsLoading] = useState(false);
   const { add:addError } = useContext(ErrorContext)
 
-  async function get() {
+  async function get(from, to) {
     setIsLoading(true);
 
     const { bearerToken} = await login({ type: 'popup' })
@@ -21,6 +21,14 @@ export default function useLogs() {
         Authorization: bearerToken
       }
     }
+
+    let query = '';
+    if(from && to) query += `from=${from.toISOString()}&to=${to.toISOString()}` 
+    if(query) {
+      query = '&' + query;
+      request.url += query;
+    }
+
 
 
     try {
