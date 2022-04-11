@@ -85,6 +85,7 @@ export default function Substitute () {
           showSelect
           onSelectedItemsChanged={(e) => { setSelectedTeams(e)}}
           noDataText={'Ingen teams er funnet'}
+          mobileHeaderText="Teams"
           style={{marginTop: '2rem'}}
         />
       }

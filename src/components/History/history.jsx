@@ -110,6 +110,7 @@ export default function History() {
       <h2 style={{margin: '0', color: '#FFBF00'}}>Vikariat</h2>
       <SubstitutionTable
         items={substitutions}
+        mobileHeaderText="Historikk"
       />
     </div>
   )

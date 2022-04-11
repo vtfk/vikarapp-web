@@ -29,8 +29,6 @@ export default function useLogs() {
       request.url += query;
     }
 
-
-
     try {
       const { data } = await axios.request(request);
       setState(data);

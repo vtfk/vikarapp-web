@@ -119,6 +119,7 @@ export default function SubstituteRelationships() {
         showSelect
         selectOnClick
         selectedTeamIds={selectedTeamIds}
+        mobileHeaderText="Teams"
         onSelectedIdsChanged={(e) => setSelectedTeamIds(e)}
       />
       <div style={{marginTop: 'auto'}}>
