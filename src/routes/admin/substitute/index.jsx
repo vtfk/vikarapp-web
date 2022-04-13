@@ -76,7 +76,9 @@ export default function SubstituteRelationships() {
   }
 
   return (
-    <div className="column-group" style={{height: '100%'}}>
+    <div style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
+      <p className="description">Her kan du administrere alle vikariater</p>
+      <div className="column-group" style={{height: '100%'}}>
       <h2 style={{margin: '0', color: '#FFBF00'}}>Vikar:</h2>
       <PersonSearchField
         placeholder="Hvem skal være vikar?"
@@ -125,6 +127,7 @@ export default function SubstituteRelationships() {
       <div style={{marginTop: 'auto'}}>
         <Button disabled={!isReadyToSave} onClick={() => postSubstitution()}>Legg til vikariat</Button>
       </div>
+    </div>
     </div>
   )
 }

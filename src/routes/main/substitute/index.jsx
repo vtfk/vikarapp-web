@@ -71,6 +71,7 @@ export default function Substitute () {
 
   return (
     <div style={{width: '100%', display: 'flex', flexDirection: 'column'}}>
+      <p className="description">Søk opp en lærer og start ett eller flere vikariat</p>
       <PersonSearchField 
         placeholder="Søk etter læreren du skal være vikar for"
         onSelected={(e) => { setSelectedTeacher(e); searchTeacherTeams(e?.userPrincipalName) }}

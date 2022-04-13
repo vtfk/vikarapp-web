@@ -96,6 +96,7 @@ export default function Logs () {
 
   return(
     <div className='column-group'>
+      <p className="description">Logger over handlinger i VikarApp</p>
       <div className="toolbar" style={{display: 'flex'}}>
         <div style={{display: 'flex', alignItems: 'center'}}>
           <Datepicker placeholder="Fra" selected={from} onChange={(e) => { setFrom(e) }} />

@@ -82,7 +82,7 @@ export default function SubstituteRelationships() {
 
   return (
     <div className='column-group'>
-      <div style={{color: 'white', textAlign: 'center'}}>Her setter du opp hvilke skoler som for lov til å være vikar for hverandre</div>
+      <p className="description">Her setter du opp hvilke skoler som for lov til å være vikar for hverandre</p>
       <Button style={{marginLeft: 'auto'}} onClick={() => onEditItem({name: '', permittedSchools: []})} size="small">Legg til ny skole</Button>
       <Table headers={headers} items={schools} showSelect={false} headerStyle={{textAlign: 'left'}} itemStyle={{textAlign: 'left'}} isLoading={isLoading} mobileHeaderText="Skoler"/>
       {

@@ -45,19 +45,18 @@ export default function MainOverview() {
 
   return (
     <div className="overview">
-      <div className="main-content">
-        <SubstitutionTable
-          itemId="_id"
-          items={substitutions}
-          isLoading={isLoading}
-          selected={selectedIds}
-          showSelect
-          selectOnClick
-          mobileHeaderText="Mine vikariat"
-          onSelectedIdsChanged={(e) => setSelectedIds(e)}
-          onSelectedItemsChanged={(e) => setSelectedItems(e)}
-        />
-      </div>
+      <p className="description">Her kan du se og fornye dine siste vikariater</p>
+      <SubstitutionTable
+        itemId="_id"
+        items={substitutions}
+        isLoading={isLoading}
+        selected={selectedIds}
+        showSelect
+        selectOnClick
+        mobileHeaderText="Mine vikariat"
+        onSelectedIdsChanged={(e) => setSelectedIds(e)}
+        onSelectedItemsChanged={(e) => setSelectedItems(e)}
+      />
       <div className='main-footer-button-group' style={{marginTop: '1rem'}}>
         <Link to="substitute">
           <Button>Jeg skal være vikar</Button>

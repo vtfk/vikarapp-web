@@ -48,6 +48,14 @@
   margin-top: 1rem;
 }
 
+p.description {
+  margin: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  color: white;
+  text-align: center;
+}
+
 .settings-button {
   width: 40px
 }
