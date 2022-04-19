@@ -1,12 +1,7 @@
 
-// import ErrorDialog from '../components/ErrorField/ErrorDialog'
-// import useError from '../components/ErrorField/useError'
-
 import Select from "../components/Select";
 
 export default function Debug() {
-  // const { errors, remove, clear } = useError()
-
   const items = [
     {
       label: 'Test #1',

@@ -3,11 +3,13 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { login } from '../../auth'
 import { ErrorContext } from '../../components/ErrorField/ErrorContext';
+import { LoadingContext } from '../../components/LoadingDialog/LoadingContext';
 
 export default function useSubstitutions() {
   const [state, setState] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const { add:addError } = useContext(ErrorContext)
+  const { add:addLoading, complete:completeLoading } = useContext(LoadingContext)
 
   /**
    * Get substitutions
@@ -44,7 +46,7 @@ export default function useSubstitutions() {
     // Make the request
     try {
       const { data } = await axios.request(request);
-      console.log('Substitutions', data)
+
       // Set the state
       setState(data)
       setIsLoading(false)
@@ -84,7 +86,9 @@ export default function useSubstitutions() {
       }
 
       // Make the request
+      const loadingId = addLoading({ message: 'test' })
       const { data } = await axios.request(request);
+      completeLoading(loadingId)
       return data;
     } catch (err) {
       addError(err)

@@ -5,6 +5,7 @@ import {
   Route,
 } from "react-router-dom";
 import { ErrorProvider } from './components/ErrorField/ErrorContext';
+import { LoadingProvider } from './components/LoadingDialog/LoadingContext';
 
 /*
   Import routes
@@ -19,15 +20,17 @@ import Logout from './routes/Logout'
 function App() {
   return (
     <ErrorProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/login' element={ <Login /> } />
-          <Route path="/handlelogin" element={<HandleLogin />} />
-          <Route path="/loginredirect" element={<LoginRedirect />} />
-          <Route path="/logout" element={ <Logout /> } />
-          <Route path="/*" element={<AuthRoute><Main /></AuthRoute>} />
-        </Routes>
-      </BrowserRouter>
+      <LoadingProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path='/login' element={ <Login /> } />
+            <Route path="/handlelogin" element={<HandleLogin />} />
+            <Route path="/loginredirect" element={<LoginRedirect />} />
+            <Route path="/logout" element={ <Logout /> } />
+            <Route path="/*" element={<AuthRoute><Main /></AuthRoute>} />
+          </Routes>
+        </BrowserRouter>
+      </LoadingProvider>
     </ErrorProvider>
   );
 }

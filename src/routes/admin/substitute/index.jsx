@@ -100,7 +100,7 @@ export default function SubstituteRelationships() {
         isLoading={isLoadingTeams}
         showSelect
         selectOnClick
-        selectedTeamIds={selectedTeamIds}
+        selectedIds={selectedTeamIds}
         mobileHeaderText="Teams"
         onSelectedIdsChanged={(e) => setSelectedTeamIds(e)}
       />

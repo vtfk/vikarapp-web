@@ -87,7 +87,6 @@ export default function Logs () {
 
   useEffect(() => {
     if(from && to) {
-      console.log('Getting')
       get(from, to);
     }
 

@@ -77,7 +77,7 @@ export default function SubstitutionTable({items, mobileHeaderText, isLoading, s
       headers={headers}
       items={items}
       isLoading={isLoading}
-      selected={selected}
+      selectedIds={selected}
       selectOnClick={selectOnClick}
       showSelect={showSelect}
       mobileHeaderText={mobileHeaderText}

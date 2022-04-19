@@ -11,9 +11,6 @@ export default function useError() {
   function add(error) {
     // If the error is nothig, just return
     if(!error) return;
-    
-    console.log('Adding error', error)
-    console.log('Type: ', typeof error)
 
     // If the error is a string, convert to object
     if(typeof error === 'string') {
@@ -29,7 +26,6 @@ export default function useError() {
     const newErrors = JSON.parse(JSON.stringify(errors));
     newErrors.push(error);
 
-    console.log('New errors:', newErrors)
     setErrors(newErrors);
   }
 
