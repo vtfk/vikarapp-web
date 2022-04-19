@@ -71,7 +71,10 @@ export default function SubstituteRelationships() {
     })
     
     try {
-      postSubstitutions(substitutions)
+      if(window.confirm(`Er du helt sikker på at du vil aktivere disse '${substitutions.length}' vikariatene?`)) {
+        await postSubstitutions(substitutions)
+        setSelectedTeamIds([])
+      }
     } catch {}
   }
 
@@ -90,29 +93,6 @@ export default function SubstituteRelationships() {
         onSelected={(e) => onSelectedTeacher(e)}
         returnSelf
       />
-      {/* <SearchField
-        items={availableSubstitutes}
-        itemMapping={itemMapping}
-        placeholder="Hvem skal være vikar?"
-        loading={isLoadingSubstitutes}
-        onChange={(e) => onSubstituteSearchChanges(e.target.value)}
-        onSearch={(e) => { searchForSubstitute(e.target.value) }}
-        onSelected={(e) => { setSelectedSubstitute(e) }}
-        debounceMs={250}
-        rounded
-      />
-      <h2 style={{margin: '0', color: '#FFBF00'}}>Lærer:</h2>
-      <SearchField
-        items={availableTeachers}
-        itemMapping={itemMapping}
-        placeholder="For hvilken lærer?"
-        loading={isLoadingTeachers}
-        onChange={(e) => onTeacherSearchChanged(e.target.value)}
-        onSearch={(e) => { searchForTeacher(e.target.value) }}
-        onSelected={(e) => { onSelectedTeacher(e) }}
-        debounceMs={250}
-        rounded
-      /> */}
       <Table
         itemId="id"
         headers={tableHeaders}

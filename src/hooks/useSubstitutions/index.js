@@ -44,6 +44,7 @@ export default function useSubstitutions() {
     // Make the request
     try {
       const { data } = await axios.request(request);
+      console.log('Substitutions', data)
       // Set the state
       setState(data)
       setIsLoading(false)
@@ -93,47 +94,3 @@ export default function useSubstitutions() {
 
   return { state, get, post, isLoading }
 }
-
-
-/*
-  Mulige måter å sette dette opp på
-
-{
-  "_id": "",
-  "status": "pending || active || expired",
-  "teamId": "",
-  "teamName": "",
-  "substituteteacherUpn": "",
-  "substituteTeacherName": "",
-  "teacherUpn": "",
-  "teacherName": "",
-  "expirationTimestamp": ""
-}
-
-{
-  "_id": "",
-  "teamId": "",
-  "teamName": "",
-  "substitutions": [
-    {
-      "_id": "",
-      "teacherUpn": "",
-      "teacherName": "",
-      "expirationTimestamp": ""
-    }
-  ]
-}
-
-{
-  "_id": "",
-  "teacherUpn": "",
-  "teacherName": "",
-  "substitutions": [
-    {
-      "teamId": "",
-      "teamName": "",
-      "expirationTimestamp": ""
-    }
-  ]
-}
-*/
