@@ -46,6 +46,10 @@ const headers = [
     }
   },
   {
+    label: locale(localizations.substitute),
+    value: 'substituteName'
+  },
+  {
     label: locale(localizations.teacher),
     value: 'teacherName'
   },
@@ -77,6 +81,8 @@ export default function SubstitutionTable({items, mobileHeaderText, isLoading, s
       selectOnClick={selectOnClick}
       showSelect={showSelect}
       mobileHeaderText={mobileHeaderText}
+      headerStyle={{fontSize: '14px'}}
+      itemStyle={{fontSize: '14px'}}
       onSelectedIdsChanged={(e) => onSelectedIdsChanged && typeof onSelectedIdsChanged === 'function' && onSelectedIdsChanged(e)}
       onSelectedItemsChanged={(e) => onSelectedItemsChanged && typeof onSelectedItemsChanged === 'function' && onSelectedItemsChanged(e)}
     />

@@ -111,6 +111,7 @@ export default function History() {
       <SubstitutionTable
         items={substitutions}
         mobileHeaderText="Historikk"
+        showSubstitute
       />
     </div>
   )

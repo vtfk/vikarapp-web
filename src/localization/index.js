@@ -15,6 +15,11 @@ export const localizations = {
     nn: 'Lærar',
     en: 'Teacher'
   },
+  substitute: {
+    nb: 'Vikar',
+    nn: 'Vikar',
+    en: 'Substitute'
+  },
   class: {
     nb: 'Klasse',
     nn: 'Undervisningsgruppe',
