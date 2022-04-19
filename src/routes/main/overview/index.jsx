@@ -34,13 +34,14 @@ export default function MainOverview() {
     }
 
     try {
+      setIsShowRenewalDialog(false)
       await postSubstitutions(request)
       setSelectedIds([]);
       setSelectedItems([]);
       await get(getValidToken().username)
     } catch {}
     
-    setIsShowRenewalDialog(false)
+    
   }
 
   return (

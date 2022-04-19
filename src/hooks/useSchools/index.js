@@ -3,11 +3,13 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { login } from '../../auth'
 import { ErrorContext } from '../../components/ErrorField/ErrorContext';
+import { LoadingContext } from '../../components/LoadingDialog/LoadingContext';
 
 export default function useSchools() {
   const [state, setState] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const { add:addError } = useContext(ErrorContext)
+  const { add:addLoading, complete:completeLoading, clear:clearLoading } = useContext(LoadingContext)
 
   async function get() {
     setIsLoading(true);
@@ -53,8 +55,11 @@ export default function useSchools() {
 
     // Update the relationship
     try {
+      const loadingId = addLoading({ message: '' })
       await axios.request(request);
+      completeLoading(loadingId)
     } catch (err) {
+      clearLoading();
       addError(err)
       throw err;
     }
@@ -80,11 +85,14 @@ export default function useSchools() {
       }
 
       // Make the request
+      const loadingId = addLoading({ message: '' })
       const { data } = await axios.request(request);
+      completeLoading(loadingId)
 
       // Return the data
       return data
     } catch (err) {
+      clearLoading();
       addError(err)
       throw err;
     }
