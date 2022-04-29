@@ -112,13 +112,13 @@ export default function Logs () {
         </div>
       </div>
       <div style={{overflow: 'auto', flexGrow: 1}}>
-      <Table
-        headers={headers}
-        items={state}
-        isLoading={isLoading}
-        mobileHeaderText="Logger"
-        selectOnClick={false}
-      />
+        <Table
+          headers={headers}
+          items={state}
+          isLoading={isLoading}
+          mobileHeaderText="Logger"
+          selectOnClick={false}
+        />
       </div>
       <Dialog isOpen={!!openedItem} style={{maxHeight: '90%'}} onDismiss={() => setOpenedItem()}>
         <DialogTitle>Detaljer</DialogTitle>

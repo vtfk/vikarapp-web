@@ -76,44 +76,49 @@ export default function History() {
   */
 
   return(
-    <div className="column-group">
+    <div className="column-group" style={{overflow: 'auto'}}>
       <h2 style={{margin: '0', color: '#FFBF00'}}>Filtrering</h2>
-      <div className="history-input-group">
-        { isAdmin &&
+      <div className="column-group" style={{gap: '1rem'}}>
+        <div className="history-input-group">
+          { isAdmin &&
+            <PersonSearchField
+              placeholder="Vikar"
+              returnSelf
+              onSelected={(e) => setSelectedSubstitute(e)}
+            />
+          }
           <PersonSearchField
-            placeholder="Vikar"
+            placeholder="Lærer"
             returnSelf
-            onSelected={(e) => setSelectedSubstitute(e)}
+            onSelected={(e) => setSelectedTeacher(e)}
           />
-        }
-        <PersonSearchField
-          placeholder="Lærer"
-          returnSelf
-          onSelected={(e) => setSelectedTeacher(e)}
-        />
-      </div>
-      <div className="history-input-group">
-        <Select
-          placeholder="Velg statuser"
-          items={allStatuses}
-          selected={selectedStatuses}
-          multiple
-          onChange={(e) => setSelectedStatuses(e)}
-        />
-        <Select
-          placeholder="Velg år"
-          items={availableYears}
-          multiple
-          onChange={(e) => setSelectedYears(e)}
-        />
+        </div>
+        <div className="history-input-group">
+          <Select
+            placeholder="Velg statuser"
+            items={allStatuses}
+            selected={selectedStatuses}
+            multiple
+            onChange={(e) => setSelectedStatuses(e)}
+          />
+          <Select
+            placeholder="Velg år"
+            items={availableYears}
+            multiple
+            onChange={(e) => setSelectedYears(e)}
+          />
+        </div>
       </div>
       <h2 style={{margin: '0', color: '#FFBF00'}}>Vikariat</h2>
-      <SubstitutionTable
-        items={substitutions}
-        mobileHeaderText="Historikk"
-        isLoading={isSubsitutionLoading}
-        showSubstitute
-      />
+      <div style={{flexGrow: '1', overflow: 'auto'}}>
+        <SubstitutionTable
+          items={substitutions}
+          mobileHeaderText="Historikk"
+          isLoading={isSubsitutionLoading}
+          showSubstitute
+        />
+      </div>
+
     </div>
   )
 }
