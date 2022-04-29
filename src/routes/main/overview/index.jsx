@@ -1,6 +1,6 @@
 import './style.css'
 import { Button, Dialog, DialogTitle, DialogBody, DialogActions} from '@vtfk/components'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import useSubstitutions from '../../../hooks/useSubstitutions'
 import { getValidToken } from '../../../auth'
@@ -19,18 +19,34 @@ export default function MainOverview() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
+  const uniqueIds = useMemo(() => {
+    const unique = [];
+    const alreadyAddedIds = [];
+
+    for(const item of selectedItems) {
+      if(alreadyAddedIds.includes(item.teamId)) continue;
+      unique.push(item);
+      alreadyAddedIds.push(item.teamId);
+    }
+
+    return unique;
+  }, [selectedItems])
+
   async function renewSubsitution() {
     // Input validation
     if(!selectedItems || selectedItems.length === 0) return;
 
     // Make an array of each request
     const request = []
+    const alreadyAddedIds = [];
     for(const substitution of selectedItems) {
+      if(alreadyAddedIds.includes(substitution.teamId)) continue;
       request.push({
         substituteUpn: substitution.substituteUpn,
         teacherUpn: substitution.teacherUpn,
         teamId: substitution.teamId
       })
+      alreadyAddedIds.push(substitution.teamId);
     }
 
     try {
@@ -64,12 +80,12 @@ export default function MainOverview() {
         <Button onClick={() => navigate('/history')}>Historikk</Button>
       </div>
       <Dialog isOpen={isShowRenewalDialog} onDismiss={() => setIsShowRenewalDialog(false)}>
-        <DialogTitle>Fornye vikariat?</DialogTitle>
+        <DialogTitle>Ønsker du å lagre?</DialogTitle>
         <DialogBody>
-          Er du sikker på at du ønsker å fornye vikariat for:
+          Er du sikker på at du ønsker å forlenge eller fornye vikariat for:
           <ul>
             {
-              selectedItems.map((i) => <li key={i._id}>{i.teamName}</li>)
+              uniqueIds.map((i) => <li key={i._id}>{i.teamName}</li>)
             }
           </ul>
         </DialogBody>
