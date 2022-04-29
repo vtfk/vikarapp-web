@@ -24,7 +24,7 @@ const allStatuses = [
 export default function History() {
   const [ selectedStatuses, setSelectedStatuses ] = useState([])
   const [ selectedYears, setSelectedYears ] = useState([])
-  const { state:substitutions, get:getSubstitutions } = useSubstitutions()
+  const { state:substitutions, get:getSubstitutions, isLoading:isSubsitutionLoading } = useSubstitutions()
   const [ selectedSubstitute, setSelectedSubstitute ] = useState()
   const [ selectedTeacher, setSelectedTeacher ] = useState()
   const [ hasInitialized, setHasInitialized ] = useState(false);
@@ -111,6 +111,7 @@ export default function History() {
       <SubstitutionTable
         items={substitutions}
         mobileHeaderText="Historikk"
+        isLoading={isSubsitutionLoading}
         showSubstitute
       />
     </div>
