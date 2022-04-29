@@ -64,6 +64,7 @@ export default function useSubstitutions() {
    * @param {String} substitutions.teamIds
    */
   async function post(substitutions) {
+    let loadingId = undefined;
     try {
       // Input validation
       if(!substitutions || !Array.isArray(substitutions) || substitutions.length === 0) throw new Error('Vikariat kan ikke være tomt');
@@ -86,12 +87,13 @@ export default function useSubstitutions() {
       }
 
       // Make the request
-      const loadingId = addLoading({ message: 'test' })
+      loadingId = addLoading({ message: 'test' })
       const { data } = await axios.request(request);
       completeLoading(loadingId)
       return data;
     } catch (err) {
-      addError(err)
+      completeLoading(loadingId);
+      addError(err);
       throw err;
     }
   }

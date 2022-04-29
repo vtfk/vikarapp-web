@@ -40,8 +40,6 @@ export default function MainOverview() {
       setSelectedItems([]);
       await get(getValidToken().username)
     } catch {}
-    
-    
   }
 
   return (

@@ -11,7 +11,7 @@ export default function useTeachers() {
 
   async function search(term, returnSelf) {
     try {
-      if(!term || typeof term !== 'string' || term.length <= 2) return;
+      if(!term || typeof term !== 'string' || term.length <= 2) return [];
 
       setIsLoading(true);
 
@@ -28,11 +28,10 @@ export default function useTeachers() {
         }
       }
 
-    
       const { data } = await axios.request(request);
       setState(data);
       setIsLoading(false);
-      return data;
+      return data
     } catch(err) {
       addError(err)
       setState([]);

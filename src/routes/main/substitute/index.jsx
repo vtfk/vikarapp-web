@@ -74,7 +74,6 @@ export default function Substitute () {
   }
 
   async function onSelectedTeacherChanged(e) {
-    console.log('New selected teacher', e)
     setSelectedTeacher(e);
     if(e?.userPrincipalName) {
       // Retreive all of the substitutes teams
@@ -104,7 +103,6 @@ export default function Substitute () {
     <div style={{width: '100%', display: 'flex', flexDirection: 'column'}}>
       <div style={{flexGrow: '1'}}>
 
-      
       <p className="description">Søk opp en lærer og start ett eller flere vikariat</p>
       <PersonSearchField 
         placeholder="Søk etter læreren du skal være vikar for"
