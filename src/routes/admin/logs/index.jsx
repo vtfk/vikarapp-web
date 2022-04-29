@@ -59,7 +59,14 @@ export default function Logs () {
     },
     {
       label: 'Utført av',
-      value: 'requestor.name'
+      value: 'requestor.name',
+      itemRender: (val) => {
+        return (
+          <>
+            { val ? val : 'API'}
+          </>
+        )
+      }
     },
     {
       label: 'Varighet',
