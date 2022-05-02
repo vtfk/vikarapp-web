@@ -50,13 +50,11 @@ export default function MainOverview() {
       alreadyAddedIds.push(substitution.teamId);
     }
 
-    try {
-      setIsShowRenewalDialog(false)
-      await postSubstitutions(request)
-      setSelectedIds([]);
-      setSelectedItems([]);
-      await get(getValidToken().username)
-    } catch {}
+    setIsShowRenewalDialog(false)
+    await postSubstitutions(request)
+    setSelectedIds([]);
+    setSelectedItems([]);
+    await get(getValidToken().username)
   }
 
   return (

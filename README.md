@@ -23,4 +23,4 @@ More information about the system can be found [here](https://github.com/vtfk/az
 |REACT_APP_auth.providers.azuread.login.scopes | Application scopes | ['[AzureAppClientID]/.default']
 |REACT_APP_VTFK_VIKARAPI_BASEURL | The base URL of the VikarApp API | https://[url]/
 |REACT_APP_VTFK_VIKARAPI_APPKEY | The Azure Function key | 
-
+|REACT_APP_SENTRY_DSN | Sentry data source name for logging | 

@@ -97,7 +97,7 @@ export default function useSubstitutions() {
     } catch (err) {
       completeLoading(loadingId);
       addError(err);
-      throw err;
+      throw err?.message || err;
     }
   }
 

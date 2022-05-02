@@ -95,10 +95,8 @@ export default function SubstituteRelationships() {
       }
     })
     
-    try {
-      await postSubstitutions(substitutions)
-      clearState()
-    } catch {}
+    await postSubstitutions(substitutions)
+    clearState()
   }
 
   return (
