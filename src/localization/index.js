@@ -9,105 +9,6 @@ function getLanguageFromToken() {
 const preferredLanguage = getLanguageFromToken() || 'nb'
 
 export const localizations = {
-  teacher: {
-    nb: 'Lærer',
-    nn: 'Lærar',
-    en: 'Teacher'
-  },
-  substitute: {
-    nb: 'Vikar',
-    nn: 'Vikar',
-    en: 'Substitute'
-  },
-  class: {
-    nb: 'Klasse',
-    nn: 'Undervisningsgruppe',
-    en: 'Class'
-  },
-  classes: {
-    nb: 'Klasser',
-    nn: 'Undervisningsgruppar',
-    en: 'Classes'
-  },
-  expires: {
-    nb: 'Utløper',
-    nn: 'Utløpar',
-    en: 'Expires'
-  },
-  yes: {
-    nb: 'Ja',
-    nn: 'Ja',
-    en: 'Yes'
-  },
-  no: {
-    nb: 'Nei',
-    nn: 'Nei',
-    en: 'No'
-  },
-  cancel: {
-    nb: 'Avbryt',
-    nn: 'Avbryt',
-    en: 'Cancel'
-  },
-  activateSubstitution: {
-    nb: 'Aktiver vikariat',
-    nn: 'Aktiver vikariat',
-    en: 'Activate substitution'
-  },
-  doYouWantToSave: {
-    nb: 'Ønsker du å lagre?',
-    nn: 'Ønsker du å lagra?',
-    en: 'Do you want to save?'
-  },
-  history: {
-    nb: 'Historikk',
-    nn: 'Historikk',
-    en: 'History'
-  },
-  overview: {
-    headerSubtext: {
-      nb: 'Her kan du se og fornye dine siste vikariater',
-      nn: 'Her kan du sjå og fornya dei siste vikariata dine',
-      en: 'Here you can see and renew your last substitutions'
-    },
-    tableMobileHeader: {
-      nb: 'Mine vikariat',
-      nn: 'Vikariata mine',
-      en: 'My substitutions'
-    },
-    iShallSubstitute: {
-      nb: 'Jeg skal være vikar',
-      nn: 'Eg skal vera vikar',
-      en: 'Substitute'
-    },
-    extendSubstitution: {
-      nb: 'Forleng vikariat',
-      nn: 'Forleng vikariat',
-      en: 'Extend substitution'
-    },
-    doYouWantToRenew: {
-      nb: 'Er du sikker på at du ønsker å forlenge eller fornye vikariat for:',
-      nn: 'Er du sikker på at du ønsker å forlenga eller fornya vikariat for:',
-      en: 'Are you sure you want to extend or renew substitution for:'
-    }
-  },
-  admin: {
-    manageSubstitutions: {
-      nb: 'Behandle vikariat',
-      nn: 'Behandl vikariat',
-      en: 'Manage substitutions'
-    },
-    manageSearchPermissions: {
-      nb: 'Behandle søkerettigheter',
-      nn: 'Behandl søkerettigheter',
-      en: 'Manage search permissions'
-    },
-    logger: {
-      nb: 'Logger',
-      nn: 'Loggar',
-      en: 'Logs'
-    },
-  },
   words: {
     teacher: {
       nb: 'Lærer',
@@ -119,6 +20,11 @@ export const localizations = {
       nn: 'Vikar',
       en: 'Substitute'
     },
+    substitution: {
+      nb: 'Vikariat',
+      nn: 'Vikariat',
+      en: 'Substitution'
+    },
     substitutions: {
       nb: 'Vikariat',
       nn: 'Vikariat',
@@ -128,6 +34,16 @@ export const localizations = {
       nb: 'Skole',
       nn: 'Skule',
       en: 'School'
+    },
+    class: {
+      nb: 'Klasse',
+      nn: 'Undervisningsgruppe',
+      en: 'Class'
+    },
+    classes: {
+      nb: 'Klasser',
+      nn: 'Undervisningsgruppar',
+      en: 'Classes'
     },
     schools: {
       nb: 'Skoler',
@@ -203,16 +119,63 @@ export const localizations = {
       nn: 'Ukjent',
       en: 'Unknown'
     },
+    active: {
+      nb: 'Aktiv',
+      nn: 'Aktiv',
+      en: 'Active'
+    },
+    activate: {
+      nb: 'Aktiver',
+      nn: 'Aktiver',
+      en: 'Activate'
+    },
     pending: {
       nb: 'Venter',
       nn: 'Ventar',
       en: 'Pending'
     },
+    expires: {
+      nb: 'Utløper',
+      nn: 'Utløpar',
+      en: 'Expires'
+    },
+    expired: {
+      nb: 'Utløpt',
+      nn: 'Gått ut',
+      en: 'Expired'
+    },
     description: {
       nb: 'Beskrivelse',
       nn: 'Beskriving',
       en: 'Description'
+    },
+    historyNoun: {
+      nb: 'Historikk',
+      nn: 'Historikk',
+      en: 'History'
     }
+  },
+  terms: {
+    loggingIn: {
+      nb: 'Logger inn',
+      nn: 'Loggar inn',
+      en: 'Logging in'
+    },
+    loggingOut: {
+      nb: 'Logger ut',
+      nn: 'Loggar ut',
+      en: 'Logging out'
+    },
+    youWillSoonBeRedirected: {
+      nb: 'Du vil snart bli videresendt',
+      nn: 'Du vil snart bli vidaresendt',
+      en: 'You will soon be redirected'
+    },
+    doYouWantToSave: {
+      nb: 'Ønsker du å lagre?',
+      nn: 'Ønsker du å lagra?',
+      en: 'Do you want to save?'
+    },
   },
   components: {
     history: {
@@ -275,6 +238,48 @@ export const localizations = {
   },
   routes: {
     admin: {
+      overview: {
+        headerSubtext: {
+          nb: 'Her kan du se og fornye dine siste vikariater',
+          nn: 'Her kan du sjå og fornya dei siste vikariata dine',
+          en: 'Here you can see and renew your last substitutions'
+        },
+        tableMobileHeader: {
+          nb: 'Mine vikariat',
+          nn: 'Vikariata mine',
+          en: 'My substitutions'
+        },
+        iShallSubstitute: {
+          nb: 'Jeg skal være vikar',
+          nn: 'Eg skal vera vikar',
+          en: 'Substitute'
+        },
+        extendSubstitution: {
+          nb: 'Forleng vikariat',
+          nn: 'Forleng vikariat',
+          en: 'Extend substitution'
+        },
+        doYouWantToRenew: {
+          nb: 'Er du sikker på at du ønsker å forlenge eller fornye vikariat for:',
+          nn: 'Er du sikker på at du ønsker å forlenga eller fornya vikariat for:',
+          en: 'Are you sure you want to extend or renew substitution for:'
+        }
+      },
+      manageSubstitutions: {
+        nb: 'Behandle vikariat',
+        nn: 'Behandl vikariat',
+        en: 'Manage substitutions'
+      },
+      manageSearchPermissions: {
+        nb: 'Behandle søkerettigheter',
+        nn: 'Behandl søkerettigheter',
+        en: 'Manage search permissions'
+      },
+      logger: {
+        nb: 'Logger',
+        nn: 'Loggar',
+        en: 'Logs'
+      },
       substitute: {
         headerSubtext: {
           nb: 'Her kan du administrere alle vikariater',
@@ -438,6 +443,18 @@ export const localizations = {
         nb: 'Detaljer',
         nn: 'Detaljar',
         en: 'Details'
+      }
+    },
+    login: {
+      title: {
+        nb: 'Du logges inn',
+        nn: 'Du blir logga inn',
+        en: 'You are beeing logged in'
+      },
+      subtitle: {
+        nb: 'Hvis det ikke skjer automatisk, vennligst forsøk knappen',
+        nn: 'Viss det ikkje skjer automatisk, vennlegast forsøk knappen',
+        en: 'If it does not happen automatically, please try the button'
       }
     }
   }

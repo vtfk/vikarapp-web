@@ -142,22 +142,22 @@ export default function SubstituteRelationships() {
         open={showSaveConfirmation}
         onClickOk={() => postSubstitution()}
         onClickCancel={() => clearState()}
-        title={ locale(localizations.doYouWantToSave) }
+        title={ locale(localizations.terms.doYouWantToSave) }
       >
         <div>
           <div>{ locale(localizations.routes.admin.substitute.areYouSure) }</div>
             <table style={{textAlign: 'left', marginTop: '1rem', marginBottom: '0.5rem'}}>
             <tbody>
               <tr>
-                <th style={{verticalAlign: 'top', width: '75px'}}>{ locale(localizations.teacher) }:</th>
+                <th style={{verticalAlign: 'top', width: '75px'}}>{ locale(localizations.words.teacher) }:</th>
                 <td>{selectedTeacher?.displayName}</td>
               </tr>
               <tr>
-                <th style={{verticalAlign: 'top'}}>{ locale(localizations.substitute) }:</th>
+                <th style={{verticalAlign: 'top'}}>{ locale(localizations.words.substitute) }:</th>
                 <td>{selectedSubstitute?.displayName}</td>
               </tr>
               <tr>
-                <th style={{verticalAlign: 'top'}}>{ locale(localizations.classes) }</th>
+                <th style={{verticalAlign: 'top'}}>{ locale(localizations.words.classes) }</th>
                 <td>
                     {
                       selectedTeams.map((i, idx) => {

@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react'
 import * as auth from '../auth';
 import ErrorField from '../components/ErrorField';
+import { locale, localizations } from '../localization';
 import './Login.css'
 
 export default function Login() {
@@ -25,10 +26,9 @@ export default function Login() {
 
   return (
     <div className='container'>
-      <div className='title'>Logger inn</div>
-      <div className='subtitle'>Du vil snart bli videresendt</div>
+      <div className='title'>{ locale(localizations.terms.loggingIn) }</div>
+      <div className='subtitle'>{ locale(localizations.terms.youWillSoonBeRedirected) }</div>
       { error && <ErrorField error={error} /> }
-      {/* <div>User agent {window.navigator.userAgent.toLocaleLowerCase()}</div> */}
     </div>
   )
 }

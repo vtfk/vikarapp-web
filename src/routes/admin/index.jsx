@@ -20,25 +20,25 @@ export default function Admin() {
       {
         isAdmin &&
         <Link to="/admin/substitute" className='admin-action-button'>
-          <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer'}}>{ locale(localizations.admin.manageSubstitutions) }</Button>
+          <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer'}}>{ locale(localizations.routes.admin.manageSubstitutions) }</Button>
         </Link>
       }
       {
         isAdmin &&
         <Link to="/admin/history" className='admin-action-button'>
-          <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer'}}>{ locale(localizations.history) }</Button>
+          <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer'}}>{ locale(localizations.words.history) }</Button>
         </Link>
       }
       {
         isConfig &&
         <Link to="/admin/schools" className='admin-action-button'>
-          <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer', textDecoration: 'none'}}>{ locale(localizations.admin.manageSearchPermissions) }</Button>
+          <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer', textDecoration: 'none'}}>{ locale(localizations.routes.admin.manageSearchPermissions) }</Button>
         </Link>
       }
       {
         isAdmin &&
         <Link to="/admin/logs" className='admin-action-button'>
-          <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer'}}>{ locale(localizations.admin.logger) }</Button>
+          <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer'}}>{ locale(localizations.routes.admin.logger) }</Button>
         </Link>
       }
     </div>

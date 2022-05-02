@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import * as auth from '../auth'
 import ErrorField from '../components/ErrorField';
+import { locale, localizations } from '../localization';
 
 async function login() {
   await auth.login();
@@ -30,8 +31,8 @@ export default function LoginPage() {
 
   return (
     <div className="container">
-      <div className="title">Du logges inn</div>
-      <div className="subtitle">Hvis det ikke skjer automatisk, vennligst forsøk knappen</div>
+      <div className="title">{ locale(localizations.routes.login.title) }</div>
+      <div className="subtitle">{ locale(localizations.routes.login.subtitle) }</div>
       {/* <div>User agent {window.navigator.userAgent.toLocaleLowerCase()}</div> */}
       <button onClick={() => authenticate()}>Login</button>
       { error && <ErrorField error={error} showDetailsButton /> }

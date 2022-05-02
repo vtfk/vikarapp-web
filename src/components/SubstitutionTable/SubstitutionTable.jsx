@@ -7,13 +7,13 @@ import { localizations, locale } from '../../localization'
 function translateStatus(status) {
   switch(status) {
     case 'pending':
-      return 'Venter'
+      return locale(localizations.words.pending)
     case 'active':
-      return 'Aktiv'
+      return locale(localizations.words.active)
     case 'expired':
-      return 'Utløpt'
+      return locale(localizations.words.expired)
     default:
-      return 'Ukjent'
+      return locale(localizations.words.unknown)
   }
 }
 // Format dateTime to dd.mm.yyyy
@@ -46,19 +46,19 @@ const headers = [
     }
   },
   {
-    label: locale(localizations.substitute),
+    label: locale(localizations.words.substitute),
     value: 'substituteName'
   },
   {
-    label: locale(localizations.teacher),
+    label: locale(localizations.words.teacher),
     value: 'teacherName'
   },
   {
-    label: locale(localizations.classes),
+    label: locale(localizations.words.classes),
     value: 'teamName',
   },
   {
-    label: locale(localizations.expires),
+    label: locale(localizations.words.expires),
     value: 'expirationTimestamp',
     itemRender: (val) => {
       return (

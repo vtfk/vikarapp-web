@@ -68,8 +68,8 @@ export default function useSchools() {
   async function post(school) {
     try {
       // Validation
-      if(!school) throw new Error('Kan ikke opprette en ny skole når school er tom')
-      if(!school.name) throw new Error(`Kan ikke opprette ny skole når 'name' er tomt`)
+      if(!school) throw new Error(`Cannot create a new school when 'school'-property is empty`)
+      if(!school.name) throw new Error(`Cannot create a new school when 'name'-property is empty`)
 
       // Ensure valid token
       const { bearerToken} = await login({ type: 'popup' })

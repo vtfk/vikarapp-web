@@ -67,11 +67,11 @@ export default function useSubstitutions() {
     let loadingId = undefined;
     try {
       // Input validation
-      if(!substitutions || !Array.isArray(substitutions) || substitutions.length === 0) throw new Error('Vikariat kan ikke være tomt');
+      if(!substitutions || !Array.isArray(substitutions) || substitutions.length === 0) throw new Error('Cannot renew substitution because no request was provided');
       for(const substitution of substitutions) {
-        if(!substitution.substituteUpn) throw new Error(`Kan ikke fornye vikariat fordi substituteUpn mangler`)
-        if(!substitution.teacherUpn) throw new Error(`Kan ikke fornye vikariat fordi teacherUpn mangler`)
-        if(!substitution.teamId) throw new Error(`Kan ikke fornye vikariat for fordi teamId mangler`)
+        if(!substitution.substituteUpn) throw new Error(`Cannot renew substitution because 'substituteUpn'-property is missing`)
+        if(!substitution.teacherUpn) throw new Error(`Cannot renew substitution because 'teacherUpn'-property is missing`)
+        if(!substitution.teamId) throw new Error(`Cannot renew substitution because 'teamId'-property is missing`)
       }
 
       const { bearerToken} = await login({ type: 'popup' })

@@ -146,9 +146,9 @@ export default function Substitute () {
       </div>
       {
       <div className='main-footer-button-group'>
-        <Button disabled={selectedTeams.length === 0} onClick={() => activateSubstitution()}>{ locale(localizations.activateSubstitution) }</Button>
+        <Button disabled={selectedTeams.length === 0} onClick={() => activateSubstitution()}>{`${locale(localizations.words.activate)} ${locale(localizations.words.substitution)}`}</Button>
         <Link to="/">
-          <Button>{ locale(localizations.cancel) }</Button>
+          <Button>{ locale(localizations.words.cancel) }</Button>
         </Link>
       </div>
       }
