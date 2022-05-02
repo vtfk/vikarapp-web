@@ -26,7 +26,7 @@ export default function Admin() {
       {
         isAdmin &&
         <Link to="/admin/history" className='admin-action-button'>
-          <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer'}}>{ locale(localizations.words.history) }</Button>
+          <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer'}}>{ locale(localizations.words.historyNoun) }</Button>
         </Link>
       }
       {

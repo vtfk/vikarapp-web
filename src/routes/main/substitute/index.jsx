@@ -1,5 +1,5 @@
 import { Button } from '@vtfk/components'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Table } from '@vtfk/components'
 import {
   Link, useNavigate
@@ -10,6 +10,7 @@ import { login } from '../../../auth'
 import PersonSearchField from '../../../components/PersonSearchField';
 import { getValidToken } from '../../../auth'
 import { locale, localizations } from '../../../localization';
+import ConfirmationDialog from '../../../components/ConfirmationDialog'
 
 export default function Substitute () {
   const [selectedTeacher, setSelectedTeacher] = useState(undefined);
@@ -17,6 +18,7 @@ export default function Substitute () {
   const [hiddenTeams, setHiddenTeams] = useState([])
   const [selectedTeams, setSelectedTeams] = useState([])
   const [showHiddenTeams, setShowHiddenTeams] = useState(false);
+  const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
   
   const navigate = useNavigate()
   const { search:searchTeacherTeams, isLoadingTeams} = useTeacherTeams();
@@ -38,7 +40,13 @@ export default function Substitute () {
     }
   ]
 
+  // Memos
+  const confirmationMessage = useMemo(() => {
+
+  }, [selectedTeacher, selectedTeams])
+
   async function activateSubstitution() {
+    setShowConfirmationDialog(false);
     // Input validation
     if(!selectedTeacher) {
       alert('Du må velge en lærer du skal være vikar for');
@@ -48,12 +56,6 @@ export default function Substitute () {
       alert('Du må velge velge en eller flere klasse å vikariere for');
       return;
     }
-
-    // Verify that the request should be made
-    let message = `Ønsker du å vikarere for lærer ${selectedTeacher.displayName}?\n\n`
-    message += 'Klasser:\n'
-    selectedTeams.map((t) => message += `${t.displayName}\n`)
-    if(!window.confirm(message)) return;
 
     const token = await login({ type: 'popup'} )
 
@@ -73,7 +75,7 @@ export default function Substitute () {
       navigate('/')
     }
   }
-
+  
   async function onSelectedTeacherChanged(e) {
     setSelectedTeacher(e);
     if(e?.userPrincipalName) {
@@ -146,11 +148,45 @@ export default function Substitute () {
       </div>
       {
       <div className='main-footer-button-group'>
-        <Button disabled={selectedTeams.length === 0} onClick={() => activateSubstitution()}>{`${locale(localizations.words.activate)} ${locale(localizations.words.substitution)}`}</Button>
+        <Button
+          disabled={selectedTeams.length === 0}
+          onClick={() => setShowConfirmationDialog(true)}
+        >
+          {`${locale(localizations.words.activate)} ${locale(localizations.words.substitution)}`}
+        </Button>
         <Link to="/">
           <Button>{ locale(localizations.words.cancel) }</Button>
         </Link>
       </div>
+      }
+      {
+        <ConfirmationDialog
+          open={showConfirmationDialog}
+          title={ locale(localizations.routes.substitute.confirmationTitle) }
+          okBtnText={ locale(localizations.words.yes) }
+          cancelBtnText={ locale(localizations.words.no) }
+          onClickCancel={() => setShowConfirmationDialog(false)}
+          onClickOk={() => activateSubstitution() }
+        >
+          <table style={{ textAlign: 'left'}}>
+            <tbody>
+              <tr>
+                <th style={{verticalAlign: 'top'}}>{ locale(localizations.words.teacher) }</th>
+                <td>{ selectedTeacher?.displayName }</td>
+              </tr>
+              <tr>
+                <th style={{verticalAlign: 'top'}}>{ locale(localizations.words.classes) }</th>
+                <td>{ selectedTeams?.map((i, idx) => {
+                  return (
+                    <>
+                      { i.displayName }<br/>
+                    </>
+                  )
+                }) }</td>
+              </tr>
+            </tbody>
+          </table>
+        </ConfirmationDialog>
       }
     </div>
   )

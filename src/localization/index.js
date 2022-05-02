@@ -237,34 +237,34 @@ export const localizations = {
     }
   },
   routes: {
-    admin: {
-      overview: {
-        headerSubtext: {
-          nb: 'Her kan du se og fornye dine siste vikariater',
-          nn: 'Her kan du sjå og fornya dei siste vikariata dine',
-          en: 'Here you can see and renew your last substitutions'
-        },
-        tableMobileHeader: {
-          nb: 'Mine vikariat',
-          nn: 'Vikariata mine',
-          en: 'My substitutions'
-        },
-        iShallSubstitute: {
-          nb: 'Jeg skal være vikar',
-          nn: 'Eg skal vera vikar',
-          en: 'Substitute'
-        },
-        extendSubstitution: {
-          nb: 'Forleng vikariat',
-          nn: 'Forleng vikariat',
-          en: 'Extend substitution'
-        },
-        doYouWantToRenew: {
-          nb: 'Er du sikker på at du ønsker å forlenge eller fornye vikariat for:',
-          nn: 'Er du sikker på at du ønsker å forlenga eller fornya vikariat for:',
-          en: 'Are you sure you want to extend or renew substitution for:'
-        }
+    overview: {
+      headerSubtext: {
+        nb: 'Her kan du se og fornye dine siste vikariater',
+        nn: 'Her kan du sjå og fornya dei siste vikariata dine',
+        en: 'Here you can see and renew your last substitutions'
       },
+      tableMobileHeader: {
+        nb: 'Mine vikariat',
+        nn: 'Vikariata mine',
+        en: 'My substitutions'
+      },
+      iShallSubstitute: {
+        nb: 'Jeg skal være vikar',
+        nn: 'Eg skal vera vikar',
+        en: 'Substitute'
+      },
+      extendSubstitution: {
+        nb: 'Forleng vikariat',
+        nn: 'Forleng vikariat',
+        en: 'Extend substitution'
+      },
+      doYouWantToRenew: {
+        nb: 'Er du sikker på at du ønsker å forlenge eller fornye vikariat for:',
+        nn: 'Er du sikker på at du ønsker å forlenga eller fornya vikariat for:',
+        en: 'Are you sure you want to extend or renew substitution for:'
+      }
+    },
+    admin: {
       manageSubstitutions: {
         nb: 'Behandle vikariat',
         nn: 'Behandl vikariat',
@@ -391,6 +391,11 @@ export const localizations = {
         nb: 'teams som du allerede er medlem av',
         nn: 'teams som du allereie er medlem av',
         en: 'teams you are already a member of'
+      },
+      confirmationTitle: {
+        nb: 'Ønsker du å aktivere vikariat?',
+        nn: 'Ønsker du å aktivera vikariat?',
+        en: 'Are you sure you want to activate the substitution?'
       }
     },
     history: {

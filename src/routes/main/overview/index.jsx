@@ -78,7 +78,7 @@ export default function MainOverview() {
           <Button>{ locale(localizations.routes.overview.iShallSubstitute) }</Button>
         </Link>
         <Button disabled={selectedIds.length === 0} onClick={() => selectedItems.length > 0 && setIsShowRenewalDialog(true)}>{locale(localizations.routes.overview.extendSubstitution)}</Button>
-        <Button onClick={() => navigate('/history')}>{locale(localizations.words.history)}</Button>
+        <Button onClick={() => navigate('/history')}>{locale(localizations.words.historyNoun)}</Button>
       </div>
       <Dialog isOpen={isShowRenewalDialog} onDismiss={() => setIsShowRenewalDialog(false)}>
         <DialogTitle>{locale(localizations.terms.doYouWantToSave)}</DialogTitle>
