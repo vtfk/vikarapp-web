@@ -31,7 +31,7 @@ export default function Substitute () {
       itemStyle: {textAlign: 'left'}
     },
     {
-      label: 'Beskrivelse',
+      label: locale(localizations.words.description),
       value: 'description',
       style: {textAlign: 'left'},
       itemStyle: {textAlign: 'left'}
@@ -104,9 +104,9 @@ export default function Substitute () {
     <div style={{width: '100%', display: 'flex', flexDirection: 'column'}}>
       <div style={{flexGrow: '1'}}>
 
-      <p className="description">{ locale(localizations.substituteHeaderSubtext) }</p>
+      <p className="description">{ locale(localizations.routes.substitute.headerSubtext) }</p>
       <PersonSearchField 
-        placeholder="Søk etter læreren du skal være vikar for"
+        placeholder={ locale(localizations.routes.substitute.teacherSearchLabel) }
         onSelected={(e) => { onSelectedTeacherChanged(e) }}
       />
       {
@@ -118,15 +118,15 @@ export default function Substitute () {
           selectOnClick
           showSelect
           onSelectedItemsChanged={(e) => { setSelectedTeams(e)}}
-          noDataText={'Ingen teams er funnet'}
+          noDataText={ locale(localizations.routes.substitute.tableNoData) }
           mobileHeaderText="Teams"
           style={{marginTop: '2rem', height: 'auto'}}
         />
       }
       { hiddenTeams.length > 0 && 
       <div style={{marginTop: '1rem', color: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '0.5rem'}}>
-        Vi har skjult {hiddenTeams.length} teams som du allerede er medlem av
-        <Button size="small" onClick={() => setShowHiddenTeams(!showHiddenTeams)}>{!showHiddenTeams ? 'Se skjulte teams' : 'Skjul'}</Button>
+        { locale(localizations.routes.substitute.hiddenMsgPart1) } {hiddenTeams.length} { locale(localizations.routes.substitute.hiddenMsgPart2) }
+        <Button size="small" onClick={() => setShowHiddenTeams(!showHiddenTeams)}>{!showHiddenTeams ? locale(localizations.words.show) : locale(localizations.words.hide)}</Button>
         {
           showHiddenTeams &&
           <div>

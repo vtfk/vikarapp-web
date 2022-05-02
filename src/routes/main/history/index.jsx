@@ -47,11 +47,11 @@ export default function History() {
   return (
     <div style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
       <div>
-        <p className="description">{ locale(localizations.historyRoute.headerSubtext) }</p>
-        <h2 className='color-primary' style={{marginBottom: '0.5rem'}}>{ locale(localizations.historyRoute.showSubstitutionWhere) }</h2>
+        <p className="description">{ locale(localizations.routes.history.headerSubtext) }</p>
+        <h2 className='color-primary' style={{marginBottom: '0.5rem'}}>{ locale(localizations.routes.history.showSubstitutionWhere) }</h2>
         <div style={{display: 'flex', flexDirection: 'column', gap: '0.5rem'}}>
-          <Switch label={locale(localizations.historyRoute.iWasSubstitute)} isActive={wasSubstitute} onClick={() => { setWasSubstitute(!wasSubstitute); setWasTeacher(!wasTeacher) }}/>
-          <Switch label={locale(localizations.historyRoute.iHadSubstitute)} isActive={wasTeacher} onClick={() => { setWasSubstitute(!wasSubstitute); setWasTeacher(!wasTeacher) }}/>
+          <Switch label={locale(localizations.routes.history.iWasSubstitute)} isActive={wasSubstitute} onClick={() => { setWasSubstitute(!wasSubstitute); setWasTeacher(!wasTeacher) }}/>
+          <Switch label={locale(localizations.routes.history.iHadSubstitute)} isActive={wasTeacher} onClick={() => { setWasSubstitute(!wasSubstitute); setWasTeacher(!wasTeacher) }}/>
         </div>
         <h2 className='color-primary' style={{marginTop: '1rem', marginBottom: '0.5rem'}}>{ locale(localizations.substitute) }</h2>
       </div>

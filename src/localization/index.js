@@ -59,11 +59,6 @@ export const localizations = {
     nn: 'Ønsker du å lagra?',
     en: 'Do you want to save?'
   },
-  substituteHeaderSubtext: {
-    nb: 'Søk opp en lærer og start ett eller flere vikariat',
-    nn: 'Søk opp ein lærar og start eitt eller fleire vikariat',
-    en: 'Search for a teacher to start one or more substitutions'
-  },
   history: {
     nb: 'Historikk',
     nn: 'Historikk',
@@ -96,28 +91,6 @@ export const localizations = {
       en: 'Are you sure you want to extend or renew substitution for:'
     }
   },
-  historyRoute: {
-    headerSubtext: {
-      nb: 'Her kan du se og filtrere dine tidligere vikariater',
-      nn: 'Her kan du sjå og filtrera dei tidlegare vikariata dine',
-      en: 'Here you can see and filter your previous substitutions'
-    },
-    showSubstitutionWhere: {
-      nb: 'Vis vikariat hvor:',
-      nn: 'Vis vikariat kvar:',
-      en: 'Show substitutions where:'
-    },
-    iWasSubstitute: {
-      nb: 'Jeg var vikar',
-      nn: 'Eg var vikar',
-      en: 'I were substituting'
-    },
-    iHadSubstitute: {
-      nb: 'Jeg hadde vikar',
-      nn: 'Eg hadde vikar',
-      en: 'I had substitution'
-    }
-  },
   admin: {
     manageSubstitutions: {
       nb: 'Behandle vikariat',
@@ -136,6 +109,21 @@ export const localizations = {
     },
   },
   words: {
+    teacher: {
+      nb: 'Lærer',
+      nn: 'Lærar',
+      en: 'Teacher'
+    },
+    substitute: {
+      nb: 'Vikar',
+      nn: 'Vikar',
+      en: 'Substitute'
+    },
+    substitutions: {
+      nb: 'Vikariat',
+      nn: 'Vikariat',
+      en: 'Substitutions'
+    },
     school: {
       nb: 'Skole',
       nn: 'Skule',
@@ -181,6 +169,109 @@ export const localizations = {
       nn: 'Avbryt',
       en: 'Cancel'
     },
+    from: {
+      nb: 'Fra',
+      nn: 'Frå',
+      en: 'From'
+    },
+    to: {
+      nb: 'Til',
+      en: 'To'
+    },
+    show: {
+      nb: 'Vis',
+      nn: 'Vis',
+      en: 'Show'
+    },
+    hide: {
+      nb: 'Skjul',
+      nn: 'Skjul',
+      en: 'Hide'
+    },
+    filters: {
+      nb: 'Filtere',
+      nn: 'Filtere',
+      en: 'Filters'
+    },
+    filter: {
+      nb: 'Filter',
+      nn: 'Filter',
+      en: 'Filter'
+    },
+    unknown: {
+      nb: 'Ukjent',
+      nn: 'Ukjent',
+      en: 'Unknown'
+    },
+    pending: {
+      nb: 'Venter',
+      nn: 'Ventar',
+      en: 'Pending'
+    },
+    description: {
+      nb: 'Beskrivelse',
+      nn: 'Beskriving',
+      en: 'Description'
+    }
+  },
+  components: {
+    history: {
+      statuses: {
+        pending: {
+          nb: 'Venter',
+          nn: 'Ventar',
+          en: 'Pending'
+        },
+        active: {
+          nb: 'Aktiv',
+          nn: 'Aktiv',
+          en: 'Active'
+        },
+        expired: {
+          nb: 'Utløpt',
+          nn: 'Gått ut',
+          en: 'Expired'
+        }
+      },
+      chooseStatuses: {
+        nb: 'Velg statuser',
+        nn: 'Vel statusar',
+        en: 'Choose statuses'
+      },
+      chooseYears: {
+        nb: 'Velg år',
+        nn: 'Vel år',
+        en: 'Choose years'
+      }
+    },
+    errorDialog: {
+      okAllBtnText: {
+        nb: 'Ok til alle',
+        en: 'Ok to all'
+      },
+      showDetailsBtnText: {
+        nb: 'Vis detaljer',
+        nn: 'Vis detaljar',
+        en: 'Show details'
+      },
+      hideDetailsBtnText: {
+        nb: 'Skjul detlajer',
+        nn: 'Skjul detaljar',
+        en: 'Hide details'
+      }
+    },
+    loadingDialog: {
+      message: {
+        nb: 'Forespørsel behandles',
+        nn: 'Førespurnad blir behandla',
+        en: 'Request is processed'
+      },
+      pleaseWait: {
+        nb: 'Vennligst vent',
+        nn: 'Ver vennleg og vent',
+        en: 'Please wait'
+      }
+    }
   },
   routes: {
     admin: {
@@ -262,6 +353,91 @@ export const localizations = {
           nn: 'i Active Directory',
           en: 'in Active Directory'
         }
+      },
+      history: {
+        headerSubtext: {
+          nb: 'Her kan du se og filtrere dine tidligere vikariater',
+          nn: 'Her kan du sjå og filtrera dei tidlegare vikariata dine',
+          en: 'Here you can see and filter your previous substitutions'
+        }
+      }
+    },
+    substitute: {
+      headerSubtext: {
+        nb: 'Søk opp en lærer og start ett eller flere vikariat',
+        nn: 'Søk opp ein lærar og start eitt eller fleire vikariat',
+        en: 'Search for a teacher to start one or more substitutions'
+      },
+      teacherSearchLabel: {
+        nb: 'Søk etter læreren du skal være vikar for',
+        nn: 'Søk etter læraren du skal vera vikar for',
+        en: 'Search for the teacher you want to substitute for'
+      },
+      tableNoData: {
+        nb: 'Ingen teams er funnet',
+        nn: 'Ingen teams er funne',
+        en: 'No teams found'
+      },
+      hiddenMsgPart1: {
+        nb: 'Vi har skjult',
+        en: 'We have hidden'
+      },
+      hiddenMsgPart2: {
+        nb: 'teams som du allerede er medlem av',
+        nn: 'teams som du allereie er medlem av',
+        en: 'teams you are already a member of'
+      }
+    },
+    history: {
+      headerSubtext: {
+        nb: 'Her kan du se og filtrere dine tidligere vikariater',
+        nn: 'Her kan du sjå og filtrera dei tidlegare vikariata dine',
+        en: 'Here you can see and filter your previous substitutions'
+      },
+      showSubstitutionWhere: {
+        nb: 'Vis vikariat hvor:',
+        nn: 'Vis vikariat kvar:',
+        en: 'Show substitutions where:'
+      },
+      iWasSubstitute: {
+        nb: 'Jeg var vikar',
+        nn: 'Eg var vikar',
+        en: 'I were substituting'
+      },
+      iHadSubstitute: {
+        nb: 'Jeg hadde vikar',
+        nn: 'Eg hadde vikar',
+        en: 'I had substitution'
+      }
+    },
+    logs: {
+      headerSubtext: {
+        nb: 'Logger over handlinger i VikarApp',
+        nn: 'Loggar over handlingar i VikarApp',
+        en: 'Action logs'
+      },
+      thTimestamp: {
+        nb: 'Tidspunkt',
+        nn: 'Tidspunkt',
+        en: 'Time'
+      },
+      thEndpoint: {
+        nb: 'Endepunkt',
+        en: 'Endpoint'
+      },
+      thDoneBy: {
+        nb: 'Utført av',
+        en: 'Done by'
+      },
+      thDuration: {
+        nb: 'Varighet',
+        nn: 'Varigheit',
+        en: 'Duration'
+      },
+      thDetails: {
+        nb: 'Detaljer',
+        nn: 'Detaljar',
+        en: 'Details'
       }
     }
   }

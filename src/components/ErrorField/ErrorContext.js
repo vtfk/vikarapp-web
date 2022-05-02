@@ -1,4 +1,5 @@
 import { useState, createContext } from "react";
+import { locale, localizations } from "../../localization";
 import ErrorDialog from "./ErrorDialog";
 import { createObjectWithOrderedKeys } from './lib/helpers'
 
@@ -67,6 +68,9 @@ export function ErrorProvider({children}) {
           errors={errors}
           onOk={(e) => { remove(e) }}
           onClear={() => { clear()}}
+          okAllBtnText={ locale(localizations.components.errorDialog.okAllBtnText) }
+          showDetailsBtnText={ locale(localizations.components.errorDialog.showDetailsBtnText) }
+          hideDetailsBtnText={ locale(localizations.components.errorDialog.hideDetailsBtnText) }
         />
       }
     </ErrorContext.Provider>

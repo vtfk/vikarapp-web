@@ -2,6 +2,7 @@ import { Button, Datepicker, Dialog, DialogActions, DialogBody, DialogTitle, Ico
 import { useEffect, useState } from "react";
 import useLogs from '../../../hooks/useLogs'
 import './styles.scss'
+import { locale, localizations } from "../../../localization";
 
 import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/default-highlight'
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs'
@@ -27,7 +28,7 @@ export default function Logs () {
 
   const headers = [
     {
-      label: 'Tidspunkt',
+      label: locale(localizations.routes.logs.thTimestamp),
       value: 'startTimestamp',
       itemTooltip: 'startTimestamp',
       itemRender: (val) => {
@@ -54,11 +55,11 @@ export default function Logs () {
       }
     },
     {
-      label: 'Endepunkt',
+      label: locale(localizations.routes.logs.thEndpoint),
       value: 'endpoint'
     },
     {
-      label: 'Utført av',
+      label: locale(localizations.routes.logs.thDoneBy),
       value: 'requestor.name',
       itemRender: (val) => {
         return (
@@ -69,7 +70,7 @@ export default function Logs () {
       }
     },
     {
-      label: 'Varighet',
+      label: locale(localizations.routes.logs.thDuration),
       value: 'duration',
       itemRender: (val, item, index, header) => {
         return(
@@ -80,7 +81,7 @@ export default function Logs () {
       }
     },
     {
-      label: 'Detailjer',
+      label: locale(localizations.routes.logs.thDetails),
       value: '',
       itemRender: (val, i) => {
         return (
@@ -102,13 +103,13 @@ export default function Logs () {
 
   return(
     <div className='column-group'>
-      <p className="description">Logger over handlinger i VikarApp</p>
+      <p className="description">{ locale(localizations.routes.logs.headerSubtext) }</p>
       <div className="toolbar" style={{display: 'flex'}}>
         <div style={{display: 'flex', alignItems: 'center'}}>
-          <Datepicker placeholder="Fra" selected={from} onChange={(e) => { setFrom(e) }} />
+          <Datepicker placeholder={ locale(localizations.words.from) } selected={from} onChange={(e) => { setFrom(e) }} />
         </div>
         <div style={{display: 'flex', alignItems: 'center'}}>
-          <Datepicker placeholder="Til" selected={to} onChange={(e) => { setTo(e) }} />
+          <Datepicker placeholder={ locale(localizations.words.to) } selected={to} onChange={(e) => { setTo(e) }} />
         </div>
       </div>
       <div style={{overflow: 'auto', flexGrow: 1}}>

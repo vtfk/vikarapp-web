@@ -26,7 +26,7 @@ export default function Header() {
       <div className='header-item header-item-3'> 
         {
           isAdmin && 
-          <IconButton icon="lock" onClick={() => navigate('/admin')} />
+          <IconButton icon="settings" onClick={() => navigate('/admin')} />
         }
       </div>
     </div>
