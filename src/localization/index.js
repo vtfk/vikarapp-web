@@ -176,6 +176,11 @@ export const localizations = {
       nn: 'Ønsker du å lagra?',
       en: 'Do you want to save?'
     },
+    actionWasSuccessful: {
+      nb: 'Handlingen var vellykket',
+      nn: 'Handlinga var vellykka',
+      en: 'The action was successful'
+    }
   },
   components: {
     history: {
@@ -357,7 +362,7 @@ export const localizations = {
           nb: 'i Active Directory',
           nn: 'i Active Directory',
           en: 'in Active Directory'
-        }
+        },
       },
       history: {
         headerSubtext: {

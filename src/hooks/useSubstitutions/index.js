@@ -4,6 +4,8 @@ import { useContext, useState } from "react";
 import { login } from '../../auth'
 import { ErrorContext } from '../../components/ErrorField/ErrorContext';
 import { LoadingContext } from '../../components/LoadingDialog/LoadingContext';
+import { toast } from 'react-toastify'
+import { locale, localizations } from '../../localization';
 
 export default function useSubstitutions() {
   const [state, setState] = useState([])
@@ -90,6 +92,7 @@ export default function useSubstitutions() {
       loadingId = addLoading({ message: 'test' })
       const { data } = await axios.request(request);
       completeLoading(loadingId)
+      toast.success(locale(localizations.terms.actionWasSuccessful))
       return data;
     } catch (err) {
       completeLoading(loadingId);

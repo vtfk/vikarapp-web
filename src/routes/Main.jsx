@@ -17,6 +17,8 @@ import SubstituteAdmin from './admin/substitute';
 import HistoryAdmin from './admin/history'
 import Schools from './admin/schools';
 import Logs from './admin/logs'
+import { ToastContainer } from 'react-toastify'
+import "react-toastify/dist/ReactToastify.css"
 
 import Debug from './Debug'
 
@@ -47,6 +49,7 @@ export default function Main() {
           <img className='main-footer-logo' alt="footer-logo" src={logo} width="100px" />
         </div>
       </div>
+      <ToastContainer autoClose="2000" position='top-center' />
     </main>
   )
 }

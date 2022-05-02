@@ -4,6 +4,8 @@ import { useContext, useState } from "react";
 import { login } from '../../auth'
 import { ErrorContext } from '../../components/ErrorField/ErrorContext';
 import { LoadingContext } from '../../components/LoadingDialog/LoadingContext';
+import { toast } from 'react-toastify'
+import { locale, localizations } from '../../localization';
 
 export default function useSchools() {
   const [state, setState] = useState([]);
@@ -57,6 +59,7 @@ export default function useSchools() {
     try {
       const loadingId = addLoading({ message: '' })
       await axios.request(request);
+      toast.success(locale(localizations.terms.actionWasSuccessful))
       completeLoading(loadingId)
     } catch (err) {
       clearLoading();
@@ -88,7 +91,7 @@ export default function useSchools() {
       const loadingId = addLoading({ message: '' })
       const { data } = await axios.request(request);
       completeLoading(loadingId)
-
+      toast.success(locale(localizations.terms.actionWasSuccessful))
       // Return the data
       return data
     } catch (err) {
