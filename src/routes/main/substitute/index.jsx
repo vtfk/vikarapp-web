@@ -44,11 +44,11 @@ export default function Substitute () {
     setShowConfirmationDialog(false);
     // Input validation
     if(!selectedTeacher) {
-      alert('Du må velge en lærer du skal være vikar for');
+      alert('You cannot active a substitution before selecting a teacher');
       return;
     }
     if(!selectedTeams || !Array.isArray(selectedTeams) || selectedTeams.length === 0) {
-      alert('Du må velge velge en eller flere klasse å vikariere for');
+      alert('You cannot active a substitution before selecting teams');
       return;
     }
 

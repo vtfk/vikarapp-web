@@ -83,7 +83,7 @@ export default function SubstituteRelationships() {
   // Post substitution
   async function postSubstitution() {
     if(!isReadyToSave) {
-      alert('Du er ikke klar til å sende denne henvendelsen');
+      alert('The substitution request is incomplete');
       return;
     }
 
