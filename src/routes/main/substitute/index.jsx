@@ -1,5 +1,5 @@
 import { Button } from '@vtfk/components'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Table } from '@vtfk/components'
 import {
   Link, useNavigate
@@ -39,11 +39,6 @@ export default function Substitute () {
       itemStyle: {textAlign: 'left'}
     }
   ]
-
-  // Memos
-  const confirmationMessage = useMemo(() => {
-
-  }, [selectedTeacher, selectedTeams])
 
   async function activateSubstitution() {
     setShowConfirmationDialog(false);
