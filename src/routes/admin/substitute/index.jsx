@@ -5,6 +5,7 @@ import { Table } from "@vtfk/components";
 import useSubstitutions from "../../../hooks/useSubstitutions";
 import PersonSearchField from "../../../components/PersonSearchField";
 import ConfirmationDialog from "../../../components/ConfirmationDialog"
+import { locale, localizations } from "../../../localization";
 
 export default function SubstituteRelationships() {
   /*
@@ -36,7 +37,7 @@ export default function SubstituteRelationships() {
 
   // Headers for the table
   const tableHeaders = [
-    { label: 'Team / Klasse', value: 'displayName' }
+    { label: locale(localizations.routes.admin.substitute.tableHeaderTeamClass), value: 'displayName' }
   ]
   
   /*
@@ -102,12 +103,12 @@ export default function SubstituteRelationships() {
 
   return (
     <div style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
-      <p className="description">Her kan du administrere alle vikariater</p>
+      <p className="description">{ locale(localizations.routes.admin.substitute.headerSubtext) }</p>
       <div className="column-group" style={{height: '100%'}}>
         <h2 style={{margin: '0', color: '#FFBF00'}}>Vikar:</h2>
         <PersonSearchField
           value={substituteSearchText}
-          placeholder="Hvem skal være vikar?"
+          placeholder={ locale(localizations.routes.admin.substitute.whoShouldSubstitute) }
           onChange={(e) => setSubstituteSearchText(e)}
           onSelected={(e) => setSelectedSubstitute(e)}
           clearTrigger={clearSubstituteNum}
@@ -115,7 +116,7 @@ export default function SubstituteRelationships() {
         />
         <PersonSearchField
           value={teacherSearchText}
-          placeholder="For hvilken lærer?"
+          placeholder={ locale(localizations.routes.admin.substitute.forWhatTeacher) }
           onChange={(e) => setSelectedTeacherText(e)}
           onSelected={(e) => onSelectedTeacher(e)}
           clearTrigger={clearTeacherNum}
@@ -134,29 +135,29 @@ export default function SubstituteRelationships() {
           onSelectedItemsChanged={(e) => setSelectedTeams(e)}
         />
         <div style={{marginTop: 'auto'}}>
-          <Button disabled={!isReadyToSave} onClick={() => setShowSaveConfirmation(true)}>Legg til vikariat</Button>
+          <Button disabled={!isReadyToSave} onClick={() => setShowSaveConfirmation(true)}>{ locale(localizations.routes.admin.substitute.addSubstitution) }</Button>
         </div>
       </div>
       <ConfirmationDialog
         open={showSaveConfirmation}
         onClickOk={() => postSubstitution()}
         onClickCancel={() => clearState()}
-        title="Er du sikker på at du vil lagre?"
+        title={ locale(localizations.doYouWantToSave) }
       >
         <div>
-          <div>Er du helt sikker på at du ønsker å sette opp følgende vikariat?</div>
+          <div>{ locale(localizations.routes.admin.substitute.areYouSure) }</div>
             <table style={{textAlign: 'left', marginTop: '1rem', marginBottom: '0.5rem'}}>
             <tbody>
               <tr>
-                <th style={{verticalAlign: 'top', width: '75px'}}>Lærer:</th>
+                <th style={{verticalAlign: 'top', width: '75px'}}>{ locale(localizations.teacher) }:</th>
                 <td>{selectedTeacher?.displayName}</td>
               </tr>
               <tr>
-                <th style={{verticalAlign: 'top'}}>Vikar:</th>
+                <th style={{verticalAlign: 'top'}}>{ locale(localizations.substitute) }:</th>
                 <td>{selectedSubstitute?.displayName}</td>
               </tr>
               <tr>
-                <th style={{verticalAlign: 'top'}}>Klasser</th>
+                <th style={{verticalAlign: 'top'}}>{ locale(localizations.classes) }</th>
                 <td>
                     {
                       selectedTeams.map((i, idx) => {

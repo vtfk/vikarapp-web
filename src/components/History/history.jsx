@@ -76,9 +76,10 @@ export default function History() {
   */
 
   return(
-    <div className="column-group" style={{overflow: 'auto'}}>
-      <h2 style={{margin: '0', color: '#FFBF00'}}>Filtrering</h2>
-      <div className="column-group" style={{gap: '1rem'}}>
+    <div className="history-column-group" style={{overflow: 'auto'}}>
+      <div>
+        <h2 style={{margin: '0', color: '#FFBF00'}}>Filtrering</h2>
+        <div className="column-group" style={{gap: '1rem'}}>
         <div className="history-input-group">
           { isAdmin &&
             <PersonSearchField
@@ -109,15 +110,21 @@ export default function History() {
           />
         </div>
       </div>
-      <h2 style={{margin: '0', color: '#FFBF00'}}>Vikariat</h2>
-      <div style={{flexGrow: '1', overflow: 'auto'}}>
-        <SubstitutionTable
-          items={substitutions}
-          mobileHeaderText="Historikk"
-          isLoading={isSubsitutionLoading}
-          showSubstitute
-        />
       </div>
+
+      <h2 style={{margin: '0', marginTop: '0.75rem', color: '#FFBF00'}}>Vikariat</h2>
+      <div style={{flexGrow: '1', overflow: 'auto'}}>
+        <div >
+          <SubstitutionTable
+            items={substitutions}
+            mobileHeaderText="Historikk"
+            isLoading={isSubsitutionLoading}
+            showSubstitute
+            style={{overflow: 'auto'}}
+          />
+        </div>
+      </div>
+
 
     </div>
   )

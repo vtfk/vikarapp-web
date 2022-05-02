@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import useSubstitutions from '../../../hooks/useSubstitutions'
 import { getValidToken } from '../../../auth'
 import SubstitutionTable from '../../../components/SubstitutionTable/SubstitutionTable'
+import { localizations, locale } from '../../../localization'
 
 export default function MainOverview() {
   // State
@@ -60,7 +61,7 @@ export default function MainOverview() {
 
   return (
     <div className="overview">
-      <p className="description">Her kan du se og fornye dine siste vikariater</p>
+      <p className="description">{locale(localizations.overview.headerSubtext)}</p>
       <SubstitutionTable
         itemId="_id"
         items={substitutions}
@@ -68,21 +69,21 @@ export default function MainOverview() {
         selected={selectedIds}
         showSelect
         selectOnClick
-        mobileHeaderText="Mine vikariat"
+        mobileHeaderText={locale(localizations.overview.tableMobileHeader)}
         onSelectedIdsChanged={(e) => setSelectedIds(e)}
         onSelectedItemsChanged={(e) => setSelectedItems(e)}
       />
       <div className='main-footer-button-group' style={{marginTop: '1rem'}}>
         <Link to="substitute">
-          <Button>Jeg skal være vikar</Button>
+          <Button>{ locale(localizations.overview.iShallSubstitute) }</Button>
         </Link>
-        <Button disabled={selectedIds.length === 0} onClick={() => selectedItems.length > 0 && setIsShowRenewalDialog(true)}>Forleng vikariat</Button>
-        <Button onClick={() => navigate('/history')}>Historikk</Button>
+        <Button disabled={selectedIds.length === 0} onClick={() => selectedItems.length > 0 && setIsShowRenewalDialog(true)}>{locale(localizations.overview.extendSubstitution)}</Button>
+        <Button onClick={() => navigate('/history')}>{locale(localizations.history)}</Button>
       </div>
       <Dialog isOpen={isShowRenewalDialog} onDismiss={() => setIsShowRenewalDialog(false)}>
-        <DialogTitle>Ønsker du å lagre?</DialogTitle>
+        <DialogTitle>{locale(localizations.doYouWantToSave)}</DialogTitle>
         <DialogBody>
-          Er du sikker på at du ønsker å forlenge eller fornye vikariat for:
+        {locale(localizations.overview.doYouWantToRenew)}
           <ul>
             {
               uniqueIds.map((i) => <li key={i._id}>{i.teamName}</li>)
@@ -90,8 +91,8 @@ export default function MainOverview() {
           </ul>
         </DialogBody>
         <DialogActions>
-          <Button size="small" style={{marginTop: '0.5rem'}} onClick={() => renewSubsitution()}>Ja</Button>
-          <Button size="small" style={{marginTop: '0.5rem'}} onClick={() => setIsShowRenewalDialog(false)}>Nei</Button>
+          <Button size="small" style={{marginTop: '0.5rem'}} onClick={() => renewSubsitution()}>{locale(localizations.yes)}</Button>
+          <Button size="small" style={{marginTop: '0.5rem'}} onClick={() => setIsShowRenewalDialog(false)}>{locale(localizations.no)}</Button>
         </DialogActions>
       </Dialog>
     </div>

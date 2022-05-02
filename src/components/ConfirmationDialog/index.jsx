@@ -18,8 +18,8 @@ export default function ErrorDialog({ open, title, children, okBtnText, cancelBt
           {children}
         </DialogBody>
         <DialogActions>
-          <Button onClick={() => handleOkClick()}>{ okBtnText || 'Ok' }</Button>
-          <Button onClick={() => handleCancelClick()}>{ cancelBtnText || 'Lukk' }</Button>
+          <Button size="small" onClick={() => handleOkClick()}>{ okBtnText || 'Ok' }</Button>
+          <Button size="small" onClick={() => handleCancelClick()}>{ cancelBtnText || 'Lukk' }</Button>
         </DialogActions>
       </Dialog>
     </>

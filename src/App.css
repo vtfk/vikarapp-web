@@ -1,3 +1,8 @@
+:root {
+  --color-primary: #FFBF00;
+}
+
+
 a {
   text-decoration: none;
 }
@@ -10,4 +15,13 @@ a {
   .dialog {
     max-width: 100%;
   }
+}
+
+.color-primary {
+  color: var(--color-primary)
+}
+
+.switch {
+  color: white;
+  font-weight: 600;
 }

@@ -9,6 +9,7 @@ import useSubstitutions from '../../../hooks/useSubstitutions';
 import { login } from '../../../auth'
 import PersonSearchField from '../../../components/PersonSearchField';
 import { getValidToken } from '../../../auth'
+import { locale, localizations } from '../../../localization';
 
 export default function Substitute () {
   const [selectedTeacher, setSelectedTeacher] = useState(undefined);
@@ -103,7 +104,7 @@ export default function Substitute () {
     <div style={{width: '100%', display: 'flex', flexDirection: 'column'}}>
       <div style={{flexGrow: '1'}}>
 
-      <p className="description">Søk opp en lærer og start ett eller flere vikariat</p>
+      <p className="description">{ locale(localizations.substituteHeaderSubtext) }</p>
       <PersonSearchField 
         placeholder="Søk etter læreren du skal være vikar for"
         onSelected={(e) => { onSelectedTeacherChanged(e) }}
@@ -145,9 +146,9 @@ export default function Substitute () {
       </div>
       {
       <div className='main-footer-button-group'>
-        <Button disabled={selectedTeams.length === 0} onClick={() => activateSubstitution()}>Aktiver vikariat</Button>
+        <Button disabled={selectedTeams.length === 0} onClick={() => activateSubstitution()}>{ locale(localizations.activateSubstitution) }</Button>
         <Link to="/">
-          <Button>Avbryt</Button>
+          <Button>{ locale(localizations.cancel) }</Button>
         </Link>
       </div>
       }

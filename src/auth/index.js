@@ -14,10 +14,23 @@ const providerHelpers = require('./providers/_helpers');
 let authenticationPromise = undefined;
 const tokenName = 'auth_token';
 
+/**
+ * @typedef AuthToken
+ * @type {object}
+ * @property {string} provider The provider the token was received from
+ * @property {string} bearerToken Formatted bearer token in 'bearer <accessToken>' format
+ * @property {Date} expiration Timestamp for when the token is invalidated
+ * @property {string} username The username/userPrincipalName for the token
+ * @property {string[]} roles Array of all the roles this token has
+ * @property {string[]} scopes Array of the scopes this token has
+ * @property {Object} token The unmodified token received from the auth provider
+ */
+
 
 /**
  * Returns the current valid token if existing
  * @param {Object} options
+ * @returns { AuthToken } token
  */
 export function getValidToken(options = config.common || {}) {
   // Retreive the token from storage
@@ -87,11 +100,15 @@ function saveToken(token, options = {}) {
   if(!options) options = {};
   options = Object.assign(config.common, options);
   
+  // Attempt to figure out the expiration timestamp
+  let expiration = token.expiresOn || token.extExpiresOn || token.expiration || token.exp
+  try { expiration = new Date(expiration) } catch { }
+
   // Parse and prepare the token
   const formattedToken = {
     provider: options.provider || 'azuread',
     username: token.account?.username || token.idTokenClaims?.preferred_username || undefined,
-    expiration: token.expiresOn || token.extExpiresOn || token.expiration || token.exp,
+    expiration: expiration,
     scopes: token.scopes || options.scopes || [],
     language: token.idTokenClaims?.xms_pl,
     roles: token.roles || token.idTokenClaims?.roles || token.account?.idTokenClaims?.roles || [],

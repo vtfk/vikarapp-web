@@ -2,6 +2,7 @@ import { Button, Checkbox, Dialog, DialogActions, DialogBody, DialogTitle, TextF
 import { useEffect, useState } from "react";
 import { Table } from "@vtfk/components";
 import useSchools from "../../../hooks/useSchools"
+import { locale, localizations } from "../../../localization";
 
 export default function SubstituteRelationships() {
   const [editedItem, setEditedItem] = useState(undefined);
@@ -10,11 +11,11 @@ export default function SubstituteRelationships() {
 
   const headers = [
     {
-      label: 'Skole',
+      label: locale(localizations.words.school),
       value: 'name',
     },
     {
-      label: 'Skoler',
+      label: locale(localizations.words.schools),
       value: 'schools',
       style: { textAlign: 'center' },
       itemStyle: { textAlign: 'center' },
@@ -27,14 +28,14 @@ export default function SubstituteRelationships() {
       }
     },
     {
-      label: 'Handlinger',
+      label: locale(localizations.words.actions),
       value: 'actions',
       style: { textAlign: 'center' },
       itemStyle: { textAlign: 'center' },
       itemRender: (val, item) => {
         return (
           <div style={{display: 'flex', justifyContent: 'center'}}>
-            <Button size="small" onClick={() => onEditItem(item)} style={{minHeight: '25px', padding: '0 1rem'}}>Rediger</Button>
+            <Button size="small" onClick={() => onEditItem(item)} style={{minHeight: '25px', padding: '0 1rem'}}>{locale(localizations.words.edit)}</Button>
           </div>
         )
       }
@@ -82,18 +83,18 @@ export default function SubstituteRelationships() {
 
   return (
     <div className='column-group'>
-      <p className="description">Her setter du opp hvilke skoler som for lov til å være vikar for hverandre</p>
-      <Button style={{marginLeft: 'auto'}} onClick={() => onEditItem({name: '', permittedSchools: []})} size="small">Legg til ny skole</Button>
+      <p className="description">{ locale(localizations.routes.admin.schools.headerSubtext) }</p>
+      <Button style={{marginLeft: 'auto'}} onClick={() => onEditItem({name: '', permittedSchools: []})} size="small">{ locale(localizations.routes.admin.schools.addNewSchool) }</Button>
       <Table headers={headers} items={schools} showSelect={false} headerStyle={{textAlign: 'left'}} itemStyle={{textAlign: 'left'}} isLoading={isLoading} mobileHeaderText="Skoler"/>
       {
         editedItem && 
         <Dialog isOpen={editedItem !== undefined} onDismiss={() => setEditedItem(undefined)}>
-          <DialogTitle>{editedItem._id ? 'Rediger skole' : 'Legg til skole'}</DialogTitle>
+          <DialogTitle>{editedItem._id ? `${locale(localizations.words.edit)} ${locale(localizations.words.school)}` : `${locale(localizations.words.add)} ${locale(localizations.words.school)}`}</DialogTitle>
           <DialogBody>
-            { editedItem._id ? <div>Her endrer du hvilke skoler lærere på <b>{editedItem.name}</b> kan være vikar for.</div> : <div>Her oppretter du en ny skole</div>}
-            <div>Navnet på skolen må være navnet som skolen har i <b>officeLocation</b> i Active Directory</div>
-            <TextField value={editedItem.name} placeholder="Navn på skole" rounded style={{marginTop: '1rem'}} onChange={(e) => setEditedItem({...editedItem, name: e.target.value})} />
-            <div style={{marginTop: '1rem', marginBottom: '0.2rem'}}>Lærer skal kunne vikariere for disse skolene:</div>
+            { editedItem._id ? <div>{locale(localizations.routes.admin.schools.editDescPart1)} <b>{editedItem.name}</b> {locale(localizations.routes.admin.schools.editDescPart2)}</div> : <div>{locale(localizations.routes.admin.schools.newSchoolDesc)}</div>}
+            <div>{locale(localizations.routes.admin.schools.adWarningPart1)} <b>officeLocation</b> {locale(localizations.routes.admin.schools.adWarningPart2)}</div>
+            <TextField value={editedItem.name} placeholder={locale(localizations.routes.admin.schools.nameOfSchoolLabel)} rounded style={{marginTop: '1rem'}} onChange={(e) => setEditedItem({...editedItem, name: e.target.value})} />
+            <div style={{marginTop: '1rem', marginBottom: '0.2rem'}}>{ locale(localizations.routes.admin.schools.teachersShouldBeAbleTo) }</div>
             <div style={{height: '275px', maxHeight: '275px', overflowY: 'auto'}}>
             <div>
               <Checkbox
@@ -116,8 +117,8 @@ export default function SubstituteRelationships() {
             </div>
           </DialogBody>
           <DialogActions>
-            <Button size="small" onClick={() => saveChange()}>Lagre</Button>
-            <Button size="small" onClick={() => setEditedItem(undefined)}>Avbryt</Button>
+            <Button size="small" onClick={() => saveChange()}>{ locale(localizations.words.save)} </Button>
+            <Button size="small" onClick={() => setEditedItem(undefined)}>{ locale(localizations.words.cancel)}</Button>
           </DialogActions>
         </Dialog>
       }
