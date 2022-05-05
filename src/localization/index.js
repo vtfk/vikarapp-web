@@ -17,7 +17,7 @@ function getLanguageFromStorage() {
 export const localizations = {
   words: {
     settings: {
-      nb: 'Instillinger',
+      nb: 'Innstillinger',
       nn: 'Innstillingar',
       en: 'Settings'
     },
