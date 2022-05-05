@@ -99,27 +99,28 @@ export default function Substitute () {
 
   return (
     <div style={{width: '100%', display: 'flex', flexDirection: 'column'}}>
-      <div style={{flexGrow: '1'}}>
-
       <p className="description">{ locale(localizations.routes.substitute.headerSubtext) }</p>
       <PersonSearchField 
         placeholder={ locale(localizations.routes.substitute.teacherSearchLabel) }
         onSelected={(e) => { onSelectedTeacherChanged(e) }}
       />
-      {
-        <Table
-          headers={headers}
-          items={availableTeams}
-          itemId="id"
-          isLoading={isLoadingTeams}
-          selectOnClick
-          showSelect
-          onSelectedItemsChanged={(e) => { setSelectedTeams(e)}}
-          noDataText={ locale(localizations.routes.substitute.tableNoData) }
-          mobileHeaderText="Teams"
-          style={{marginTop: '2rem', height: 'auto'}}
-        />
-      }
+      <div style={{ flexGrow: 1, overflow: 'auto', marginTop: '1rem' }}>
+        {
+          <Table
+            headers={headers}
+            items={availableTeams}
+            itemId="id"
+            isLoading={isLoadingTeams}
+            selectOnClick
+            showSelect
+            onSelectedItemsChanged={(e) => { setSelectedTeams(e)}}
+            noDataText={ locale(localizations.routes.substitute.tableNoData) }
+            mobileHeaderText="Teams"
+            style={{height: 'auto'}}
+          />
+        }
+      </div>
+
       { hiddenTeams.length > 0 && 
       <div style={{marginTop: '1rem', color: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '0.5rem'}}>
         { locale(localizations.routes.substitute.hiddenMsgPart1) } {hiddenTeams.length} { locale(localizations.routes.substitute.hiddenMsgPart2) }
@@ -140,7 +141,6 @@ export default function Substitute () {
         }
       </div>
       }
-      </div>
       {
       <div className='main-footer-button-group'>
         <Button
