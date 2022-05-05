@@ -255,6 +255,13 @@ export const localizations = {
         nn: 'Ver vennleg og vent',
         en: 'Please wait'
       }
+    },
+    settings: {
+      warning: {
+        nb: 'Når innstillingene endres vil appen lastes inn på nytt.',
+        nn: 'Når innstillingane blir endra vil appen lastast inn på nytt.',
+        en: 'When the settings change the app will restart'
+      }
     }
   },
   routes: {

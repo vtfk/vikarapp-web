@@ -57,7 +57,7 @@ export default function Header() {
       <Dialog isOpen={showSettings} onDismiss={() => setShowSettings(false)} style={{minWidth: '30%'}} height="30%">
         <DialogTitle>{ locale(localizations.words.settings) }</DialogTitle>
         <DialogBody>
-          Når innstillingene endres vil appen lastes inn på nytt.
+          <div style={{color: 'red'}}>{ locale(localizations.components.settings.warning) } </div>
           <table style={{textAlign: 'left'}}>
             <tbody>
               <tr>
