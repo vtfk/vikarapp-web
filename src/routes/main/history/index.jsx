@@ -55,7 +55,7 @@ export default function History() {
           <Switch label={locale(localizations.routes.history.iWasSubstitute)} isActive={wasSubstitute} onClick={() => { setWasSubstitute(!wasSubstitute); setWasTeacher(!wasTeacher) }}/>
           <Switch label={locale(localizations.routes.history.iHadSubstitute)} isActive={wasTeacher} onClick={() => { setWasSubstitute(!wasSubstitute); setWasTeacher(!wasTeacher) }}/>
         </div>
-        <h2 className='color-primary' style={{marginTop: '1rem', marginBottom: '0.5rem'}}>{ locale(localizations.substitute) }</h2>
+        <h2 className='color-primary' style={{marginTop: '1rem', marginBottom: '0.5rem'}}>{ locale(localizations.words.substitutions) }</h2>
       </div>
       <div style={{ flexGrow: 1, overflow: 'auto'}}>
         <SubstitutionTable items={substitutions} isLoading={isLoading} />

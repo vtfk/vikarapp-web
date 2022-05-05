@@ -113,7 +113,7 @@ export default function History() {
       </div>
       </div>
 
-      <h2 style={{margin: '0', marginTop: '0.75rem', color: '#FFBF00'}}>{ locale(localizations.words.substitutions)}</h2>
+      <h2 style={{margin: '0', marginTop: '0.75rem', color: '#FFBF00'}}>{ locale(localizations.words.substitutions) }</h2>
       <div style={{flexGrow: '1', overflow: 'auto'}}>
         <div >
           <SubstitutionTable

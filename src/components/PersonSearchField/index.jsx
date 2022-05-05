@@ -6,7 +6,7 @@ import useTeachers from "../../hooks/useTeachers";
 const itemMapping = [
   { value: 'displayName' },
   { value: 'jobTitle' },
-  { value: 'officeLocation'}
+  { value: 'company'}
 ]
 
 export default function PersonSearchField({value, placeholder, onChange, onSelected, clearTrigger, returnSelf, style}) {
