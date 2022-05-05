@@ -16,31 +16,36 @@ export default function Admin() {
   if(roles?.includes('App.Config') || isDev()) isConfig = true;
 
   return (
-    <div className='column-group'>
-      {
-        isAdmin &&
-        <Link to="/admin/substitute" className='admin-action-button'>
-          <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer'}}>{ locale(localizations.routes.admin.manageSubstitutions) }</Button>
-        </Link>
-      }
-      {
-        isAdmin &&
-        <Link to="/admin/history" className='admin-action-button'>
-          <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer'}}>{ locale(localizations.words.historyNoun) }</Button>
-        </Link>
-      }
-      {
-        isConfig &&
-        <Link to="/admin/schools" className='admin-action-button'>
-          <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer', textDecoration: 'none'}}>{ locale(localizations.routes.admin.manageSearchPermissions) }</Button>
-        </Link>
-      }
-      {
-        isAdmin &&
-        <Link to="/admin/logs" className='admin-action-button'>
-          <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer'}}>{ locale(localizations.routes.admin.logger) }</Button>
-        </Link>
-      }
-    </div>
+    <>
+    <div style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
+      <p className="description">{ locale(localizations.routes.admin.administrationPanel) }</p>
+        <div className='column-group' style={{flexGrow: '1'}}>
+          {
+            isAdmin &&
+            <Link to="/admin/substitute" className='admin-action-button'>
+              <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer'}}>{ locale(localizations.routes.admin.manageSubstitutions) }</Button>
+            </Link>
+          }
+          {
+            isAdmin &&
+            <Link to="/admin/history" className='admin-action-button'>
+              <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer'}}>{ locale(localizations.words.historyNoun) }</Button>
+            </Link>
+          }
+          {
+            isConfig &&
+            <Link to="/admin/schools" className='admin-action-button'>
+              <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer', textDecoration: 'none'}}>{ locale(localizations.routes.admin.manageSearchPermissions) }</Button>
+            </Link>
+          }
+          {
+            isAdmin &&
+            <Link to="/admin/logs" className='admin-action-button'>
+              <Button style={{width: '450px', maxWidth: '450px', height: '100px', fontSize: '27px', cursor: 'pointer'}}>{ locale(localizations.routes.admin.logger) }</Button>
+            </Link>
+          }
+        </div>
+      </div>
+    </>
   )
 }

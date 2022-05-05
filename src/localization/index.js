@@ -293,6 +293,11 @@ export const localizations = {
       }
     },
     admin: {
+      administrationPanel: {
+        nb: 'Administrasjonspanel',
+        nn: 'Administrasjonspanel',
+        en: 'Administration panel'
+      },
       manageSubstitutions: {
         nb: 'Behandle vikariat',
         nn: 'Behandl vikariat',
