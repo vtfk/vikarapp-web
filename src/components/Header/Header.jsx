@@ -50,9 +50,9 @@ export default function Header() {
       <div className='header-item header-item-3'> 
         {
           isAdmin && 
-          <IconButton icon="settings" onClick={() => navigate('/admin')} />
+          <IconButton icon="lock" onClick={() => navigate('/admin')} />
         }
-        <IconButton icon="statistics" onClick={() => setShowSettings(true)} />
+        <IconButton icon="settings" onClick={() => setShowSettings(true)} />
       </div>
       <Dialog isOpen={showSettings} onDismiss={() => setShowSettings(false)} style={{minWidth: '30%'}} height="30%">
         <DialogTitle>{ locale(localizations.words.settings) }</DialogTitle>
