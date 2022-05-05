@@ -25,6 +25,11 @@
   justify-content: center;
 }
 
+.header-item-3 {
+  display: flex;
+  gap: 0.5rem;
+}
+
 .header-title {
   color: #FFBF00;
   margin: 0;

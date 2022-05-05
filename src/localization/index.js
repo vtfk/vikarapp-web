@@ -1,15 +1,31 @@
 import { getValidToken } from '../auth'
 
+const supportedLanguages = ['nb', 'nn', 'en']
+
 function getLanguageFromToken() {
   let language = getValidToken()?.language;
   if(language && language.includes('-')) language = language.substring(0, 2);
-  return 'nn' || language;
+  
+  return supportedLanguages.includes(language) ? language : 'nb'
 }
 
-const preferredLanguage = getLanguageFromToken() || 'nb'
+function getLanguageFromStorage() {
+  const language = localStorage.getItem('language');
+  return supportedLanguages.includes(language) ? language : 'nb'
+}
 
 export const localizations = {
   words: {
+    settings: {
+      nb: 'Instillinger',
+      nn: 'Innstillingar',
+      en: 'Settings'
+    },
+    language: {
+      nb: 'Språk',
+      nn: 'Språk',
+      en: 'Language'
+    },
     teacher: {
       nb: 'Lærer',
       nn: 'Lærar',
@@ -470,9 +486,18 @@ export const localizations = {
   }
 }
 
+export function getCurrentLaguage() {
+  return getLanguageFromStorage() || getLanguageFromToken() || 'nb';
+}
+
+export function setLanguage(language) {
+  const lang = supportedLanguages.includes(language) ? language : 'nb'
+  localStorage.setItem('language', lang);
+}
+
 export function locale(value) {
   if(!value) return 'Tekst ikke funnet';
-  let val = value[preferredLanguage];
+  let val = value[getCurrentLaguage()];
   if(!val) return value['nb']
   return val
 }
