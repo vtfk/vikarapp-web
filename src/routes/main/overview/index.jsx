@@ -1,11 +1,12 @@
 import './style.css'
-import { Button, Dialog, DialogTitle, DialogBody, DialogActions} from '@vtfk/components'
+import { Button, DialogTitle, DialogBody} from '@vtfk/components'
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import useSubstitutions from '../../../hooks/useSubstitutions'
 import { getValidToken } from '../../../auth'
 import SubstitutionTable from '../../../components/SubstitutionTable/SubstitutionTable'
 import { localizations, locale } from '../../../localization'
+import ConfirmationDialog from '../../../components/ConfirmationDialog'
 
 export default function MainOverview() {
   // State
@@ -36,6 +37,8 @@ export default function MainOverview() {
   async function renewSubsitution() {
     // Input validation
     if(!selectedItems || selectedItems.length === 0) return;
+    console.log('Renewing')
+    setIsShowRenewalDialog(false);
 
     // Make an array of each request
     const request = []
@@ -57,6 +60,11 @@ export default function MainOverview() {
     await get(getValidToken().username)
   }
 
+  function handleRenewedClick() {
+    console.log('CLICKED RENEW');
+    if(selectedItems.length > 0) setIsShowRenewalDialog(true)
+  }
+
   return (
     <div className="overview">
       <p className="description">{locale(localizations.routes.overview.headerSubtext)}</p>
@@ -75,25 +83,28 @@ export default function MainOverview() {
         <Link to="substitute">
           <Button>{ locale(localizations.routes.overview.iShallSubstitute) }</Button>
         </Link>
-        <Button disabled={selectedIds.length === 0} onClick={() => selectedItems.length > 0 && setIsShowRenewalDialog(true)}>{locale(localizations.routes.overview.extendSubstitution)}</Button>
+        <Button disabled={selectedIds.length === 0} onClick={() => handleRenewedClick()}>{locale(localizations.routes.overview.extendSubstitution)}</Button>
         <Button onClick={() => navigate('/history')}>{locale(localizations.words.historyNoun)}</Button>
       </div>
-      <Dialog isOpen={isShowRenewalDialog} onDismiss={() => setIsShowRenewalDialog(false)}>
-        <DialogTitle>{locale(localizations.terms.doYouWantToSave)}</DialogTitle>
-        <DialogBody>
-        {locale(localizations.routes.overview.doYouWantToRenew)}
-          <ul>
-            {
-              uniqueIds.map((i) => <li key={i._id}>{i.teamName}</li>)
-            }
-          </ul>
-        </DialogBody>
-        <DialogActions>
-          <Button size="small" style={{marginTop: '0.5rem'}} onClick={() => renewSubsitution()}>{locale(localizations.words.yes)}</Button>
-          <Button size="small" style={{marginTop: '0.5rem'}} onClick={() => setIsShowRenewalDialog(false)}>{locale(localizations.words.no)}</Button>
-        </DialogActions>
-      </Dialog>
+      { isShowRenewalDialog &&
+        <ConfirmationDialog
+          open={isShowRenewalDialog}
+          onClickOk={() => renewSubsitution()}
+          onClickCancel={() => setIsShowRenewalDialog(false)}
+          okBtnText={locale(localizations.words.yes)}
+          cancelBtnText={locale(localizations.words.no)}
+        >
+          <DialogTitle>{locale(localizations.terms.doYouWantToSave)}</DialogTitle>
+          <DialogBody>
+            {locale(localizations.routes.overview.doYouWantToRenew)}
+              <ul>
+                {
+                  uniqueIds.map((i) => <li key={i._id}>{i.teamName}</li>)
+                }
+              </ul>
+          </DialogBody>
+        </ConfirmationDialog>
+      }
     </div>
-
   )
 }

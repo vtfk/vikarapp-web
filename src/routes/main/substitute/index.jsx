@@ -41,6 +41,7 @@ export default function Substitute () {
   ]
 
   async function activateSubstitution() {
+    console.log('Activating')
     setShowConfirmationDialog(false);
     // Input validation
     if(!selectedTeacher) {
@@ -153,6 +154,7 @@ export default function Substitute () {
       </div>
       }
       {
+        showConfirmationDialog && 
         <ConfirmationDialog
           open={showConfirmationDialog}
           title={ locale(localizations.routes.substitute.confirmationTitle) }
