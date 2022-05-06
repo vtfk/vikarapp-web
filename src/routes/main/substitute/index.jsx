@@ -116,12 +116,9 @@ export default function Substitute () {
             onSelectedItemsChanged={(e) => { setSelectedTeams(e)}}
             noDataText={ locale(localizations.routes.substitute.tableNoData) }
             mobileHeaderText="Teams"
-            style={{height: 'auto'}}
           />
         }
-      </div>
-
-      { hiddenTeams.length > 0 && 
+              { hiddenTeams.length > 0 && 
       <div style={{marginTop: '1rem', color: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '0.5rem'}}>
         { locale(localizations.routes.substitute.hiddenMsgPart1) } {hiddenTeams.length} { locale(localizations.routes.substitute.hiddenMsgPart2) }
         <Button size="small" onClick={() => setShowHiddenTeams(!showHiddenTeams)}>{!showHiddenTeams ? locale(localizations.words.show) : locale(localizations.words.hide)}</Button>
@@ -141,6 +138,7 @@ export default function Substitute () {
         }
       </div>
       }
+      </div>
       {
       <div className='main-footer-button-group'>
         <Button
