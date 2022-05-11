@@ -136,44 +136,45 @@ export default function SubstituteRelationships() {
           <Button disabled={!isReadyToSave} onClick={() => setShowSaveConfirmation(true)}>{ locale(localizations.routes.admin.substitute.addSubstitution) }</Button>
         </div>
       </div>
-      <ConfirmationDialog
-        open={showSaveConfirmation}
-        onClickOk={() => postSubstitution()}
-        onClickCancel={() => clearState()}
-        title={ locale(localizations.terms.doYouWantToSave) }
-      >
-        <div>
-          <div>{ locale(localizations.routes.admin.substitute.areYouSure) }</div>
-            <table style={{textAlign: 'left', marginTop: '1rem', marginBottom: '0.5rem'}}>
-            <tbody>
-              <tr>
-                <th style={{verticalAlign: 'top', width: '75px'}}>{ locale(localizations.words.teacher) }:</th>
-                <td>{selectedTeacher?.displayName}</td>
-              </tr>
-              <tr>
-                <th style={{verticalAlign: 'top'}}>{ locale(localizations.words.substitute) }:</th>
-                <td>{selectedSubstitute?.displayName}</td>
-              </tr>
-              <tr>
-                <th style={{verticalAlign: 'top'}}>{ locale(localizations.words.classes) }</th>
-                <td>
-                    {
-                      selectedTeams.map((i, idx) => {
-                        return (
-                          <>
+      {
+        showSaveConfirmation &&
+        <ConfirmationDialog
+          open={showSaveConfirmation}
+          onClickOk={() => postSubstitution()}
+          onClickCancel={() => clearState()}
+          title={ locale(localizations.terms.doYouWantToSave) }
+        >
+          <div>
+            <div>{ locale(localizations.routes.admin.substitute.areYouSure) }</div>
+              <table style={{textAlign: 'left', marginTop: '1rem', marginBottom: '0.5rem'}}>
+              <tbody>
+                <tr>
+                  <th style={{verticalAlign: 'top', width: '75px'}}>{ locale(localizations.words.teacher) }:</th>
+                  <td>{selectedTeacher?.displayName}</td>
+                </tr>
+                <tr>
+                  <th style={{verticalAlign: 'top'}}>{ locale(localizations.words.substitute) }:</th>
+                  <td>{selectedSubstitute?.displayName}</td>
+                </tr>
+                <tr>
+                  <th style={{verticalAlign: 'top'}}>{ locale(localizations.words.classes) }</th>
+                  <td>
+                      {
+                        selectedTeams.map((i, idx) => {
+                          return (
                             <div key={idx}>
                               {i.displayName}
                             </div>
-                          </> 
-                        )
-                      })
-                    }
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </ConfirmationDialog>
+                          )
+                        })
+                      }
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </ConfirmationDialog>
+      }
     </div>
   )
 }

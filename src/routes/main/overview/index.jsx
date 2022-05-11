@@ -37,7 +37,6 @@ export default function MainOverview() {
   async function renewSubsitution() {
     // Input validation
     if(!selectedItems || selectedItems.length === 0) return;
-    console.log('Renewing')
     setIsShowRenewalDialog(false);
 
     // Make an array of each request
@@ -61,7 +60,6 @@ export default function MainOverview() {
   }
 
   function handleRenewedClick() {
-    console.log('CLICKED RENEW');
     if(selectedItems.length > 0) setIsShowRenewalDialog(true)
   }
 
@@ -86,25 +84,23 @@ export default function MainOverview() {
         <Button disabled={selectedIds.length === 0} onClick={() => handleRenewedClick()}>{locale(localizations.routes.overview.extendSubstitution)}</Button>
         <Button onClick={() => navigate('/history')}>{locale(localizations.words.historyNoun)}</Button>
       </div>
-      { isShowRenewalDialog &&
-        <ConfirmationDialog
-          open={isShowRenewalDialog}
-          onClickOk={() => renewSubsitution()}
-          onClickCancel={() => setIsShowRenewalDialog(false)}
-          okBtnText={locale(localizations.words.yes)}
-          cancelBtnText={locale(localizations.words.no)}
-        >
-          <DialogTitle>{locale(localizations.terms.doYouWantToSave)}</DialogTitle>
-          <DialogBody>
-            {locale(localizations.routes.overview.doYouWantToRenew)}
-              <ul>
-                {
-                  uniqueIds.map((i) => <li key={i._id}>{i.teamName}</li>)
-                }
-              </ul>
-          </DialogBody>
-        </ConfirmationDialog>
-      }
+      <ConfirmationDialog
+        open={isShowRenewalDialog}
+        onClickOk={() => renewSubsitution()}
+        onClickCancel={() => setIsShowRenewalDialog(false)}
+        okBtnText={locale(localizations.words.yes)}
+        cancelBtnText={locale(localizations.words.no)}
+      >
+        <DialogTitle>{locale(localizations.terms.doYouWantToSave)}</DialogTitle>
+        <DialogBody>
+          {locale(localizations.routes.overview.doYouWantToRenew)}
+            <ul>
+              {
+                uniqueIds.map((i) => <li key={i._id}>{i.teamName}</li>)
+              }
+            </ul>
+        </DialogBody>
+      </ConfirmationDialog>
     </div>
   )
 }

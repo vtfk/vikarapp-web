@@ -1,11 +1,25 @@
 import { Button, Dialog, DialogActions, DialogBody, DialogTitle } from "@vtfk/components";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
+
 
 export default function ErrorDialog({ open, title, children, okBtnText, cancelBtnText, onClickOk, onClickCancel }) {
 
-  function handleOkClick() {
+  const handleOkClick = useCallback(() => {
     if(onClickOk && typeof onClickOk === 'function') onClickOk();
-  }
+  }, [onClickOk])
+
+  const listenForEnter = useCallback((e) => {
+    console.log('Callback', e);
+    try {
+      e.preventDefault();
+      e.stopPropagation();  
+    } catch {}
+  
+    if(e.key === 'Enter') {
+      handleOkClick();
+      return;
+    }
+  },[handleOkClick])
 
   function handleCancelClick() {
     if(onClickCancel && typeof onClickCancel === 'function') onClickCancel();
@@ -14,27 +28,19 @@ export default function ErrorDialog({ open, title, children, okBtnText, cancelBt
   const dialogRef = useRef(undefined);
 
   useEffect(() => {
-    dialogRef.current.focus();
-  }, [open])
+    if(open) {
+      dialogRef.current.focus();
+      document.removeEventListener('keydown', listenForEnter);
+      document.addEventListener('keydown', listenForEnter)
+    } else {
+      document.removeEventListener('keydown', listenForEnter)
+    }
+  }, [open, listenForEnter])
 
   useEffect(() => {
-    function listenForEnter(e) {
-      try {
-        e.preventDefault();
-        e.stopPropagation();  
-      } catch {}
-
-      if(e.key === 'Enter') {
-        handleOkClick();
-        return;
-      }
-    }
-
-    document.addEventListener('keydown', listenForEnter)
-
     return () => document.removeEventListener('keydown', listenForEnter)
     // eslint-disable-next-line
-  }, [])
+  }, [listenForEnter])
 
   return(
     <>
