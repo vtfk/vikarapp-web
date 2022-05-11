@@ -9,7 +9,6 @@ export default function ErrorDialog({ open, title, children, okBtnText, cancelBt
   }, [onClickOk])
 
   const listenForEnter = useCallback((e) => {
-    console.log('Callback', e);
     try {
       e.preventDefault();
       e.stopPropagation();  

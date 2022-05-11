@@ -9,6 +9,7 @@ import { getCurrentLaguage, locale, localizations, setLanguage } from '../../loc
 export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
+
   const [showSettings, setShowSettings] = useState(false);
   
   let isAdmin = false;
@@ -41,7 +42,10 @@ export default function Header() {
       <div className='header-item header-item-1'>
         {
           location && location.pathname !== '/' &&
-          <IconButton icon="home" onClick={() => navigate('/')}/>
+          <div className='header-button'>
+            <IconButton icon="arrowLeft" onClick={() => navigate(-1)}/>
+            Tilbake
+          </div>
         }
       </div>
       <div className='header-item header-item-2'>
@@ -50,9 +54,15 @@ export default function Header() {
       <div className='header-item header-item-3'> 
         {
           isAdmin && 
-          <IconButton icon="lock" onClick={() => navigate('/admin')} />
+          <div className='header-button'>
+            <IconButton icon="lock" onClick={() => navigate('/admin')} />
+            Admin
+          </div>
         }
-        <IconButton icon="settings" onClick={() => setShowSettings(true)} />
+        <div className='header-button'>
+          <IconButton icon="settings" onClick={() => setShowSettings(true)} />
+          Innstillinger
+        </div>
       </div>
       <Dialog isOpen={showSettings} onDismiss={() => setShowSettings(false)} style={{minWidth: '30%'}} height="30%">
         <DialogTitle>{ locale(localizations.words.settings) }</DialogTitle>
