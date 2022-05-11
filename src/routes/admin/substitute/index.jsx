@@ -12,7 +12,7 @@ export default function SubstituteRelationships() {
     Hooks
   */
   const { search: searchTeams, isLoadingTeams } = useTeacherTeams();
-  const { post:postSubstitutions } = useSubstitutions()
+  const { post:postSubstitutions, get:getSubstitutions } = useSubstitutions()
 
   /*
     State
@@ -23,6 +23,7 @@ export default function SubstituteRelationships() {
   // Substitute
   const [ substituteSearchText, setSubstituteSearchText] = useState('');
   const [ selectedSubstitute, setSelectedSubstitute] = useState()
+  const [ existingSubstitutions, setExistingSubstitutions] = useState([])
 
   // Teacher
   const [ teacherSearchText, setSelectedTeacherText ] = useState('');
@@ -35,9 +36,61 @@ export default function SubstituteRelationships() {
   const [ clearSubstituteNum, setClearSubstituteNum] = useState(0)
   const [ clearTeacherNum, setClearTeacherNum] = useState(0)
 
+  // Translate status for display
+function translateStatus(status) {
+  switch(status) {
+    case 'pending':
+      return locale(localizations.words.pending)
+    case 'active':
+      return locale(localizations.words.active)
+    case 'expired':
+      return locale(localizations.words.expired)
+    default:
+      return locale(localizations.words.unknown)
+  }
+}
+// Format dateTime to dd.mm.yyyy
+function formatDate(date) {
+  function padTo2Digits(num) {
+    return num.toString().padStart(2, '0');
+  }
+
+  if(typeof date === 'string') date = new Date(date)
+
+  return [
+    padTo2Digits(date.getDate()),
+    padTo2Digits(date.getMonth() + 1),
+    date.getFullYear(),
+  ].join('.');
+}
+
   // Headers for the table
   const tableHeaders = [
-    { label: locale(localizations.routes.admin.substitute.tableHeaderTeamClass), value: 'displayName' }
+    {
+      label: locale(localizations.routes.admin.substitute.tableHeaderTeamClass),
+      value: 'displayName'
+    },
+    {
+      label: 'Status',
+      itemRender: (val, item) => {
+        if(!item?.id) return(<></>)
+
+        const existing = existingSubstitutions.find((i) => i.teamId === item.id);
+        if(!existing) return(<></>)
+        return (<>{translateStatus(existing.status)}</>)
+      }
+    },
+    {
+      label: locale(localizations.words.expires),
+      itemRender: (val, item) => {
+        if(!item?.id) return(<></>)
+
+        const existing = existingSubstitutions.find((i) => i.teamId === item.id);
+        if(!existing) return(<></>)
+
+        return (<>{formatDate(existing.expirationTimestamp)}</>)
+      }
+    }
   ]
   
   /*
@@ -67,6 +120,14 @@ export default function SubstituteRelationships() {
     setAvailableTeams(teams)
   }
 
+  async function onSelectedSubstitute(e) {
+    setSelectedSubstitute(e);
+    if(e?.userPrincipalName) {
+      const existing = await getSubstitutions(e.userPrincipalName, undefined, 'active');
+      if(Array.isArray(existing)) setExistingSubstitutions(existing);
+    }
+  }
+
   // Clears all state
   function clearState() {
     setShowSaveConfirmation(false);
@@ -76,6 +137,7 @@ export default function SubstituteRelationships() {
     setSubstituteSearchText('');
     setAvailableTeams([]);
     setSelectedTeamIds([]);
+    setExistingSubstitutions([])
     setClearSubstituteNum(clearSubstituteNum + 1)
     setClearTeacherNum(clearTeacherNum + 1)
   }
@@ -103,23 +165,28 @@ export default function SubstituteRelationships() {
     <div style={{display: 'flex', flexDirection: 'column', width: '100%'}}>
       <p className="description">{ locale(localizations.routes.admin.substitute.headerSubtext) }</p>
       <div className="column-group" style={{height: '100%'}}>
-        <h2 style={{margin: '0', color: '#FFBF00'}}>Vikar:</h2>
-        <PersonSearchField
-          value={substituteSearchText}
-          placeholder={ locale(localizations.routes.admin.substitute.whoShouldSubstitute) }
-          onChange={(e) => setSubstituteSearchText(e)}
-          onSelected={(e) => setSelectedSubstitute(e)}
-          clearTrigger={clearSubstituteNum}
-          returnSelf
-        />
-        <PersonSearchField
-          value={teacherSearchText}
-          placeholder={ locale(localizations.routes.admin.substitute.forWhatTeacher) }
-          onChange={(e) => setSelectedTeacherText(e)}
-          onSelected={(e) => onSelectedTeacher(e)}
-          clearTrigger={clearTeacherNum}
-          returnSelf
-        />
+        <div>
+          <h2 style={{margin: '0', color: '#FFBF00'}}>Vikar:</h2>
+          <PersonSearchField
+            value={substituteSearchText}
+            placeholder={ locale(localizations.routes.admin.substitute.whoShouldSubstitute) }
+            onChange={(e) => setSubstituteSearchText(e)}
+            onSelected={(e) => onSelectedSubstitute(e)}
+            clearTrigger={clearSubstituteNum}
+            returnSelf
+          />
+        </div>
+        <div>
+          <h2 style={{margin: '0', color: '#FFBF00'}}>Lærer:</h2>
+          <PersonSearchField
+            value={teacherSearchText}
+            placeholder={ locale(localizations.routes.admin.substitute.forWhatTeacher) }
+            onChange={(e) => setSelectedTeacherText(e)}
+            onSelected={(e) => onSelectedTeacher(e)}
+            clearTrigger={clearTeacherNum}
+            returnSelf
+          />
+        </div>
         <Table
           itemId="id"
           headers={tableHeaders}

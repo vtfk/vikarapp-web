@@ -239,7 +239,7 @@ export const localizations = {
         en: 'Show details'
       },
       hideDetailsBtnText: {
-        nb: 'Skjul detlajer',
+        nb: 'Skjul detaljer',
         nn: 'Skjul detaljar',
         en: 'Hide details'
       }
@@ -340,9 +340,9 @@ export const localizations = {
           en: 'Add substitution'
         },
         areYouSure: {
-          nb: 'Er du helt sikker på at du ønsker å sette opp følgende vikariat?',
-          nn: 'Er du heilt sikker på at du ønsker å setja opp følgjande vikariat?',
-          en: 'Are you sure you want to setup the following substitution?'
+          nb: 'Er du helt sikker på at du ønsker å aktivere/fornye følgende vikariat?',
+          nn: 'Er du heilt sikker på at du ønsker å aktivera/fornya følgjande vikariat?',
+          en: 'Are you sure you want to activate/renew the following substitution?'
         }
       },
       schools: {
