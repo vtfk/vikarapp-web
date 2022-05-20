@@ -88,7 +88,7 @@ export default function SubstituteRelationships() {
       <Table headers={headers} items={schools} showSelect={false} headerStyle={{textAlign: 'left'}} itemStyle={{textAlign: 'left'}} isLoading={isLoading} mobileHeaderText="Skoler"/>
       {
         editedItem && 
-        <Dialog isOpen={editedItem !== undefined} onDismiss={() => setEditedItem(undefined)} width='60%'>
+        <Dialog isOpen={editedItem !== undefined} draggable onDismiss={() => setEditedItem(undefined)} width='60%'>
           <DialogTitle>{editedItem._id ? `${locale(localizations.words.edit)} ${locale(localizations.words.school)}` : `${locale(localizations.words.add)} ${locale(localizations.words.school)}`}</DialogTitle>
           <DialogBody>
             { editedItem._id ? <div>{locale(localizations.routes.admin.schools.editDescPart1)} <b>{editedItem.name}</b> {locale(localizations.routes.admin.schools.editDescPart2)}</div> : <div>{locale(localizations.routes.admin.schools.newSchoolDesc)}</div>}

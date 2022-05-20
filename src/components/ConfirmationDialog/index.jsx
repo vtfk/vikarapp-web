@@ -44,7 +44,7 @@ export default function ErrorDialog({ open, title, children, okBtnText, cancelBt
   return(
     <>
       <div ref={dialogRef}>
-        <Dialog isOpen={open}>
+        <Dialog isOpen={open} draggable onDismiss={() => handleCancelClick()}>
           { title && <DialogTitle>{title}</DialogTitle>}
           <DialogBody>
             {children}

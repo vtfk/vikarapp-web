@@ -64,7 +64,7 @@ export default function Header() {
           Innstillinger
         </div>
       </div>
-      <Dialog isOpen={showSettings} onDismiss={() => setShowSettings(false)} style={{minWidth: '30%'}} height="30%">
+      <Dialog isOpen={showSettings} onDismiss={() => setShowSettings(false)} draggable style={{minWidth: '30%'}} height="30%">
         <DialogTitle>{ locale(localizations.words.settings) }</DialogTitle>
         <DialogBody>
           <div style={{color: 'red'}}>{ locale(localizations.components.settings.warning) } </div>

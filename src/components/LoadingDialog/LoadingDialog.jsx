@@ -4,7 +4,7 @@ import './style.css'
 
 export default function LoadingDialog({ loadings, style }) {
   return(
-    <Dialog isOpen={loadings.length > 0} showCloseButton={false}>
+    <Dialog isOpen={loadings.length > 0} draggable showCloseButton={false}>
       <DialogBody style={{padding: '1rem'}}>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '0.5rem'}}>
           <h1 style={{margin: 0}}>{ locale(localizations.components.loadingDialog.message) }</h1>
