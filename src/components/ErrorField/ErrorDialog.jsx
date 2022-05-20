@@ -33,7 +33,7 @@ export default function ErrorDialog({ errors, onOk, onClear, style, okBtnText, o
   }
 
   return(
-    <Dialog isOpen={errors.length > 0} onDismiss={() => onClear()} showCloseButton={false}>
+    <Dialog isOpen={errors.length > 0} draggable onDismiss={() => onClear()} showCloseButton={false}>
       <DialogBody>
         <ErrorField error={errors[errorIndex]} showDetails={isShowDetails}/>
       </DialogBody>
