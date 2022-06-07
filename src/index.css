@@ -1,0 +1,24 @@
+body {
+  min-height: 100vh;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: #DDEBE3;
+}
+
+#root {
+  height:100%;
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+  margin-block-start: 0;
+  margin-block-end: 0;
+
+}
+
+@media screen and (max-width: 750px) {
+  body {
+    height: initial;
+  }
+}

@@ -1,0 +1,23 @@
+:root {
+  --color-primary: #FFBF00;
+}
+
+
+a {
+  text-decoration: none;
+}
+
+@media screen and (max-width: 750px) {
+  .dialog {
+    max-width: 100%;
+  }
+}
+
+.color-primary {
+  color: var(--color-primary)
+}
+
+.switch {
+  color: white;
+  font-weight: 600;
+}
