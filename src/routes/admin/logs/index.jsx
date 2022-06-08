@@ -121,7 +121,7 @@ export default function Logs () {
           selectOnClick={false}
         />
       </div>
-      <Dialog isOpen={!!openedItem} style={{maxHeight: '90%'}} draggable onDismiss={() => setOpenedItem()}>
+      <Dialog isOpen={!!openedItem} height="90%" width="60%" draggable onDismiss={() => setOpenedItem()}>
         <DialogTitle>Detaljer</DialogTitle>
         <DialogBody style={{overflow: 'auto'}}>
           <SyntaxHighlighter language='json' style={docco} customStyle={{ background: 'none', overflowX: 'none', marginTop: '0' }} >{openedItem && JSON.stringify(openedItem, null, 2)}</SyntaxHighlighter>
