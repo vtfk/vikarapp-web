@@ -58,7 +58,7 @@ export const localizations = {
     },
     classes: {
       nb: 'Klasser',
-      nn: 'Undervisningsgruppar',
+      nn: 'Undervisningsgrupper',
       en: 'Classes'
     },
     schools: {
@@ -152,7 +152,7 @@ export const localizations = {
     },
     expires: {
       nb: 'Utløper',
-      nn: 'Utløpar',
+      nn: 'Går ut',
       en: 'Expires'
     },
     expired: {
@@ -278,12 +278,12 @@ export const localizations = {
       },
       iShallSubstitute: {
         nb: 'Jeg skal være vikar',
-        nn: 'Eg skal vera vikar',
+        nn: 'Eg skal vere vikar',
         en: 'Substitute'
       },
       extendSubstitution: {
         nb: 'Forleng vikariat',
-        nn: 'Forleng vikariat',
+        nn: 'Forleng vikariatet',
         en: 'Extend substitution'
       },
       doYouWantToRenew: {
@@ -326,7 +326,7 @@ export const localizations = {
         },
         whoShouldSubstitute: {
           nb: 'Hvem skal være vikar?',
-          nn: 'Kven skal vera vikar?',
+          nn: 'Kven skal vere vikar?',
           en: 'Who should substitute?'
         },
         forWhatTeacher: {
@@ -341,14 +341,14 @@ export const localizations = {
         },
         areYouSure: {
           nb: 'Er du helt sikker på at du ønsker å aktivere/fornye følgende vikariat?',
-          nn: 'Er du heilt sikker på at du ønsker å aktivera/fornya følgjande vikariat?',
+          nn: 'Er du heilt sikker på at du ønsker å aktivere/fornya følgjande vikariat?',
           en: 'Are you sure you want to activate/renew the following substitution?'
         }
       },
       schools: {
         headerSubtext: {
           nb: 'Her setter du opp hvilke skoler som for lov til å være vikar for hverandre',
-          nn: 'Her set du opp kva skular som for lov til å vera vikar for kvarandre',
+          nn: 'Her set du opp kva skular som for lov til å vere vikar for kvarandre',
           en: 'Setup what schools are allowed to substitute for each other'
         },
         addNewSchool: {
@@ -368,7 +368,7 @@ export const localizations = {
         },
         editDescPart2: {
           nb: 'kan være vikar for.',
-          nn: 'kan vera vikar for.',
+          nn: 'kan vere vikar for.',
           en: 'substitute for.'
         },
         newSchoolDesc: {
@@ -383,7 +383,7 @@ export const localizations = {
         },
         adWarningPart1: {
           nb: 'Navnet på skolen må være navnet som skolen har i',
-          nn: 'Namnet på skulen må vera namnet som skulen har i',
+          nn: 'Namnet på skulen må vere namnet som skulen har i',
           en: 'The name of the school must be the same as it has in'
         },
         adWarningPart2: {
@@ -408,7 +408,7 @@ export const localizations = {
       },
       teacherSearchLabel: {
         nb: 'Søk etter læreren du skal være vikar for',
-        nn: 'Søk etter læraren du skal vera vikar for',
+        nn: 'Søk etter læraren du skal vere vikar for',
         en: 'Search for the teacher you want to substitute for'
       },
       tableNoData: {
@@ -427,7 +427,7 @@ export const localizations = {
       },
       confirmationTitle: {
         nb: 'Ønsker du å aktivere vikariat?',
-        nn: 'Ønsker du å aktivera vikariat?',
+        nn: 'Ønsker du å aktivere vikariat?',
         en: 'Are you sure you want to activate the substitution?'
       }
     },
