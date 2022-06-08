@@ -117,6 +117,7 @@ export default function Logs () {
           headers={headers}
           items={state}
           isLoading={isLoading}
+          noDataText={locale(localizations.terms.noDataIsFound)}
           mobileHeaderText="Logger"
           selectOnClick={false}
         />

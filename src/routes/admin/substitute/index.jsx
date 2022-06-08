@@ -195,6 +195,7 @@ function formatDate(date) {
           showSelect
           selectOnClick
           selectedIds={selectedTeamIds}
+          noDataText={locale(localizations.terms.noDataIsFound)}
           mobileHeaderText="Teams"
           onSelectedIdsChanged={(e) => setSelectedTeamIds(e)}
           onSelectedItemsChanged={(e) => setSelectedTeams(e)}

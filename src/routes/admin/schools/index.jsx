@@ -85,7 +85,7 @@ export default function SubstituteRelationships() {
     <div className='column-group'>
       <p className="description">{ locale(localizations.routes.admin.schools.headerSubtext) }</p>
       <Button style={{marginLeft: 'auto'}} onClick={() => onEditItem({name: '', permittedSchools: []})} size="small">{ locale(localizations.routes.admin.schools.addNewSchool) }</Button>
-      <Table headers={headers} items={schools} showSelect={false} headerStyle={{textAlign: 'left'}} itemStyle={{textAlign: 'left'}} isLoading={isLoading} mobileHeaderText="Skoler"/>
+      <Table headers={headers} items={schools} showSelect={false} headerStyle={{textAlign: 'left'}} itemStyle={{textAlign: 'left'}} isLoading={isLoading} mobileHeaderText="Skoler" noDataText={locale(localizations.terms.noDataIsFound)}/>
       {
         editedItem && 
         <Dialog isOpen={editedItem !== undefined} draggable onDismiss={() => setEditedItem(undefined)} width='60%'>

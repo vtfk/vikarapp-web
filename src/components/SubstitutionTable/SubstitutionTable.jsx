@@ -81,6 +81,7 @@ export default function SubstitutionTable({items, mobileHeaderText, isLoading, s
       selectOnClick={selectOnClick}
       showSelect={showSelect}
       mobileHeaderText={mobileHeaderText}
+      noDataText={locale(localizations.terms.noDataIsFound)}
       headerStyle={{fontSize: '14px'}}
       itemStyle={{fontSize: '14px'}}
       onSelectedIdsChanged={(e) => onSelectedIdsChanged && typeof onSelectedIdsChanged === 'function' && onSelectedIdsChanged(e)}

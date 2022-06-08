@@ -196,6 +196,11 @@ export const localizations = {
       nb: 'Handlingen var vellykket',
       nn: 'Handlinga var vellykka',
       en: 'The action was successful'
+    },
+    noDataIsFound: {
+      nb: 'Ingen data er funnet',
+      nn: 'Ingen data er funne',
+      en: 'No data is found'
     }
   },
   components: {
