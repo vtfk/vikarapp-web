@@ -5,13 +5,13 @@
   "dependencies": {
     "@azure/msal-browser": "2.22.1",
     "@microsoft/teams-js": "1.11.0",
-    "@sentry/react": "^6.19.7",
-    "@sentry/tracing": "^6.19.7",
+    "@sentry/react": "6.19.7",
+    "@sentry/tracing": "6.19.7",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "12.1.5",
     "@testing-library/user-event": "13.5.0",
-    "@vtfk/components": "^0.11.5",
-    "@vtfk/utilities": "^1.4.0",
+    "@vtfk/components": "0.11.5",
+    "@vtfk/utilities": "1.4.0",
     "axios": "0.26.1",
     "lodash.merge": "4.6.2",
     "lodash.set": "4.3.2",
@@ -21,7 +21,7 @@
     "react-router-dom": "6.2.2",
     "react-scripts": "5.0.1",
     "react-syntax-highlighter": "15.5.0",
-    "react-toastify": "^8.2.0",
+    "react-toastify": "8.2.0",
     "sass": "1.49.11",
     "web-vitals": "2.1.4"
   },
@@ -50,7 +50,7 @@
     ]
   },
   "devDependencies": {
-    "msw": "^0.39.2"
+    "msw": "0.39.2"
   },
   "msw": {
     "workerDirectory": "public"
