@@ -12,7 +12,7 @@
     "@testing-library/user-event": "13.5.0",
     "@vtfk/components": "0.11.5",
     "@vtfk/utilities": "1.4.0",
-    "axios": "0.26.1",
+    "axios": "0.28.0",
     "lodash.merge": "4.6.2",
     "lodash.set": "4.3.2",
     "nanoid": "3.3.4",
