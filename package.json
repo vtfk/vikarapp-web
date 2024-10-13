@@ -5,8 +5,8 @@
   "dependencies": {
     "@azure/msal-browser": "2.22.1",
     "@microsoft/teams-js": "1.11.0",
-    "@sentry/react": "6.19.7",
-    "@sentry/tracing": "6.19.7",
+    "@sentry/react": "7.119.2",
+    "@sentry/tracing": "7.114.0",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "12.1.5",
     "@testing-library/user-event": "13.5.0",
